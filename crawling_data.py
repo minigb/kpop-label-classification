@@ -72,7 +72,6 @@ class BillboardMusicCrawler:
 
     # Sort by date
     df_sorted = df.sort_values(by=self.in_csv_col_names.date).reset_index(drop=True)
-    df_sorted = df_sorted.drop(columns=[self.in_csv_col_names.date])
 
     # Remove duplicates
     df_uniq = df_sorted.drop_duplicates(subset=[self.in_csv_col_names.title, self.in_csv_col_names.artist], keep='first')
