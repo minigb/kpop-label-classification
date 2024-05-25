@@ -3,11 +3,10 @@ import yt_dlp
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import csv
 from tqdm import tqdm
-import json
 from pathlib import Path
 from argparse import ArgumentParser
 
-from utils.song_id import get_song_id
+from utils import get_song_id
 
 
 class CsvColumnNames:
