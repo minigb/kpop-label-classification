@@ -23,16 +23,15 @@ class FileNames:
 
 
 class BillboardMusicCrawler:
-  def __init__(self, input_csv_path: str, kpop_path: str, save_audio_dir: str, save_csv_name: str, exclude_keywords: list, include_keywords: list):
+  def __init__(self, input_csv_path: str, save_audio_dir: str, save_csv_name: str, exclude_keywords: list, include_keywords: list):
     self.input_csv_path = Path(input_csv_path)
-    self.kpop_path = Path(kpop_path) if kpop_path is not None else None
     self.save_audio_dir = Path(save_audio_dir)
     self.save_csv_name = save_csv_name
     self.exclude_keywords = exclude_keywords
     self.include_keywords = include_keywords
 
-    self.in_csv_col_names = CsvColumnNames('CHART WEEK', 'TITLE', 'PERFORMER')
-    self.out_csv_col_names = CsvColumnNames('Date', 'Song', 'Artist')
+    self.in_csv_col_names = CsvColumnNames('Year', 'Song', 'Artist')
+    self.out_csv_col_names = CsvColumnNames('Year', 'Song', 'Artist')
 
     self._init_result_csv()
     self.input_df = self.get_sorted_and_unique_billboard_df()
@@ -40,6 +39,8 @@ class BillboardMusicCrawler:
 
 
   def _init_result_csv(self):
+    parent_dir = Path(self.save_csv_name).parent
+    parent_dir.mkdir(parents=True, exist_ok=True)
     fns = FileNames(self.save_csv_name)
 
     # queries result df
@@ -70,30 +71,10 @@ class BillboardMusicCrawler:
     df = pd.read_csv(self.input_csv_path)
 
     # Sort by date
-    df[f'Formatted {self.in_csv_col_names.date}'] = pd.to_datetime(df[self.in_csv_col_names.date], format='%m/%d/%Y')
-    df_sorted = df.sort_values(by=f'Formatted {self.in_csv_col_names.date}').reset_index(drop=True)
-    df_sorted = df_sorted.drop(columns=[f'Formatted {self.in_csv_col_names.date}'])
+    df_sorted = df.sort_values(by=self.in_csv_col_names.date).reset_index(drop=True)
 
     # Remove duplicates
     df_uniq = df_sorted.drop_duplicates(subset=[self.in_csv_col_names.title, self.in_csv_col_names.artist], keep='first')
-    
-    # Remove K-POP songs
-    if self.kpop_path is None:
-      return df_uniq
-    
-    kpop_dict = {}
-    
-    with open(self.kpop_path, 'r', encoding='utf-8') as csvfile:
-      reader = csv.reader(csvfile)
-      for row in reader:
-          artist, songs = row[0], row[1:]
-          kpop_dict[artist] = songs
-      org_df_len, kpop_len = len(df_uniq), sum([len(v) for k, v in kpop_dict.items()])
-      for k, v in kpop_dict.items():
-        for song in v:
-          df_uniq = df_uniq.drop(df_uniq[(df_uniq[self.in_csv_col_names.artist].str.contains(k)) & (df_uniq[self.in_csv_col_names.title] == song)].index)
-          
-      assert len(df_uniq) == org_df_len - kpop_len, f"len(df_uniq) = {len(df_uniq)}, org_df_len - kpop_len = {org_df_len - kpop_len}"
     
     return df_uniq
   
@@ -284,7 +265,6 @@ class FailedMusicCrawler(BillboardMusicCrawler):
     for fn in FileNames(self.save_csv_name).__dict__.values():
       assert fn.exists(), f"{fn} does not exist"
     self.input_csv_path = FileNames(self.save_csv_name).failed
-    self.kpop_path = None
     self.in_csv_col_names = self.out_csv_col_names = CsvColumnNames('Date', 'Song', 'Artist')
 
     self._init_result_csv()
@@ -299,7 +279,6 @@ class RecrawlerForRemastered(BillboardMusicCrawler):
     exclude_keywords = exclude_keywords + [self.REMASTER] if self.REMASTER not in exclude_keywords else exclude_keywords
 
     self.input_csv_path = Path(input_csv_path)
-    self.kpop_path = None
     self.save_audio_dir = Path(save_audio_dir)
     self.save_csv_name = save_csv_name
     self.exclude_keywords = exclude_keywords
@@ -329,13 +308,13 @@ class RecrawlerForRemastered(BillboardMusicCrawler):
 if __name__ == '__main__':
   """
   Example line to run the code: 
-  python crawling_data.py --input_csv rwd-billboard-data/data-out/hot100_assignment.csv --save_csv_name csv/billboard_hot100 --kpop_path csv/K_POP.csv --save_audio_dir data
+  python crawling_data.py --input_csv song_list.csv --save_csv_name csv/kpop --save_audio_dir audio
 
   When recrawling failed music:
-  python crawling_data.py --save_csv_name csv/billboard_hot100 --save_audio_dir data --crawler_type failed
+  python crawling_data.py --save_csv_name csv/kpop --save_audio_dir audio --crawler_type failed
 
   When recrawling remastered music:
-  python crawling_data.py --input_csv csv/billboard_hot100_chosen.csv --save_csv_name csv/billboard_hot100_remaster --save_audio_dir data_remastered_original --crawler_type remastered
+  python crawling_data.py --input_csv csv/kpop_chosen.csv --save_csv_name csv/kpop_remaster --save_audio_dir audio_remastered_original --crawler_type remastered
   
   Add '--exclude_remaster' or '--topk 20' if needed
   """
@@ -346,7 +325,6 @@ if __name__ == '__main__':
   argparser = ArgumentParser()
   argparser.add_argument('--input_csv', type=str)
   argparser.add_argument('--save_csv_name', type=str, required=True)
-  argparser.add_argument('--kpop_path', type=str, default=None)
   argparser.add_argument('--save_audio_dir', type=str, required=True)
   argparser.add_argument('--exclude_remaster', action='store_true')
   argparser.add_argument('--include_remaster', action='store_true') # TODO(minigb): Find better approach
@@ -367,7 +345,7 @@ if __name__ == '__main__':
   if args.crawler_type == 'billboard':
     fns = FileNames(args.save_csv_name)
     assert not fns.chosen.exists(), f"{fns.chosen} already exists. If you are trying to recrawl, use 'failed' as the crawler type."
-    crawler = BillboardMusicCrawler(args.input_csv, args.kpop_path, args.save_audio_dir, args.save_csv_name, exclude_keywords, include_keywords)
+    crawler = BillboardMusicCrawler(args.input_csv, args.save_audio_dir, args.save_csv_name, exclude_keywords, include_keywords)
   elif args.crawler_type == 'failed':
     crawler = FailedMusicCrawler(args.save_audio_dir, args.save_csv_name, exclude_keywords)
   elif args.crawler_type == 'testset':
