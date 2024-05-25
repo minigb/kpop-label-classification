@@ -3,7 +3,6 @@ import yt_dlp
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import csv
 from tqdm import tqdm
-import json
 from pathlib import Path
 from argparse import ArgumentParser
 
