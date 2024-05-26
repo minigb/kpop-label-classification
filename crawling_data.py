@@ -342,7 +342,7 @@ if __name__ == '__main__':
   Add '--exclude_remaster' or '--topk 20' if needed
   """
 
-  EXCLUDE_KEYWORDS_REMASTER_NOT_INCLUDED = ['live', 'cover', 'mv', 'video', 'mix', 'version', 'remix', 'remake', 'arrange', 'dj']
+  EXCLUDE_KEYWORDS_REMASTER_NOT_INCLUDED = ['live', 'cover', 'mv', 'm/v', 'video', 'mix', 'ver', 'version', 'remix', 'remake', 'arrange', 'dj']
   REMASTER = 'remaster'
 
   argparser = ArgumentParser()
