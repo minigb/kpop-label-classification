@@ -17,7 +17,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 1996,전사의 후예 (Warrior’s Descendant),H.O.T.,1,False,True,True,True,전사의 후예 (폭력시대) (descent of warriors),h.o.t. - topic,https://www.youtube.com/watch?v=RpGTUmISOyg
 1997,자유롭게 날 수 있도록 (Free to Fly),H.O.T.,0,False,True,True,True,자유롭게 날수 있도록 (free to fly),h.o.t. - topic,https://www.youtube.com/watch?v=qFXPyxD2IwA
 1997,Young Nation,지누션,0,False,True,False,True,"young nation ft. yang hyunsuk, d.o",jinusean - topic,https://www.youtube.com/watch?v=vWruvSu8FLY
-1997,연정 (Heartbreak),Sechskies,0,False,False,True,True,연정 | heartbreak,sechskies,https://www.youtube.com/watch?v=MWL8vaqM4_A
 1997,Show Me Love,지누션,1,False,True,False,True,show me love,yg family - topic,https://www.youtube.com/watch?v=RVirK3BoEa4
 1997,I Will,지누션,0,False,True,False,True,내가 (i will),jinusean - topic,https://www.youtube.com/watch?v=WNsHA5Mr80U
 1997,Outro,지누션,0,False,True,False,True,outro,jinusean - topic,https://www.youtube.com/watch?v=Q5sNO0iJWM8
@@ -98,7 +97,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2000,I'm Sorry,BoA,0,False,False,True,True,비밀일기 i'm sorry,boa,https://www.youtube.com/watch?v=XWixvcLS1Tk
 2000,Be Natural,S.E.S.,2,False,True,True,True,be natural,s.e.s. - topic,https://www.youtube.com/watch?v=YWP5K88l9G0
 2000,나에게 오는 길 (The Way to Me),Click-B,3,False,True,True,True,exit (for your way) (exit (for your way)),click-b - topic,https://www.youtube.com/watch?v=8clc85hhaLM
-2000,찬바람이 불면 (When the Cold Wind Blows),Click-B,0,False,True,False,True,when the cold wind blows,ivy - topic,https://www.youtube.com/watch?v=PhKC83tu7RA
 2000,Beautiful Life,S.E.S.,2,False,True,True,True,beatiful life,s.e.s. - topic,https://www.youtube.com/watch?v=2MI8Rt0i4NE
 2000,Good-Bye To My Love,S.E.S.,0,False,True,True,True,나를 위한 이별 good-bye to my love,s.e.s. - topic,https://www.youtube.com/watch?v=Q0gQtl_U8ms
 2000,아이야! (I Yah!) II,H.O.T.,1,False,True,True,True,아이야! i yah!,h.o.t. - topic,https://www.youtube.com/watch?v=jRaDeILxH58
@@ -532,7 +530,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2011,내 사람이라서 (Cause You're My Man) (The Greatest Love OST),G.NA,0,False,False,True,True,cause you are my man (내 사람이라서),g.na 지나 (official youtube channel),https://www.youtube.com/watch?v=kXiWBY0_6mQ
 2011,직감 (Intuition),CNBLUE (씨엔블루),2,False,False,True,True,cnblue - 직감 m/v,cnblue (씨엔블루),https://www.youtube.com/watch?v=_500iqJggs0
 2011,In My Head,CNBLUE (씨엔블루),0,False,False,True,True,in my head (in my head),cnblue (씨엔블루),https://www.youtube.com/watch?v=MDHj1li6Rtc
-2011,Rider,KARA,0,False,False,True,True,rider (rider),kara official,https://www.youtube.com/watch?v=sqwJeHvIdfw
 2011,2Hot,G.NA,0,False,False,True,True,g.na - 2hot,g.na 지나 (official youtube channel),https://www.youtube.com/watch?v=Gz0bgNz84a0
 2011,Is It Only Me? (나만 이런거야?),블락비(Block B),0,False,False,True,True,does it only happen to me? (나만 이런거야?),block b,https://www.youtube.com/watch?v=pEnP0d0Ku_U
 2011,이별이야기 (Farewell Story),Lee Jin,0,False,True,False,True,이별이야기 farewell story,release - topic,https://www.youtube.com/watch?v=y0O2a7AEfXE
@@ -562,7 +559,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2011,Give It to Me,2PM,0,False,False,True,True,"2pm ""give it to me"" m/v",2pm,https://www.youtube.com/watch?v=hv3n36p_8oc
 2011,Thank You,2PM,0,False,False,True,True,"2pm ""thank you"" m/v",2pm,https://www.youtube.com/watch?v=48RtZ_CV--A
 2011,Storm,Super Junior,0,False,False,True,True,폭풍 storm,super junior,https://www.youtube.com/watch?v=rmZ5W-gB9Mk
-2011,Nervous (불안하다),2AM,0,False,False,True,True,nervousness (불안하다),2am,https://www.youtube.com/watch?v=xU4Yqo8eUic
 2011,Mirage (미라지),2AM,0,False,False,True,True,mirage,2am,https://www.youtube.com/watch?v=j09bs6bpj-4
 2011,There Is Nothing More (이젠 없다),2AM,0,False,False,True,True,there is nothing more (이젠 없다),2am,https://www.youtube.com/watch?v=KhAMGDW3GrY
 2011,Can't Say I Love You (사랑한단 말 못해),2AM,0,False,False,True,True,can't say i love you (사랑한단 말 못해),2am,https://www.youtube.com/watch?v=_uEzO4IMLXQ
@@ -615,7 +611,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2012,Movie's Over,블락비(Block B),1,False,False,True,True,movie's over (movie's over),block b,https://www.youtube.com/watch?v=Nsu_hAifR_0
 2012,Hope,BoA,0,False,False,True,True,네모난 바퀴 hope,boa,https://www.youtube.com/watch?v=OixSAftDrCo
 2012,Catch Me If You Can,A-JAX,0,False,False,True,True,catch me if you can (잡을 테면 잡아봐),a-jax,https://www.youtube.com/watch?v=gootNMrAXP0
-2012,"Oh, Good!",G.NA,1,False,False,True,True,"brother and sister (feat. sang chu) (오빠, 동생 (feat. 상추))",g.na 지나 (official youtube channel),https://www.youtube.com/watch?v=6KgwIsD6DZU
 2012,A Good Bye,Super Junior,0,False,False,True,True,헤어지는 날 a 'good'bye,super junior,https://www.youtube.com/watch?v=qjcHYWMR5vE
 2012,Red Carpet,Shinhwa,0,False,False,True,True,red carpet,shinhwa official,https://www.youtube.com/watch?v=bfWEcOG82p8
 2012,Never Let Go,A-JAX,1,False,False,True,True,never let go (너 밖에 몰라서 (never let go)),a-jax,https://www.youtube.com/watch?v=ZsM4pqvLIvs
@@ -738,7 +733,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2013,Falling in Love,2PM,2,False,False,True,True,2pm falling in love 「hottest japan 1st fan club event 2014 'yazoo'」,love 2pm,https://www.youtube.com/watch?v=g4majeKAkIo
 2013,SHINe (Medusa I),SHINee,0,False,False,True,True,shine (medusa ⅰ),shinee,https://www.youtube.com/watch?v=36lrjjNzd6A
 2013,Easy(신파),History,2,False,False,True,True,torn apart (신파),history official channel,https://www.youtube.com/watch?v=AJ2QBVeL28c
-2013,Better Off,SHINee,1,False,False,True,True,버리고 가 better off,shinee,https://www.youtube.com/watch?v=iFyp3kF3GrE
 2013,D-Day,History,1,False,False,True,True,"d-day: ""the greatest military operation in history"" | fdr",history,https://www.youtube.com/watch?v=FV8_ebZzSHQ
 2013,Selene 6.23,SHINee,2,False,False,True,True,너와 나의 거리 (selene 6.23),shinee,https://www.youtube.com/watch?v=nqZi3EaIakY
 2013,Sleepless Night,SHINee,0,False,False,True,True,떠나지 못해 sleepless night,shinee,https://www.youtube.com/watch?v=8Z-Q6_8tAV4
@@ -782,7 +776,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2013,Go,Super Junior-M,1,False,True,True,True,go,super junior-m - topic,https://www.youtube.com/watch?v=RD9J7hnhcEc
 2013,It's You,Super Junior-M,0,False,True,True,True,it's you,super junior-m - topic,https://www.youtube.com/watch?v=Kf7fQpLvglc
 2013,Queen,Miryo,1,False,False,True,True,queen (feat. gain),miryo,https://www.youtube.com/watch?v=oZXhQLnWjL4
-2013,Lady,CNBLUE (씨엔블루),0,False,False,True,True,lady (lady),cnblue (씨엔블루),https://www.youtube.com/watch?v=Q4VutoLCvNI
 2013,Missing You (그리워해요),2NE1,0,False,False,True,True,2ne1 - 그리워해요(missing you) m/v,2ne1,https://www.youtube.com/watch?v=AG0jlKdB1s0
 2013,Coffee Shop,CNBLUE (씨엔블루),1,False,False,True,True,coffee shop (coffee shop),cnblue (씨엔블루),https://www.youtube.com/watch?v=TFZyTFWmXJE
 2013,Hurricane,Shinhwa,0,False,False,True,True,hurricane,shinhwa official,https://www.youtube.com/watch?v=a7cHgw04bX0
@@ -808,7 +801,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2013,Inception,인피니트 (Infinite),1,False,False,True,True,inception (inception),infinite,https://www.youtube.com/watch?v=88IdPPO4pAQ
 2013,이보다 좋을 순 없다 (As Good As It Gets),인피니트 (Infinite),0,False,False,True,True,as good as it gets (이보다 좋을 순 없다.),infinite,https://www.youtube.com/watch?v=KTO7i6ARUO8
 2013,Break Down,Super Junior-M,6,False,True,True,True,break down,super junior-m - topic,https://www.youtube.com/watch?v=7g5y7-tgjqs
-2014,Shirt,Super Junior,1,False,False,True,True,shirt,super junior,https://www.youtube.com/watch?v=WcoHzdLcMoU
 2014,So Good,2PM,2,False,False,True,True,nichkhun (from 2pm) so good 「 premium solo concert 2019-2020 'story of...' 」,love 2pm,https://www.youtube.com/watch?v=HyxnPVMDBuU
 2014,My Love For You,Super Junior-M,0,False,True,True,True,my love for you,super junior-m - topic,https://www.youtube.com/watch?v=qGajWKV5JgQ
 2014,MAMACITA (아야야),Super Junior,1,False,False,True,True,아야야 mamacita,super junior,https://www.youtube.com/watch?v=-kiLkUIpe5M
@@ -826,7 +818,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2014,Bad Man Crying,Rainbow,0,False,False,True,True,rainbow(레인보우) - bad man crying(나쁜 남자가 운다) dance practice ver.,rainbow official,https://www.youtube.com/watch?v=ZSC90PIoQkw
 2014,여기 봐 (Look Here),BTS,2,False,False,True,True,bts - look here from bts home party festa 2017 [eng sub] [full hd],enjoy bts more,https://www.youtube.com/watch?v=VBxF_jjGUJY
 2014,Pierrot,Rainbow,0,False,False,True,True,pierrot (pierrot),rainbow official,https://www.youtube.com/watch?v=rWklztRbsAA
-2014,Mamma Mia,KARA,1,False,False,True,True,kara(카라)-맘마미아(mamma mia)안무연습 영상(dance practice),kara official,https://www.youtube.com/watch?v=zXQvssll_I4
 2014,Privacy,Rainbow,0,False,False,True,True,privacy (privacy),rainbow official,https://www.youtube.com/watch?v=GD6QzscNeXA
 2014,Cha Cha,Rainbow,0,False,False,True,True,rainbow blaxx(레인보우 블랙)-cha cha m/v,rainbow official,https://www.youtube.com/watch?v=fKAi5cWHYDY
 2014,Fantasy,AOA (에이오에이),0,False,False,True,True,fantasy (fantasy),aoa,https://www.youtube.com/watch?v=LYBgClfywX0
@@ -862,7 +853,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2014,Winter Party,라붐,1,False,True,False,True,winter party,laboum - topic,https://www.youtube.com/watch?v=aM6J8KPweKU
 2014,La li:Lalala,라붐,2,False,True,False,True,주문을 풀어,laboum - topic,https://www.youtube.com/watch?v=1hjik8V_yew
 2014,Back in the Day,Seo Eunkwang,0,False,True,True,True,back in the day (그때),seo eunkwang - topic,https://www.youtube.com/watch?v=taOA2owkb3Q
-2014,Back,인피니트 (Infinite),2,False,False,True,True,back (back),infinite,https://www.youtube.com/watch?v=MZO-H0CgF6A
 2014,Smile Again,Winner,0,False,False,True,True,smile again,winner,https://www.youtube.com/watch?v=xyM_rzDTadI
 2014,다르다,Winner,0,False,False,True,True,winner - '끼부리지마(don't flirt)' 1012 sbs inkigayo,winner,https://www.youtube.com/watch?v=2U_fXX1lUGg
 2014,Follow Me,인피니트 (Infinite),0,False,False,True,True,follow me (follow me),infinite,https://www.youtube.com/watch?v=NSwra-HKmt8
@@ -966,7 +956,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2015,Back and Forth,Fiestar,0,True,False,False,True,back and forth-fiestar 【official audio】,小王子韩国,https://www.youtube.com/watch?v=XYxIfGLCXHI
 2015,Happy New Year,UNIQ,0,False,False,True,True,uniq - happy new year,유니크uniq,https://www.youtube.com/watch?v=ewTINtAZCTc
 2015,Love at First Sight,Super Junior,2,False,False,True,True,첫눈에 반했습니다 (love at first sight),super junior,https://www.youtube.com/watch?v=zyFwe81Vd28
-2015,안아보자 (Hug Me),iKON,0,False,False,True,True,hug me (안아보자),ikon,https://www.youtube.com/watch?v=Q2k5tH7ssXU
 2015,M.U.P,iKON,0,False,False,True,True,솔직하게 (m.u.p),ikon,https://www.youtube.com/watch?v=b209-VD1hIc
 2015,이별길 (Goodbye Road),iKON,0,False,False,True,True,ikon - '이별길(goodbye road)' m/v,ikon,https://www.youtube.com/watch?v=2O6dRaBbFoo
 2015,Good Love,Super Junior,0,False,False,True,True,good love,super junior,https://www.youtube.com/watch?v=t76VGz3AqQ0
@@ -1112,7 +1101,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2015,Lady’s Room,Red Velvet,0,False,False,True,True,lady's room,red velvet,https://www.youtube.com/watch?v=fqVGBEf7jDY
 2015,Don’t U Wait No More,Red Velvet,0,False,False,True,True,don't u wait no more,red velvet,https://www.youtube.com/watch?v=gumPi1yX9q0
 2015,Don't Cry (The Scholar Who Walks the Night OST),G.NA,1,False,False,True,True,don't cry,g.na 지나 (official youtube channel),https://www.youtube.com/watch?v=JzYYvyVd8e0
-2015,Promise (I'll Be),2PM,3,False,True,True,True,2pm - promise (i'll be),2pm - topic,https://www.youtube.com/watch?v=51gn8Q9aCao
 2015,One N Only,N.Flying (엔플라잉),0,False,False,True,True,one n only (one n only),n.flying (엔플라잉),https://www.youtube.com/watch?v=mfyhYUWIkV4
 2015,Day 1,Red Velvet,0,False,False,True,True,day 1,red velvet,https://www.youtube.com/watch?v=KTaa3Pbv9c0
 2015,Romance,SHINee,0,False,False,True,True,romance,shinee,https://www.youtube.com/watch?v=MBz-yaAK4gk
@@ -1126,7 +1114,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2016,Sing Me,DAY6,0,False,False,True,True,sing me,day6,https://www.youtube.com/watch?v=PO2VvKdqusw
 2016,Letting Go,DAY6,2,False,False,True,True,놓아 놓아 놓아 letting go (rebooted),day6,https://www.youtube.com/watch?v=EErj6GjObew
 2015,I'm Sorry,2PM,0,False,False,True,True,i'm sorry,2pm,https://www.youtube.com/watch?v=SgP9x1035c4
-2016,Blood,DAY6,0,False,False,True,True,blood,day6,https://www.youtube.com/watch?v=MroqrprFK98
 2016,Carrie (The First Day),Gain,0,False,True,True,True,carrie (the first day),gain - topic,https://www.youtube.com/watch?v=PDyRHpUrA04
 2016,Don't Come to Farewell (육룡이 나르샤 OST),은하,1,False,True,True,True,don't come with bye (이별로 오지마),은하 (eunha) - topic,https://www.youtube.com/watch?v=rL3rlepHh4I
 2016,Stalker,U-KISS,0,False,False,True,True,유키스(u-kiss) 'stalker' m/v full ver.,u-kiss,https://www.youtube.com/watch?v=3pN7REpLn3I
@@ -1730,7 +1717,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2018,Turn Off The Light (MINO),Winner,0,False,False,True,True,손만 잡고 자자 (turn off the light) (mino solo),winner,https://www.youtube.com/watch?v=Kn-EXtfsESg
 2018,Hello,Winner,0,False,False,True,True,여보세요 (hello),winner,https://www.youtube.com/watch?v=DQRVUwX_KRI
 2018,Everyday,Winner,0,False,False,True,True,winner - 'everyday' m/v,winner,https://www.youtube.com/watch?v=d1D1SJ-KqaQ
-2018,What’s In Your House,(G)I-DLE,1,False,False,True,True,what’s in your house? (알고 싶어),(g)i-dle (여자)아이들 (official youtube channel),https://www.youtube.com/watch?v=ehXwFRCvTa8
 2018,Wake up,Pentagon,1,False,False,True,True,wake up (intro) (wake up (intro)),pentagon 펜타곤 (official youtube channel),https://www.youtube.com/watch?v=jIPSN_Y3Eos
 2018,Raining,Winner,0,False,False,True,True,raining,winner,https://www.youtube.com/watch?v=JszOSGnr4AQ
 2018,Hear Me,(G)I-DLE,1,False,False,True,True,hear me (들어줘요),(g)i-dle (여자)아이들 (official youtube channel),https://www.youtube.com/watch?v=OVivuUWG9Qs
@@ -1750,7 +1736,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2018,Butterfly,BTOB,0,False,False,True,True,butterfly (나비),btob 비투비 (official youtube channel),https://www.youtube.com/watch?v=iorJ7cbOhHk
 2018,Like It,BTOB,1,False,False,True,True,like it (like it),btob 비투비 (official youtube channel),https://www.youtube.com/watch?v=dGJ1b7AidyQ
 2018,All of You Say,Minzy,1,False,False,True,True,minzy (공민지) - all of you say | glee tour in manila,minzy pos worldwide,https://www.youtube.com/watch?v=GIzKz6slh1g
-2018,Wait,EXO,0,False,False,True,True,wait,exo,https://www.youtube.com/watch?v=fgR0G9Lqypc
 2018,Humming,KARD,0,False,False,True,True,intro : humming (intro : humming),kard,https://www.youtube.com/watch?v=j-lmmFapM0w
 2018,The Feeling,BTOB,0,False,False,True,True,the feeling,btob 비투비 (official youtube channel),https://www.youtube.com/watch?v=atWBqO-S1Qc
 2018,IceBreaker,BTOB,2,False,True,False,True,icebreaker (icebreaker),peniel - topic,https://www.youtube.com/watch?v=Uw0HfNQOc3M
@@ -1765,7 +1750,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2018,All Day,Lee Minhyuk,3,False,True,True,True,all day (all day),huta (lee minhyuk) - topic,https://www.youtube.com/watch?v=QSEZtKbgwyM
 2018,Trauma,EXO,0,False,False,True,True,트라우마 (trauma),exo,https://www.youtube.com/watch?v=RVrCb56RZac
 2018,Blue Moon,BTOB,2,False,False,True,True,blue moon (blue moon),btob 비투비 (official youtube channel),https://www.youtube.com/watch?v=ipKjC3LTklg
-2019,For U,Boy Story,0,False,False,True,True,boy story 'for u' m/v | this song is for boss ♥,boy story,https://www.youtube.com/watch?v=ER6_jOAlLPg
 2018,"1, 2, 3",BTOB,1,False,True,False,True,"1, 2, 3 (1, 2, 3)",seo eunkwang - topic,https://www.youtube.com/watch?v=TR-fER6EtIw
 2019,ENERGY,Boy Story,0,False,False,True,True,"boy story ""energy"" (at home ver.)",boy story,https://www.youtube.com/watch?v=-O1sCEeg3gM
 2019,Second Life,세븐틴(SEVENTEEN),1,False,False,True,True,second life,seventeen,https://www.youtube.com/watch?v=-kcG8UjJAeM
@@ -1811,7 +1795,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2019,Love On You,라붐,1,False,True,False,True,love on you,laboum - topic,https://www.youtube.com/watch?v=fvczcXtIPAE
 2019,Hush,라붐,0,False,True,False,True,hush,laboum - topic,https://www.youtube.com/watch?v=oGeohEg9Fy0
 2019,한 페이지가 될 수 있게 (So That I Can Write It),DAY6,2,False,False,True,True,"day6(데이식스) ""한 페이지가 될 수 있게""_ day6 2nd world tour 'gravity'",day6,https://www.youtube.com/watch?v=M-I7eu1VsrU
-2019,UTOPIA,ATEEZ (에이티즈),1,False,False,True,True,utopia,ateez,https://www.youtube.com/watch?v=MriePJkEays
 2019,Icy,ITZY,1,False,False,True,True,"itzy ""icy"" dance practice",itzy,https://www.youtube.com/watch?v=mBvdwhgyqVY
 2019,Want It?,ITZY,0,False,False,True,True,"itzy ""want it?"" dance practice",itzy,https://www.youtube.com/watch?v=L4fRGgARiKw
 2019,Flower Shower,HyunA,1,True,False,True,True,현아 (hyuna) - 'flower shower' official audio,hyuna,https://www.youtube.com/watch?v=_0s91iZzqts
@@ -1884,7 +1867,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2019,Mystery Light,베리베리 (VERIVERY),0,False,False,True,True,mystery light,verivery,https://www.youtube.com/watch?v=hlt9nZyIfI0
 2019,My Beauty (Extraordinary You OST),베리베리 (VERIVERY),1,False,False,True,True,my beauty,verivery,https://www.youtube.com/watch?v=xVodUlBJIuQ
 2019,VERI-US,베리베리 (VERIVERY),3,False,False,True,True,verivery 1st mini album [veri-us] unboxing - diy by verivery ver.,verivery,https://www.youtube.com/watch?v=fZUulWTvRYA
-2019,Humph! (접근금지),Pentagon,1,False,False,True,True,펜타곤(pentagon) - '접근금지 (prod. by 기리보이)(humph! (prod. by giriboy))' m/v (performance ver.),pentagon 펜타곤 (official youtube channel),https://www.youtube.com/watch?v=irY5Eko3W_Y
 2019,Like the First Time (처음처럼),Jeon Ji-yoon,0,False,True,False,True,처음처럼 like the first time (bonus track),jenyer - topic,https://www.youtube.com/watch?v=_SLIqOs_wqA
 2019,All I Do,베리베리 (VERIVERY),0,False,False,True,True,all i do,verivery,https://www.youtube.com/watch?v=TrLWajzucRk
 2019,Analog,Jeon Ji-yoon,2,False,True,False,True,analog,jenyer - topic,https://www.youtube.com/watch?v=GV4ZCPwvNC0
@@ -2000,7 +1982,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2020,SALUTE,EVERGLOW,1,False,False,True,True,salute,everglow,https://www.youtube.com/watch?v=18jn_jmxs4I
 2020,Flow,몬스타엑스(MONSTA X),1,False,False,True,True,flow (flow),monsta x,https://www.youtube.com/watch?v=61Vi7n96X98
 2020,Hot Air Balloon,크래비티(CRAVITY),0,False,False,True,True,hot air balloon (열기구),cravity,https://www.youtube.com/watch?v=aB71Ipd4o94
-2020,Interlude,DAY6,0,False,False,True,True,ocean -interlude 1- (with denimalz 3),day6,https://www.youtube.com/watch?v=Fey6sbxThpc
 2020,Intro : Walk the Line,엔하이픈 (ENHYPEN),2,False,False,True,True,intro : walk the line,enhypen,https://www.youtube.com/watch?v=_EIIfskPgYY
 2020,Diamond,아이린&슬기,0,False,True,False,True,diamond,seulgi - topic,https://www.youtube.com/watch?v=cg-R48QN0Cg
 2020,Nobody Else,몬스타엑스(MONSTA X),0,False,False,True,True,nobody else (nobody else),monsta x,https://www.youtube.com/watch?v=uhB4ZxDUcs4
@@ -2043,7 +2024,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2020,Loving You (Do Do Sol Sol La La Sol OST Part.3),러블리즈 (Lovelyz),2,False,False,True,True,"loving you (sung by babysoul, lee mijoo, jin)",lovelyz,https://www.youtube.com/watch?v=1kjiNekWDKw
 2020,Click / Han River View (feat. Paloalto),Mino,0,False,True,True,True,click / han river view,mino - topic,https://www.youtube.com/watch?v=Tzd-kpKDwRU
 2020,With Woollim (Relay),로켓펀치 (Rocket Punch),3,False,True,False,True,relay (sung by kim sung kyu(infinite) & lovelyz & golden child & rocket punch & woollim rookie...,with woollim - topic,https://www.youtube.com/watch?v=21LnypS9Wwk
-2020,Interlude: Set Me Free,Suga,0,False,True,True,True,interlude : set me free,suga - topic,https://www.youtube.com/watch?v=vrcsE6xWODA
 2020,이제 (Feat. MELOH),Mino,0,False,True,False,True,breathe (feat. mino) (prod. gray),release - topic,https://www.youtube.com/watch?v=GsRvatDunN8
 2020,Overdrive,드리핀 (DRIPPIN),1,False,False,True,True,overdrive (overdrive),drippin,https://www.youtube.com/watch?v=x7hLiesbgUE
 2020,Unforgettable,러블리즈 (Lovelyz),8,False,False,True,True,[lovelyz : unforgettable memories] ep.3 suit dance behind,lovelyz,https://www.youtube.com/watch?v=VrZFdG0rcu8
@@ -2161,7 +2141,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2020,Ice Cream (with Selena Gomez),BLACKPINK,0,False,False,True,True,blackpink - 'ice cream (with selena gomez)' m/v,blackpink,https://www.youtube.com/watch?v=vRXZj0DzXIA
 2020,You Make Me,ITZY,0,False,False,True,True,you make me,itzy,https://www.youtube.com/watch?v=jkgQMEoEbvE
 2020,Nobody Like You,ITZY,0,False,False,True,True,itzy selfie cam #nobody_like_you,itzy,https://www.youtube.com/watch?v=6rc_R5XvT3Q
-2020,10 Months,Enhypen,1,False,False,True,True,10 months,enhypen,https://www.youtube.com/watch?v=W_Y89g1Uthw
 2020,24Hrs,ITZY,0,False,False,True,True,24hrs,itzy,https://www.youtube.com/watch?v=9-1qmaq5mic
 2020,I Don't Wanna Dance,ITZY,0,False,False,True,True,i don't wanna dance,itzy,https://www.youtube.com/watch?v=_VWUihDbl0M
 2020,Pretty Savage,BLACKPINK,0,False,False,True,True,blackpink - ‘pretty savage’ 1011 sbs inkigayo,blackpink,https://www.youtube.com/watch?v=gU2HqP4NxUs
@@ -2258,7 +2237,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2021,SERIES ‘O’ [ROUND 1 : HALL],베리베리 (VERIVERY),9,False,False,True,True,verivery 2nd single album series ‘o’ [round 1 : hall] jacket making film _ 지니 공개 버전,verivery,https://www.youtube.com/watch?v=zLs3P3USdwM
 2021,Heart Attack,베리베리 (VERIVERY),0,False,False,True,True,heart attack,verivery,https://www.youtube.com/watch?v=UcdGeLd0GRY
 2021,Prom,베리베리 (VERIVERY),0,False,False,True,True,prom,verivery,https://www.youtube.com/watch?v=PEv8hC1cJGE
-2021,Go Go,크래비티(CRAVITY),0,False,False,True,True,go go,cravity,https://www.youtube.com/watch?v=vOmba62fQtw
 2021,Get Away,베리베리 (VERIVERY),1,False,False,True,True,verivery - 'get away' official m/v,verivery,https://www.youtube.com/watch?v=CBhqNk19VQM
 2021,POW!,크래비티(CRAVITY),1,False,False,True,True,pow!,cravity,https://www.youtube.com/watch?v=pjN4sffrtl4
 2021,Go Big or Go Home,엔하이픈 (ENHYPEN),2,False,False,True,True,모 아니면 도 (go big or go home),enhypen,https://www.youtube.com/watch?v=n4erXpHxmcQ
@@ -2329,7 +2307,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2021,Lover Like Me,CL,1,True,False,True,True,cl -  lover like me (official audio),cl official channel,https://www.youtube.com/watch?v=i00W7aiwp1Q
 2021,Chuck,CL,1,True,False,True,True,cl - chuck (official audio),cl official channel,https://www.youtube.com/watch?v=HH2UrTrnPqc
 2021,All For Love,WayV,0,False,False,True,True,all for love 梦尽,wayv,https://www.youtube.com/watch?v=u16QgmV1jPc
-2021,"You, jam",LIGHTSUM,0,False,False,True,True,"you, jam",lightsum 라잇썸 (official youtube channel),https://www.youtube.com/watch?v=_GtURA2Ewyw
 2021,Memory,SF9 (에스에프나인),0,False,False,True,True,memory (memory),sf9,https://www.youtube.com/watch?v=2z4CCk9pr5E
 2021,Rumination,SF9 (에스에프나인),3,False,False,True,True,memory (memory),sf9,https://www.youtube.com/watch?v=2z4CCk9pr5E
 2021,Gentleman,SF9 (에스에프나인),0,False,False,True,True,gentleman (gentleman),sf9,https://www.youtube.com/watch?v=ufyFj3t_Z8o
@@ -2383,7 +2360,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2021,Favorites (Vampire),NCT 127,1,False,False,True,True,nct 127 엔시티 127 'favorite (vampire)' halloween costume ver.,nct 127,https://www.youtube.com/watch?v=BXP-WgkMmzg
 2021,Shadow,Super Junior,0,False,False,True,True,shadow (赤霞),super junior,https://www.youtube.com/watch?v=K2HqGe6Cszc
 2021,Swipe,ITZY,2,False,False,True,True,"itzy ""swipe"" dance practice (5k)",itzy,https://www.youtube.com/watch?v=WfMHIJ-mkBQ
-2021,Louder,청하,0,False,False,True,True,louder,chung ha 청하,https://www.youtube.com/watch?v=K691ANWkz2E
 2021,Vertigo,드리핀 (DRIPPIN),0,False,False,True,True,drippin(드리핀) 'vertigo' dance practice,drippin,https://www.youtube.com/watch?v=aPTMmOEetdQ
 2021,Reach Out Your Hands (손을 뻗어봐),드리핀 (DRIPPIN),0,False,False,True,True,reach out your hands (손을 뻗어봐),drippin,https://www.youtube.com/watch?v=HdasQQiY7Rc
 2021,Good Night My Princess,청하,0,False,False,True,True,good night my princess,chung ha 청하,https://www.youtube.com/watch?v=Q0aEWxy-nHg
@@ -2428,7 +2404,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2021,Nothing (with Be'O and Hwasa),Mino,0,False,True,False,True,nothing (feat. hwa sa & mino) (prod. gray),release - topic,https://www.youtube.com/watch?v=TrY3mQx6zGs
 2021,초콜릿 박스 (Chocolate Box),Yang Yoseob,0,False,True,False,True,chocolate box (feat. ph-1) ( chocolate box (feat. ph-1)),yang yo seop - topic,https://www.youtube.com/watch?v=NzlOdpAkEs8
 2021,ONE,DAY6,0,False,False,True,True,무적 (one),day6,https://www.youtube.com/watch?v=aoTdW4GLtIQ
-2021,GOOD GIRL,HyunA,1,True,False,True,True,현아 (hyuna) - 'good girl' official audio,hyuna,https://www.youtube.com/watch?v=GKHAU7cUt7I
 2021,Question Mark (궁금해),Mino,0,False,True,True,True,궁금해 (question mark),mino - topic,https://www.youtube.com/watch?v=PYYSCLpOnjw
 2021,Super Summer,NiziU,2,False,False,True,True,「super summer」 image movie,niziu official,https://www.youtube.com/watch?v=3QCnDQUlIsk
 2021,Burn,Boy Story,0,False,False,True,True,#boystory# 舞蹈视频《burn》完整公开。请期待我们的第一支单曲～9月1日12pm 《how old r u》,boy story,https://www.youtube.com/watch?v=SZ5kFReKJgs
@@ -2464,7 +2439,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2022,Tree (with Davii),소유,0,False,True,False,True,tree (feat. davii) (나무 (feat. davii)),soyou - topic,https://www.youtube.com/watch?v=T2J7f3aw_eo
 2022,Cyberpunk,ATEEZ (에이티즈),1,False,False,True,True,cyberpunk,ateez,https://www.youtube.com/watch?v=nHFd4eEBvP4
 2022,Playback,LOONA,0,False,False,True,True,playback,loonatheworld,https://www.youtube.com/watch?v=zA3EdSDEXw8
-2022,Gold (금),iKON,0,False,False,True,True,금 (gold),ikon,https://www.youtube.com/watch?v=QpzwYh4yYKs
 2022,Music Box : Reflection,J-Hope,1,False,True,True,True,music box : reflection,j-hope - topic,https://www.youtube.com/watch?v=7GlSv5k_whg
 2022,= (Equal Sign),J-Hope,7,False,True,True,True,equal sign (lollapalooza ver.),j-hope - topic,https://www.youtube.com/watch?v=OazMlLstAGE
 2022,Rockstar,N.Flying (엔플라잉),0,False,True,False,True,rockstar,release - topic,https://www.youtube.com/watch?v=4YSpFtBRAHs
@@ -2669,7 +2643,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2022,WALK THE LINE,Enhypen,2,False,False,True,True,intro : walk the line,enhypen,https://www.youtube.com/watch?v=_EIIfskPgYY
 2022,Future Perfect (Pass the MIC),Enhypen,3,False,False,True,True,enhypen (엔하이픈) ‘future perfect (pass the mic)’ dance practice,enhypen,https://www.youtube.com/watch?v=MHqOB-S7oGE
 2022,Change pt.2,RM,0,False,True,True,True,change pt.2,rm - topic,https://www.youtube.com/watch?v=y5EhsK21YkA
-2022,Dragon (용),iKON,0,False,False,True,True,용 (龍) (dragon),ikon,https://www.youtube.com/watch?v=yJgjT22UU08
 2022,Though You're Gone (그대 떠나가도),2AM,1,False,False,True,True,though you're gone,2am,https://www.youtube.com/watch?v=kYurJEB0uQc
 2022,건망증 (with 김사월),RM,0,False,True,True,True,건망증 (with 김사월),rm - topic,https://www.youtube.com/watch?v=cmJbVPTFtYg
 2022,"Closer (with Paul Blanco, Mahalia)",RM,0,False,True,True,True,"closer (with paul blanco, mahalia)",rm - topic,https://www.youtube.com/watch?v=mJcjXjYWI6E
@@ -2723,7 +2696,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2023,Peter Pan,(G)I-DLE,1,False,False,True,True,peter pan (어린 어른),(g)i-dle (여자)아이들 (official youtube channel),https://www.youtube.com/watch?v=ypsaGJzyAjg
 2023,Man in the Box,Xdinary Heroes,0,True,False,True,True,xdinary heroes - man in the box (official audio),xdinary heroes,https://www.youtube.com/watch?v=og7O0Mft5Qw
 2023,Paradise,(G)I-DLE,0,False,False,True,True,paradise (paradise),(g)i-dle (여자)아이들 (official youtube channel),https://www.youtube.com/watch?v=PCbx5U-S5ec
-2023,Lucid,(G)I-DLE,0,False,False,True,True,lucid (lucid),(g)i-dle (여자)아이들 (official youtube channel),https://www.youtube.com/watch?v=Bd5950W2b5E
 2023,Checkmate,Xdinary Heroes,0,True,False,True,True,xdinary heroes - checkmate (official audio),xdinary heroes,https://www.youtube.com/watch?v=lGjge3gln5g
 2023,Queencard,(G)I-DLE,1,False,False,True,True,(여자)아이들((g)i-dle) - '퀸카 (queencard)' m/v (performance ver.),(g)i-dle (여자)아이들 (official youtube channel),https://www.youtube.com/watch?v=AKg_9dn_VmA
 2023,All Night,(G)I-DLE,0,False,False,True,True,all night (all night),(g)i-dle (여자)아이들 (official youtube channel),https://www.youtube.com/watch?v=iOoeLYqx3yI
@@ -2809,7 +2781,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2023,자석 (MAGNET) (feat. Moon Sujin),김진환,1,True,False,False,True,jay (김진환) 'magnet (feat. moon sujin)' official audio,jxs_bp official,https://www.youtube.com/watch?v=86fQg-8wUZ4
 2023,Dresscode (Prod. imase),LE SSERAFIM,0,False,False,True,True,dresscode (prod. imase),le sserafim,https://www.youtube.com/watch?v=dovBgZWS0bo
 2023,Golden Age,NCT U,1,True,False,True,True,nct 2023 'golden age' (official audio),nct,https://www.youtube.com/watch?v=gJnLVHkLKqc
-2023,Karma,엔하이픈 (ENHYPEN),0,False,False,True,True,'karma' stage cam @ 2023 weverse con festival - enhypen (엔하이픈),enhypen,https://www.youtube.com/watch?v=BKHGRaxG45U
 2023,Reason,Taeyang,1,False,False,True,True,나는,taeyang,https://www.youtube.com/watch?v=VNCbNm6lt0c
 2023,JUKEBOX,이븐 (EVNNE),0,False,False,True,True,jukebox,evnne,https://www.youtube.com/watch?v=xCkENY2145Q
 2023,I WANNA DO,STAYC,1,False,False,True,True,﻿i wanna do (﻿i wanna do),stayc,https://www.youtube.com/watch?v=ms10oDKzsuc
@@ -2912,14 +2883,12 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2023,Seven (feat. Latto),Jungkook,1,False,True,False,True,seven (feat. latto) - clean ver.,jung kook - topic,https://www.youtube.com/watch?v=Vs64cZbeY88
 2023,Stay With You,Hi-Fi Un!corn (하이파이 유니콘),2,False,True,True,True,stay with you,hi-fi un!corn - topic,https://www.youtube.com/watch?v=4nB1Qu5phhQ
 2023,U&I,Hi-Fi Un!corn (하이파이 유니콘),3,False,True,True,True,u & i,hi-fi un!corn - topic,https://www.youtube.com/watch?v=kvTHWI9ImUc
-2023,Blue,V,1,False,False,True,True,v 'blue' @ naver npop,bangtantv,https://www.youtube.com/watch?v=VveNv69Mz4U
 2023,Slow Dancing,V,2,True,False,False,True,v (뷔) 'slow dancing' official audio,jxs_bp official,https://www.youtube.com/watch?v=1AP3-j1jG6g
 2023,Blue & Grey (with Suga),V,0,False,False,True,True,"bts performs ""blue & grey"" | mtv unplugged presents: bts",mtv,https://www.youtube.com/watch?v=iP62Tg04vww
 2023,MOVE (T5),TREASURE,0,False,False,True,True,treasure - 'move (t5)' m/v,treasure (트레저),https://www.youtube.com/watch?v=IR8gXjm507Y
 2023,Love Me Again,V,1,False,False,True,True,뷔(v) 'love me again' band session,bangtantv,https://www.youtube.com/watch?v=r2rZXrsBAfE
 2023,Icecream Girl,Hi-Fi Un!corn (하이파이 유니콘),0,False,True,True,True,icecream girl,hi-fi un!corn - topic,https://www.youtube.com/watch?v=YRaWzO2AKbI
 2023,Rainy Days,V,2,True,False,False,True,v (뷔) 'rainy days' official audio,jxs_bp official,https://www.youtube.com/watch?v=GP0P6xJCERc
-2023,ISTJ,NCT Dream,1,False,False,True,True,nct dream 엔시티 드림 'istj' dance practice,nct dream,https://www.youtube.com/watch?v=dj4E20oX7Qw
 2023,Calling,NCT U,0,True,False,True,True,nct u 'call d' (official audio),nct,https://www.youtube.com/watch?v=5mMaNcrRd1g
 2023,Fact Check,NCT 127,2,False,False,True,True,nct 127 엔시티 127 'fact check (불가사의; 不可思議)' dance practice,nct 127,https://www.youtube.com/watch?v=nzDbTRYgdpk
 2023,Promise,Jimin,2,False,True,True,True,약속,jimin - topic,https://www.youtube.com/watch?v=PwhgRnjhB84
