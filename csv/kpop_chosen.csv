@@ -2989,7 +2989,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2024,Now On,김동혁,1,True,False,False,True,dk (김동혁) 'now on' official audio,jxs_bp official,https://www.youtube.com/watch?v=sq5VEAsuT4Q
 2024,Groovin,김동혁,2,True,False,False,True,dk (김동혁) 'groovin' official audio,jxs_bp official,https://www.youtube.com/watch?v=5-Zk-LFR6cs
 1997,연정 (Heartbreak),Sechskies,1,False,False,True,True,연정 | heartbreak,sechskies,https://www.youtube.com/watch?v=MWL8vaqM4_A
-1997,궁금해 (Curious),S.E.S.,2,True,False,False,True,momoland (モモランド) 「curious -japanese ver.-」 [official audio],jp music,https://www.youtube.com/watch?v=mVYy4N8Ovro
 1997,행복 (Full of Happiness),H.O.T.,2,False,True,False,True,행복 (sung by super junior),smtown - topic,https://www.youtube.com/watch?v=L8Rsxy7Ch2M
 1997,I'm Your Girl,S.E.S.,6,False,True,True,True,just a feeling,s.e.s. - topic,https://www.youtube.com/watch?v=7j8fpjTHkUY
 1998,How Deep Is Your Love,지누션,1,False,True,False,True,how deep is your love,stephanie dan - topic,https://www.youtube.com/watch?v=8_8sFM6uWfQ
@@ -3169,7 +3168,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2010,The Way,CNBLUE (씨엔블루),2,False,False,True,True,nothing (엉터리 (nothing)),cnblue (씨엔블루),https://www.youtube.com/watch?v=wjr4wpv71gA
 2010,블루러브 (Bluelove),CNBLUE (씨엔블루),2,False,False,True,True,cnblue - love m/v,cnblue (씨엔블루),https://www.youtube.com/watch?v=sl1U81q_vkY
 2010,I Need a Girl (feat. G-Dragon),Taeyang,0,False,False,True,True,i need a girl ft. g-dragon,taeyang,https://www.youtube.com/watch?v=gGZGe9nar10
-2010,Change (feat. Junhyung),HyunA,0,False,False,True,True,change (feat. jun hyung yong from beast) (change (feat. 용준형 from beast)),hyuna,https://www.youtube.com/watch?v=3bnvTUkZJ24
 2010,Mamma Mia (feat. Sunny Hill),Narsha,2,False,True,True,True,맘마미아 (with sunny hill),narsha - topic,https://www.youtube.com/watch?v=HFwBlYo1zyk
 2010,My Only Girl,Super Junior,0,False,False,True,True,my only girl,super junior,https://www.youtube.com/watch?v=wnMwdsqkfNk
 2010,Bonamana (미인아),Super Junior,0,False,False,True,True,미인아 bonamana,super junior,https://www.youtube.com/watch?v=lS4lkj98cjY
@@ -3337,7 +3335,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2015,Sign,소녀시대,2,True,False,False,True,[official audio] snsd - sign,meekey me,https://www.youtube.com/watch?v=gHdhCMo75_c
 2015,Hug Me,러블리즈 (Lovelyz),0,False,False,True,True,hug me (hug me),lovelyz,https://www.youtube.com/watch?v=gVZP5E9eGtU
 2015,White,CNBLUE (씨엔블루),1,False,False,True,True,manito (마니또 (manito)),cnblue (씨엔블루),https://www.youtube.com/watch?v=HGknDdz72mo
-2015,Devil,Super Junior,0,False,False,True,True,devil,super junior,https://www.youtube.com/watch?v=K4si_0jQQSE
 2015,Rush,몬스타엑스(MONSTA X),0,False,False,True,True,rush hour,monsta x,https://www.youtube.com/watch?v=lLB3-35e1JA
 2015,Hero,몬스타엑스(MONSTA X),0,False,False,True,True,hero (hero),monsta x,https://www.youtube.com/watch?v=1GMO5h02Z_A
 2015,느낌이 좋아,BTOB,0,True,False,True,True,비투비 (btob) - 'higher' (official audio),btob 비투비 (official youtube channel),https://www.youtube.com/watch?v=0olHCULbDjw
@@ -3673,7 +3670,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2020,Cloud 9,크래비티(CRAVITY),1,True,False,False,True,cravity - cloud 9 (official audio),k-pop offi̇ci̇al,https://www.youtube.com/watch?v=GYc4uPMgmcg
 2021,Forever Love,Seo Eunkwang,0,False,True,True,True,love again,seo eunkwang - topic,https://www.youtube.com/watch?v=2kbMq6dxdkE
 2020,Blue & Grey,BTS,1,False,False,True,True,bts - blue & grey (audio),playlist bts,https://www.youtube.com/watch?v=vbjiLKOaKQE
-2021,Good Night,Seo Eunkwang,0,False,True,True,True,love again,seo eunkwang - topic,https://www.youtube.com/watch?v=2kbMq6dxdkE
 2021,No Good in Good-Bye (잘 가라니),2AM,4,False,False,True,True,i can't,2am,https://www.youtube.com/watch?v=Oi3KBuy-NCg
 2021,비 온 뒤 흐림 (Remember Me),B.I.,1,False,False,True,True,gray (비 온 뒤 흐림),b.i,https://www.youtube.com/watch?v=J7YKoo5CpBU
 2021,GOOD GIRL,HyunA,0,True,False,True,True,현아 (hyuna) - 'good girl' official audio,hyuna,https://www.youtube.com/watch?v=GKHAU7cUt7I
@@ -3856,7 +3852,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2023,Sketch,8TURN,1,False,False,True,True,sketch,8turn,https://www.youtube.com/watch?v=4IWbLlktnZ4
 2023,Ing,8TURN,0,False,False,True,True,ing,8turn,https://www.youtube.com/watch?v=Y60RUX5gfXs
 2023,Groovy,크래비티(CRAVITY),1,True,False,False,True,cravity (크래비티) 'groovy' official audio,jxs_bp official,https://www.youtube.com/watch?v=EUKV4MPe-Mc
-2023,NOT LIKE YOU,STAYC,0,True,False,False,True,stayc (스테이씨) 'not like you' official audio,jxs_bp official,https://www.youtube.com/watch?v=IMkdM3KaN0s
 2023,Sage,FT아일랜드 (FTISLAND),0,True,False,False,True,ftisland (ft아일랜드) 'sage' official audio,jxs_bp official,https://www.youtube.com/watch?v=gd15e0GCg-A
 2023,Shatter,Dreamcatcher (드림캐쳐),0,True,False,False,True,dreamcatcher (드림캐쳐) 'shatter' official audio,jxs_bp official,https://www.youtube.com/watch?v=ElGTjpJNCYk
 2023,You,프로미스나인(fromis_9),3,False,True,True,True,love me back,프로미스나인 - topic,https://www.youtube.com/watch?v=EE8655GDT9k
