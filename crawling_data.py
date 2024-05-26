@@ -1,5 +1,7 @@
 # This code is from "https://github.com/MALerLab/pop-era-classification/blob/main/crawling_data.py"
 
+# TODO(minigb): Currently sometimes the code saves the information in the chosen.csv, but does not download the audio file.
+
 import pandas as pd
 import yt_dlp
 from concurrent.futures import ThreadPoolExecutor, as_completed
