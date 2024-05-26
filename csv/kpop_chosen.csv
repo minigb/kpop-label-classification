@@ -3788,7 +3788,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2011,Ugly,2NE1,2.0,False,False,True,True,2ne1_0807_sbs popular music_ugly_no.1 of the week,2ne1,https://www.youtube.com/watch?v=LD-rmC2i624
 2011,Bubble Pop!,HyunA,1.0,False,False,False,True,hyuna (현아) - bubble pop! - color coded lyrics (han|rom|eng),bárbara,https://www.youtube.com/watch?v=HB_TYdo9jw4
 2011,Hot Summer,f(x),2.0,False,False,False,True,f(x) (에프엑스) - hot summer (han | rom | eng color coded lyrics),eirysha kpop lyrics,https://www.youtube.com/watch?v=v6Yjlplp_3U
-2011,Help Me,Miss A,1.0,False,False,False,True,miss a - help me [color coded lyrics (han/rom/eng)],nerd fox random show,https://www.youtube.com/watch?v=IatyUanZJKI
 2011,Stay,BigBang,1.0,False,False,False,True,bigbang stay color coded lyrics (kan/rom/eng),a.b. king boo,https://www.youtube.com/watch?v=1fQUSohAp7I
 2011,Pinocchio (Danger),f(x),1.0,False,False,False,True,f(x) (에프엑스) - pinocchio (danger) (피노키오(danger)) (han | rom | eng color coded lyrics),eirysha kpop lyrics,https://www.youtube.com/watch?v=r-PGtDU4Gy8
 2011,Mr. Johnny,Miss A,1.0,False,False,False,True,miss a (미쓰에이) mr. johnny color coded lyrics (han/rom/eng),fairyoons,https://www.youtube.com/watch?v=0HH0l9ArM-g
@@ -3908,7 +3907,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2014,Crush,2NE1,7.0,False,False,False,True,2ne1 - crush (color coded lyrics: rom/eng/han),suga.booty,https://www.youtube.com/watch?v=MtsHgjftruE
 2014,컬러링,Winner,1.0,False,False,True,True,winner -'컬러링(color ring)' 0817 sbs inkigayo,winner,https://www.youtube.com/watch?v=kS_v69VrHuE
 2014,Cha Cha,Rainbow,1.0,False,True,True,True,cha cha (cha cha),rainbow blaxx - topic,https://www.youtube.com/watch?v=VkoNXTv4Sa4
-2015,Ma City,BTS,0.0,False,False,False,True,bts - ma city (color coded lyrics eng/rom/han/가사),jaeguchi,https://www.youtube.com/watch?v=9_SnoNkGzUc
 2014,Gain Weight (살만찌고) (feat. Brave Brothers),4Minute,0.0,False,True,True,True,살만찌고,포미닛(4minute) - topic,https://www.youtube.com/watch?v=Wi-MtD5XvP4
 2014,This Is Love,Super Junior,2.0,False,False,False,True,super junior (슈퍼주니어) – this is love (color coded lyrics) [han/rom/eng],hyukshi,https://www.youtube.com/watch?v=JvtpF6q54SA
 2014,Intro: Skool Luv Affair,BTS,2.0,False,False,False,True,bts (방탄소년단) - intro: skool luv affair (color coded lyrics han/rom/eng),ryuminies,https://www.youtube.com/watch?v=dlPKg6ppayk
@@ -3967,7 +3965,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2015,AOA,AOA (에이오에이),3.0,False,False,False,True,aoa come see me lyrics (에이오에이 날 보러 와요 가사) [color coded lyrics/han/rom/eng],lemoring,https://www.youtube.com/watch?v=EUthZox8oC0
 2015,Oppa (오빠),Wonder Girls,6.0,False,False,False,True,hyerim/hyelim from wonder girls (원더걸스) – oppa (오빠) color coded lyrics han/rom/eng,cʜσα ʜчυηαღ,https://www.youtube.com/watch?v=Ge99ytArEHU
 2015,When I'm Alone,f(x),8.0,False,False,False,True,f(x) - when i'm alone (han/rom/eng) color coded lyrics,chaeng애기,https://www.youtube.com/watch?v=-OMFXJnu62U
-2016,Call You Bae (feat. Xiumin),Jimin (지민),4.0,False,False,False,True,aoa jimin (지민) feat. exo xiumin (시우민)- call you bae color coded lyrics (야 하고 싶어) [han/rom/eng],ooonberry,https://www.youtube.com/watch?v=RYSzZrBCCI4
 2015,"우리 (우리가 있던 시간) (With Time, Us)",Go Woori,0.0,False,False,False,True,day6 - time of our life (한 페이지가 될 수 있게) (color coded lyrics eng/rom/han/가사),jaeguchi,https://www.youtube.com/watch?v=_pKSVstK1jc
 2015,Awakening (각성),RM,1.0,False,False,False,True,bts rm - awakening (각성 (覺醒)) (color coded lyrics/han/rom/eng),ryuminies,https://www.youtube.com/watch?v=eH3o9SXLd5c
 2015,Devil,Super Junior,1.0,False,False,False,True,super junior (슈퍼주니어) – devil (color coded lyrics) [han/rom/eng],hyukshi,https://www.youtube.com/watch?v=iYUwgBRvfe0
@@ -3999,7 +3996,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2016,Shoot! Love!,라붐,2.0,False,False,False,True,laboum - 푱푱 (shooting love) [color coded lyrics],xjww17,https://www.youtube.com/watch?v=p722OFgeye8
 2016,Cheer Up,TWICE,4.0,False,False,True,True,"twice(트와이스) ""cheer up"" @ stadium",twice,https://www.youtube.com/watch?v=L7_i-r9mo9w
 2016,Stay,BLACKPINK,5.0,False,False,False,True,blackpink stay lyrics (color coded lyrics),rosiepoxie,https://www.youtube.com/watch?v=sYpnqxtTcjo
-2016,Taste the Feeling,NCT 127,1.0,False,False,False,True,nct 127 - taste the feeling (color coded lyrics | han/rom/eng),jennie,https://www.youtube.com/watch?v=WlOy4ECHMoc
 2016,휘파람 (Whistle),BLACKPINK,2.0,False,False,True,True,blackpink​ - '휘파람(whistle)' 0821 sbs inkigayo,blackpink,https://www.youtube.com/watch?v=metZ_f8aqC0
 2016,Stalker,U-KISS,1.0,False,False,False,True,u-kiss [유키스] - stalker (color coded lyrics | han/rom/eng),jennie,https://www.youtube.com/watch?v=9tKnBsuPtX8
 2016,붐바야 (Boombayah),BLACKPINK,2.0,False,False,True,True,blackpink - '붐바야(boombayah)' 0814 sbs inkigayo,blackpink,https://www.youtube.com/watch?v=LpSH8MrYCfg
@@ -4035,7 +4031,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2016,너 없이는 안 돼 (By Your Side),BTOB,0.0,False,False,False,True,btob(비투비) - only one for me (너 없인 안 된다) (color coded lyrics eng/rom/han),jaeguchi,https://www.youtube.com/watch?v=7W7RQqH4r2w
 2016,Fxxk It,BigBang,5.0,False,False,False,True,[han|rom|eng] bigbang - fxxk it (에라 모르겠다) (color coded lyrics),wokobee,https://www.youtube.com/watch?v=b1h-oaZ4e9k
 2016,Pretty Pretty (예쁨),Pentagon,9.0,False,False,False,True,pentagon - pretty pretty (예쁨) [color coded lyrics] (han/rom/eng),jss lyrics,https://www.youtube.com/watch?v=gMt4ON-NM9Y
-2017,뜨거운 감자 (Hot Potato),N.Flying (엔플라잉),2.0,False,False,False,True,"엔플라잉 (n.flying) – 뜨거운 감자 (hot potato) | han, rom, eng [color coded lyrics]",clorista kwrkys,https://www.youtube.com/watch?v=sspSJ3rxsyM
 2017,Newton,몬스타엑스(MONSTA X),1.0,False,False,False,True,[han|rom|eng] monsta x (몬스타엑스) - newton (뉴튼) (color coded lyrics),wokobee,https://www.youtube.com/watch?v=VAuz94G-4D4
 2017,이런엔딩,아이유,3.0,False,False,False,True,iu (아이유) - ending scene (이런 엔딩) (han|rom|eng) color coded lyrics/한국어 가사,iwee,https://www.youtube.com/watch?v=wiXJLUFm_7I
 2017,Melting Love,AOA (에이오에이),0.0,False,False,False,True,aoa (에이오에이) - melting love | han/rom/eng | color coded lyrics |,xinjun,https://www.youtube.com/watch?v=89HIazq6zZw
@@ -4059,7 +4054,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2017,Love Is Bitter,소녀시대,7.0,False,False,False,True,how would red velvet sing 'love is bitter' by snsd | color coded lyrics (han/rom/eng),jtv originals,https://www.youtube.com/watch?v=kivvsn59sTc
 2017,B.B.B.Boo,우주소녀(WJSN),1.0,False,False,False,True,wjsn (우주소녀) b.b.b.boo color coded lyrics (han/rom/eng),fairyoons,https://www.youtube.com/watch?v=G9h32uPu3Nc
 2017,Sugar Pop,우주소녀(WJSN),3.0,False,False,False,True,cosmic girls (wjsn/우주소녀) - sugar pop han/rom/eng color coded lyrics,wujumagic,https://www.youtube.com/watch?v=RFTpKme2-rc
-2017,Dance Dance,DAY6,3.0,False,False,False,True,day6 (데이식스) - dance dance (han|rom|eng) color coded lyrics/한국어 가사,iwee,https://www.youtube.com/watch?v=WKKVGMtWtnU
 2017,Good Night,Dreamcatcher (드림캐쳐),5.0,False,False,False,True,dreamcatcher - good night color coded lyrics [han/rom/eng],shannon gwiyomi,https://www.youtube.com/watch?v=tE0puaZGgcs
 2017,Fly High,Dreamcatcher (드림캐쳐),2.0,False,False,False,True,dreamcatcher - fly high color coded lyrics [han/rom/eng],shannon gwiyomi,https://www.youtube.com/watch?v=Q7mdID9maC8
 2017,I’m Serious,DAY6,6.0,False,False,False,True,day6 (데이식스) - i’m serious (장난 아닌데) (han|rom|eng) color coded lyrics/한국어 가사,iwee,https://www.youtube.com/watch?v=ZMrtcDz49Vc
@@ -4255,7 +4249,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2019,드라마틱 (Dramatic),BVNDIT,7.0,False,False,False,True,dramatic (드라마틱) - bvndit (밴디트) [han/rom/eng color coded lyrics],zuki,https://www.youtube.com/watch?v=ncZJhXLN6cc
 2019,언럭키,아이유,0.0,False,False,False,True,iu unlucky lyrics (아이유 unlucky 가사) [color coded lyrics/han/rom/eng],lemoring,https://www.youtube.com/watch?v=3hrHjHiEfuM
 2019,Born Again,티파니,3.0,False,False,False,True,tiffany young - born again [color coded lyrics (eng)],bgg lyrics,https://www.youtube.com/watch?v=t9HTRvuw4pc
-2019,With Love (Haebaragi cover),강승윤,7.0,False,False,False,True,kang seungyoon (강승윤) - with love (사랑으로) [color coded lyrics eng/rom/han],yg highlights,https://www.youtube.com/watch?v=fZGsTFoxTKI
 2019,Side Effects (부작용),Stray Kids,2.0,False,False,False,True,stray kids - side effects (부작용) (color coded lyrics eng/rom/han/가사),jaeguchi,https://www.youtube.com/watch?v=dAomLEpcSnc
 2019,Sunrise,여자친구,1.0,False,False,False,True,gfriend(여자친구) - sunrise (해야) (color coded lyrics eng/rom/han/가사),jaeguchi,https://www.youtube.com/watch?v=v51ZlCkZuuI
 2019,Luckitty-cat,우주소녀(WJSN),4.0,False,False,False,True,wjsn (우주소녀) - luckitty-cat [color coded lyrics (han/rom/eng)],moonster,https://www.youtube.com/watch?v=KNriby8hHkw
@@ -4284,7 +4277,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2020,Naughty,아이린&슬기,2.0,False,False,False,True,red velvet irene & seulgi - “naughty (놀이)” (color coded lyrics eng/rom/han/가사),jendukie,https://www.youtube.com/watch?v=bmJf7TiFsog
 2020,That Guy,골든차일드,2.0,False,False,False,True,golden child (골든차일드) - that guy (그 자식) [color coded lyrics eng/rom/han],dark space,https://www.youtube.com/watch?v=QTrLkfyrFzY
 2020,Shine,드리핀 (DRIPPIN),7.0,False,False,False,True,drippin (드리핀) - shine 'color coded lyrics',astralheart,https://www.youtube.com/watch?v=nZ0IeUh7cJU
-2020,Holding On,iKON,0.0,False,False,False,True,ikon (아이콘) - 견딜만해 (holding on) (color coded lyrics eng/rom/han/가사),hangeci,https://www.youtube.com/watch?v=s5gp4M6Sw8k
 2020,Back Door,Stray Kids,2.0,False,False,False,True,"stray kids ""back door"" lyrics (스트레이 키즈 back door 가사) (color coded lyrics)",jaeguchi,https://www.youtube.com/watch?v=cPwzLzy97L8
 2020,Any (아니),Stray Kids,1.0,False,False,False,True,"stray kids ""any"" lyrics (스트레이 키즈 아니 가사) (color coded lyrics)",jaeguchi,https://www.youtube.com/watch?v=tc17f98ZS5g
 2020,X (걸어온 길에 꽃밭 따윈 없었죠),청하,6.0,False,False,False,True,chung ha - x lyrics (청하 걸어온 길에 꽃밭 따윈 없었죠 가사) (color coded lyrics),jaeguchi,https://www.youtube.com/watch?v=FnquDQ4kGV4
@@ -4316,7 +4308,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2020,Psycho,Red Velvet,2.0,False,False,False,True,red velvet psycho lyrics (레드벨벳 psycho 가사) [color coded lyrics/han/rom/eng],lemoring,https://www.youtube.com/watch?v=ldneQsewJEc
 2020,On Track (바보라도 알아),Stray Kids,0.0,False,False,False,True,"stray kids ""on track (바보라도 알아)"" (color coded lyrics eng/rom/han/가사)",jaeguchi,https://www.youtube.com/watch?v=HfQTNcudcHc
 2020,My My,세븐틴(SEVENTEEN),5.0,False,False,True,True,[안무 영상] seventeen(세븐틴) - my my,seventeen,https://www.youtube.com/watch?v=w4RdpL2Fp8o
-2020,Basquiat (바스키아),Pentagon,3.0,False,False,False,True,pentagon (펜타곤) - basquiat [road to kingdom] color coded lyrics han-rom-eng,nbiyeaa 136,https://www.youtube.com/watch?v=VDkoYA5ckdE
 2020,Ex (미친 놈),Stray Kids,3.0,False,False,False,True,stray kids ex lyrics (스트레이 키즈 미친 놈 가사) (color coded lyrics),jaeguchi,https://www.youtube.com/watch?v=BBm6ScTt4Ig
 2020,Outro : Cross the Line,엔하이픈 (ENHYPEN),3.0,False,False,False,True,enhypen (엔하이픈) - outro : cross the line - color coded lyrics,noémiedepain,https://www.youtube.com/watch?v=Up0TutDKsbw
 2020,What You Waiting For,전소미,2.0,False,False,False,True,somi (전소미) 'what you waiting for' lyrics (color coded lyrics eng/rom/han/가사),jaeguchi,https://www.youtube.com/watch?v=v65iG3jy2Jc
@@ -4907,7 +4898,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2018,Woman,BoA,4.0,False,False,False,True,boa (보아) - woman (color coded lyrics han/rom/eng),zt orion,https://www.youtube.com/watch?v=MzKsU93Gxl4
 2018,Lip & Hip,HyunA,2.0,False,False,False,True,[han|rom|eng] hyuna (현아) - lip ＆ hip (color coded lyrics),wokobee,https://www.youtube.com/watch?v=NpL-wJnNTWg
 2018,Have A Good Day,Winner,9.0,False,False,True,True,【韓繁中字】winner-have a good day,love winner,https://www.youtube.com/watch?v=MxeHKyCTdbU
-2018,Serendipity (Full Length Edition),BTS,1.0,False,False,False,True,bts (jimin) - serendipity [full length edition] (color coded lyrics han/rom/eng),guccivhyung,https://www.youtube.com/watch?v=ot0MZHfP8Fw
 2018,My Pace,Stray Kids,1.0,False,False,False,True,[han|rom|eng] stray kids (스트레이 키즈) - my pace (color coded lyrics),wokobee,https://www.youtube.com/watch?v=Que-UJccCF4
 2018,GO,NCT 2018,6.0,False,False,False,True,nct dream (엔시티드림) - we go up (color coded lyrics eng/rom/han/가사),jaeguchi,https://www.youtube.com/watch?v=CyI7K_Q_Wxo
 2018,Awkward Silence (갑자기 분위기 싸해질 필요 없잖아요),Stray Kids,0.0,False,False,False,True,stray kids - awkward silence (갑자기 분위기 싸해질 필요 없잖아요) (color coded lyrics eng/han/rom),wirohouse,https://www.youtube.com/watch?v=tgbhLA_78fw
@@ -4915,7 +4905,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2018,Touch,NCT 127,3.0,False,False,False,True,nct 127 (엔시티 127) - touch (han|rom|eng) color coded lyrics/한국어 가사,iwee,https://www.youtube.com/watch?v=Hks9TpM09rc
 2018,Dreams Come True,우주소녀(WJSN),4.0,False,False,False,True,cosmic girls / wjsn (우주소녀) - dreams come true (꿈꾸는 마음으로) [color coded lyrics han|rom|eng],dalmood,https://www.youtube.com/watch?v=ZTJSzElGwb0
 2018,Treasure,ATEEZ (에이티즈),0.0,False,False,False,True,"에이티즈 (ateez) – treasure (color coded lyrics | han, rom, eng)",clorista kwrkys,https://www.youtube.com/watch?v=HoY5ggHKITo
-2018,Wanna Be (What's Wrong with Secretary Kim OST Part.3),여자친구,1.0,False,False,False,True,gfriend – [wanna be] why secretary kim (김비서가 왜 그럴까) ost  part 3 color coded lyrics,setsu29 ,https://www.youtube.com/watch?v=lfBzBzMVLw0
 2018,Come to Me,Lee Hong Gi (이홍기),9.0,False,False,False,True,lee hong gi (이홍기) feat. jung ilhoon (정일훈) - cookies (color coded lyrics han/romeng),zt orion,https://www.youtube.com/watch?v=wf73ox_OHg8
 2018,Baby Don’t Stop,NCT 2018,1.0,False,False,False,True,nct u 엔시티 유 -  ‘baby don’t stop’ | color coded lyrics han/rom/eng,jiestudio,https://www.youtube.com/watch?v=-akrzArs_Eo
 2018,GO,NCT Dream,6.0,False,False,False,True,nct dream (엔시티드림) - we go up (color coded lyrics eng/rom/han/가사),jaeguchi,https://www.youtube.com/watch?v=CyI7K_Q_Wxo
@@ -4938,7 +4927,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2018,Serendipity (Full Length Edition),Jimin,1.0,False,False,False,True,bts (jimin) - serendipity [full length edition] (color coded lyrics han/rom/eng),guccivhyung,https://www.youtube.com/watch?v=ot0MZHfP8Fw
 2018,Stay Magical,Boy Story,4.0,False,False,False,True,boy story - enough (color coded lyrics chinese/pinyin/eng/han/한국 가사),nakojjang,https://www.youtube.com/watch?v=6slr54n-SH0
 2018,District 9,Stray Kids,1.0,False,False,False,True,[han|rom|eng] stray kids (스트레이 키즈) - district 9 (color coded lyrics),wokobee,https://www.youtube.com/watch?v=chgcErEvmJw
-2018,삐삐,아이유,5.0,False,False,False,True,iu with itzy - bbibbi lyrics (아이유 with 있지 '삐삐' 가사) (color coded lyrics han/rom/eng/가사),kkura곰,https://www.youtube.com/watch?v=q2juTKtG_l8
 2018,Enough,Boy Story,1.0,False,False,False,True,boy story - enough (color coded lyrics chinese/pinyin/eng/han/한국 가사),nakojjang,https://www.youtube.com/watch?v=6slr54n-SH0
 2018,Take The Dive,종현,3.0,False,False,False,True,jonghyun (종현) – take the dive (color coded lyrics/han/rom/eng/pt-br),marsh,https://www.youtube.com/watch?v=8RurVHtFtsg
 2018,Do n Do,Lee Hong Gi (이홍기),1.0,False,False,False,True,lee hong gi (이홍기) feat. jung ilhoon (정일훈) - cookies (color coded lyrics han/romeng),zt orion,https://www.youtube.com/watch?v=wf73ox_OHg8
@@ -4971,7 +4959,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2019,Enough (예뻐지지 마),SF9 (에스에프나인),0.0,False,False,False,True,sf9 - enough (예뻐지지 마) (color coded lyrics eng/rom/han/가사),jaeguchi,https://www.youtube.com/watch?v=yEPiLBlcOfk
 2019,Close To You,러블리즈 (Lovelyz),3.0,False,False,False,True,lovelyz (러블리즈) - close to you (color coded lyrics) [han/rom/eng],byunbyul,https://www.youtube.com/watch?v=vzIpl0fRpj4
 2019,Gotta Go (벌써 12시),청하,5.0,False,False,False,True,"chungha (청하) - ""gotta go"" (벌써 12시) color coded lyrics (eng/rom/han)",my love winky,https://www.youtube.com/watch?v=Uu_CjeWyApE
-2019,Magic Spell,AOA (에이오에이),9.0,False,False,False,True,{vostfr/han/rom} aoa (에이오에이) – 'magic spell' (주문을 외워봐)  (color coded lyrics français/rom/han가사),manami hanako,https://www.youtube.com/watch?v=wpDp3K78TBA
 2019,Nothing,Lee Gikwang,4.0,False,False,False,True,lee gikwang - nothing [перевод на русский/кириллизация color coded lyrics],tk,https://www.youtube.com/watch?v=GOjkGjEsXHc
 2019,시간의바깥,아이유,2.0,False,False,False,True,iu above the time lyrics (아이유 시간의 바깥 가사) [color coded lyrics/han/rom/eng],lemoring,https://www.youtube.com/watch?v=40Iqv8M7Jsk
 2019,For You (with K/DA) [League of Legends],(G)I-DLE,2.0,False,False,False,True,"k/da more lyrics (madison beer, (g)i-dle, lexie liu, jaira burns, seraphine) (color coded lyrics)",jaeguchi,https://www.youtube.com/watch?v=QMXvYzwSECA
@@ -5165,7 +5152,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2022,Glitch Mode,NCT Dream,0.0,False,False,False,True,nct dream 'glitch mode' lyrics (엔시티 드림 버퍼링 가사) (color coded lyrics),jaeguchi,https://www.youtube.com/watch?v=oYLyz6RcDns
 2022,Villain,소녀시대,5.0,False,False,False,True,girls’ generation villain lyrics (소녀시대 villain 가사) (color coded lyrics),jendukie,https://www.youtube.com/watch?v=IGcqHvlp40s
 2022,Rainy Day (이 비가 그칠 때면),Dreamcatcher (드림캐쳐),2.0,False,False,False,True,dreamcatcher (드림캐쳐) - rainy day (이 비가 그칠 때면) [color coded lyrics han|rom|eng],dalmood,https://www.youtube.com/watch?v=3Q-wW1zO8Ks
-2022,Midnight Guest,프로미스나인(fromis_9),4.0,False,False,False,True,fromis_9 dm lyrics (프로미스나인 dm 가사) (color coded lyrics),jaeguchi,https://www.youtube.com/watch?v=4Qr0Pae4EN8
 2022,No Celestial,LE SSERAFIM,1.0,False,False,False,True,[correct] le sserafim 'no celestial' lyrics (르세라핌 no celestial 가사) (color coded lyrics),bingsoosh,https://www.youtube.com/watch?v=BstTvxU2xW4
 2022,Guerrilla,ATEEZ (에이티즈),3.0,False,False,False,True,ateez 'crazy form' lyrics (에이티즈 미친 폼 가사) (color coded lyrics),jaeguchi,https://www.youtube.com/watch?v=IjGxbheOAIY
 2022,TOMBOY,(G)I-DLE,0.0,False,False,False,True,(g)i-dle 'tomboy' lyrics ((여자)아이들 tomboy 가사) (color coded lyrics),jaeguchi,https://www.youtube.com/watch?v=0wezH4MAncY
@@ -5282,7 +5268,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2003,Let Me Love You,SE7EN,2.0,False,False,False,True,jung kook - seven (lyrics) ft. latto ''i'll be lovin' you right seven days a week'',babel,https://www.youtube.com/watch?v=m6nPJyGrpiM
 2002,Milky Way,BoA,9.0,False,False,False,True,red velvet – 'milky way' lyrics [color coded_han_rom_eng],zaty farhani,https://www.youtube.com/watch?v=j-X8Aim_Q2g
 2004,Brand New,Shinhwa,4.0,False,False,False,True,shinhwa (신화) - brand new lyrics [color coded han/rom/eng],elexdie & starbell,https://www.youtube.com/watch?v=RnqUCWQiVLg
-2006,Begin,TVXQ,2.0,False,False,False,True,tvxq (동방신기) - begin [colour coded lyrics] (kan/rom/eng),dreamycassie,https://www.youtube.com/watch?v=PIlQOrXrqNk
 2005,약속했던 그때에 (Always There...),TVXQ,6.0,False,False,False,True,tvxq! (동방신기) - 약속했던 그 때에 (always there...) - [colour coded lyrics] (han/rom/eng),er,https://www.youtube.com/watch?v=pu6-NeDXjXw
 2005,Always There,TVXQ,4.0,False,False,False,True,tvxq! 동방신기 - 약속했던 그때에 (always there...) - line distribution w/ lyrics,daburu,https://www.youtube.com/watch?v=v_YF0lS0c1A
 2006,"Heart, Mind and Soul",TVXQ,0.0,False,False,False,True,"tvxq (동방신기) - heart, mind and soul [colour coded lyrics] (kan/rom/eng)",dreamycassie,https://www.youtube.com/watch?v=Q6jqgTEKv1k
@@ -5395,7 +5380,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2014,Tough Cookie (터프쿠키),지코(Zico),1.0,False,False,False,True,zico - tough cookie (feat. don mills) (rom-han-eng lyrics),alyrics,https://www.youtube.com/watch?v=RQfONmKgJ5k
 2014,Born Hater (with Epik High),Mino,3.0,False,False,False,True,epik high 에픽하이 - born hater official lyrics [han/rom/eng],golden maknae,https://www.youtube.com/watch?v=bN-yLxqH5eI
 2015,Pray (기도),FT아일랜드 (FTISLAND),3.0,False,False,False,True,ftisland (ft아일랜드) - wind lyrics [color coded_han_rom_eng],zaty farhani,https://www.youtube.com/watch?v=tSLu3o9JiL8
-2015,Hallelujah,종현,5.0,False,False,False,True,jonghyun 종현 - hallelujah (할렐루야) lyrics (rom+eng),xo lyrics,https://www.youtube.com/watch?v=bm29CzaNqr8
 2015,뱁새 (Silver Spoon),BTS,1.0,False,False,False,True,bts - baepsae (뱁새) (try-hard/silver spoon) (color coded lyrics eng/rom/han/가사),jaeguchi,https://www.youtube.com/watch?v=P9-QNnOm2RU
 2015,Zezé,아이유,8.0,False,False,False,True,iu zezé lyrics [rom/eng],letylek,https://www.youtube.com/watch?v=o0yOzA9VUtE
 2015,Faded Love (사랑이 떠나려 할 때),Wonder Girls,1.0,False,False,False,True,wonder girls (원더걸스) – »faded love« (사랑이 떠나려 할때) lyrics (color coded) [han/rom/eng],fadedlove,https://www.youtube.com/watch?v=CgerUOz8E_w
@@ -5407,7 +5391,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2015,Warm Hole,Brown Eyed Girls,3.0,False,False,False,True,brown eyed girls (브라운아이드걸스) - warm hole (웜홀) (color coded han|rom|eng lyrics) | by yankat,yankat,https://www.youtube.com/watch?v=7F4MtRVzwUk
 2015,겁 (Fear) (with Taeyang),Mino,1.0,False,False,False,True,mino - 겁 (fear) feat. taeyang  {lyrics han|rom|eng},colorcodedkpop,https://www.youtube.com/watch?v=tdH3I9Kmq0g
 2015,Sugar Sugar,라붐,1.0,False,False,False,True,laboum (라붐) - sugar sugar (color coded han|rom|eng lyrics),yankat,https://www.youtube.com/watch?v=xc-X_P3-HSQ
-2015,Insensible (눈치없이),Lee Hong Gi (이홍기),0.0,False,False,False,True,lee hong ki - 눈치 없이 (insensible) color coded han|rom lyrics,exoii,https://www.youtube.com/watch?v=joOpakx4hbs
 2015,쩔어 (with T.O.P),G-Dragon,2.0,False,False,False,True,gd & t.o.p - zutter (쩔어) colour coded lyrics (han/rom/eng),k/j-pop lyrics,https://www.youtube.com/watch?v=yzNzab9xjDI
 2015,Apple (feat. Jay Park),Gain,2.0,False,False,False,True,가인 ga-in (ft. 박재범 jay park) - apple lyrics {han/rom/eng},aforeverbegfan,https://www.youtube.com/watch?v=H2vmHhdWCXQ
 2015,스물셋,아이유,2.0,False,False,False,True,아이유(iu) - 스물셋 [가사/lyrics],웅키,https://www.youtube.com/watch?v=_oP9tUiEZl8
@@ -5469,7 +5452,6 @@ Year,Song,Artist,query_idx,official,topic,channel_artist_same,keywords,video_tit
 2019,Everyday (Remix),Winner,5.0,False,False,False,True,"winner - everyday [hang, rom & eng lyrics]",kpop lyrics,https://www.youtube.com/watch?v=CkjrWROwbhk
 2019,NEVER (Legal High OST Part.3),골든차일드,0.0,False,False,False,True,"y, seungmin (승민) (golden child) - never (legal high ost part 3) [english subs] (color coded)",melodickpopsubs,https://www.youtube.com/watch?v=aeCIsNmSg7c
 2019,Fever,여자친구,2.0,False,False,False,True,gfriend - fever (여자친구 - 열대야) [color coded lyrics/han/rom/eng/가사],lemoring,https://www.youtube.com/watch?v=7gcc__ASPMg
-2020,제자리 (Round & Round),Sechs Kies,4.0,False,False,False,True,sechskies - 제자리 (round & round) (hangul lyrics),naturallightx x,https://www.youtube.com/watch?v=xBN7dN2UD-I
 2020,LA DI DA,EVERGLOW,4.0,False,False,False,True,everglow la di da lyrics (에버글로우 la di da 가사) (color coded lyrics),jaeguchi,https://www.youtube.com/watch?v=rx8P4FvgOWI
 2020,Chilli (Korean Ver.),세븐틴(SEVENTEEN),7.0,False,False,False,True,seventeen (세븐틴) - 칠리 (chilli) (color coded han|rom|eng lyrics) 가사,fizy hyosonn,https://www.youtube.com/watch?v=O9_hcs5yk_0
 2020,어른 병 (Feat. Blue.D),Mino,6.0,False,False,False,True,"디핵 (d-hack), pateko (파테코) - ohayo my night [ohayo my night]ㅣlyrics/가사",알파,https://www.youtube.com/watch?v=zT-Ne6mCRHY
