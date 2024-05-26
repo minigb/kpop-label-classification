@@ -124,7 +124,7 @@ class BillboardMusicCrawler:
 
 
   def filter_queries_and_choose(self, queries, failed):
-    NUM_OF_PRIORITIES = 3
+    NUM_OF_PRIORITIES = 4
     def _choose_video_with_priority(video, priority_num):
       if not video['keywords']:
         return False
@@ -136,7 +136,7 @@ class BillboardMusicCrawler:
         'lyric' in video['video_title'],
         video['channel_artist_same'] or video['topic'],
       ]
-      assert len(is_satisfying) == NUM_OF_PRIORITIES, f"{len(is_satisfying)} != {NUM_OF_PRIORITIES}"
+      assert len(is_satisfying) == NUM_OF_PRIORITIES, f"len(is_satisfying) should be {NUM_OF_PRIORITIES}, but got {len(is_satisfying)}"
 
       return is_satisfying[priority_num]
 
@@ -316,7 +316,7 @@ class MusicCrawlerReusingQueries(BillboardMusicCrawler):
                             & (queries_df[self.out_csv_col_names.title] == song) \
                             & (queries_df[self.out_csv_col_names.artist] == artist)]
     queries_df = queries_df.drop(columns = [self.out_csv_col_names.date, self.out_csv_col_names.title, self.out_csv_col_names.artist])
-    queries = [queries_df.to_dict(orient='records')]
+    queries = queries_df.to_dict(orient='records')
 
     return song_ID, queries, []
 
