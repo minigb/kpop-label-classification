@@ -37,8 +37,7 @@ class BillboardMusicCrawler:
     self.out_csv_col_names = CsvColumnNames('Year', 'Song', 'Artist')
 
     self._init_result_csv()
-    self.input_df = self.get_sorted_and_unique_billboard_df()
-    self.target_df = self.get_df_with_existing_songs_removed(self.input_df)
+    self.target_df = self.get_target_df()
 
     self.query_suffix = query_suffix
 
@@ -71,15 +70,8 @@ class BillboardMusicCrawler:
     self.chosen_df = chosen_df
 
     
-  def get_sorted_and_unique_billboard_df(self) -> pd.DataFrame:
+  def _get_sorted_and_unique_billboard_df(self) -> pd.DataFrame:
     assert self.input_csv_path.exists(), f"{self.input_csv_path} does not exist"
-    df = pd.read_csv(self.input_csv_path)
-
-    # Sort by date
-    df_sorted = df.sort_values(by=self.in_csv_col_names.date).reset_index(drop=True)
-
-    # Remove duplicates
-    df_uniq = df_sorted.drop_duplicates(subset=[self.in_csv_col_names.title, self.in_csv_col_names.artist], keep='first')
     
     return df_uniq
   
@@ -217,13 +209,20 @@ class BillboardMusicCrawler:
       df.to_csv(fn, index=False)
 
 
-  def get_df_with_existing_songs_removed(self, df):
+  def get_target_df(self):
     print(f"Checking existing files for {self.save_csv_name}...")
     
     chosen_fn = FileNames(self.save_csv_name).chosen # check whether the result file exists
     refined_df_fn = f'{self.save_csv_name}_sorted_and_unique_chart.csv'
     if not chosen_fn.exists():
       # This means that the songs have not been crawled yet
+      df_orig = pd.read_csv(self.input_csv_path)
+
+      # Sort by date
+      df_sorted = df_orig.sort_values(by=self.in_csv_col_names.date).reset_index(drop=True)
+
+      # Remove duplicates
+      df = df_sorted.drop_duplicates(subset=[self.in_csv_col_names.title, self.in_csv_col_names.artist], keep='first')
       df.to_csv(refined_df_fn, index=False)
       return df
     
@@ -291,7 +290,7 @@ class FailedMusicCrawler(BillboardMusicCrawler):
     self.in_csv_col_names = self.out_csv_col_names = CsvColumnNames('Year', 'Song', 'Artist')
 
     self._init_result_csv()
-    self.target_df = self.get_sorted_and_unique_billboard_df()
+    self.target_df = self.get_target_df()
 
 class MusicCrawlerReusingQueries(BillboardMusicCrawler):
   def __init__(self, save_audio_dir, save_csv_name, exclude_keywords, include_keywords):
@@ -306,7 +305,7 @@ class MusicCrawlerReusingQueries(BillboardMusicCrawler):
     self.in_csv_col_names = self.out_csv_col_names = CsvColumnNames('Year', 'Song', 'Artist')
 
     self._init_result_csv()
-    self.target_df = self.get_sorted_and_unique_billboard_df()
+    self.target_df = self.get_target_df()
 
 
   def make_query(self, song, artist, date, _1, _2, _3):
@@ -328,7 +327,7 @@ if __name__ == '__main__':
   Example line to run the code: 
   python crawling_data.py --input_csv song_list.csv --save_csv_name csv/kpop --save_audio_dir audio
 
-  When recrawling failed music:
+  When recrawling failed music, using query suffix:
   python crawling_data.py --save_csv_name csv/kpop --save_audio_dir audio --crawler_type failed --query_suffix "official audio"
 
   When recrawling failed music with reuse of queries:
