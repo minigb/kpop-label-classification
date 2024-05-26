@@ -1,9 +1,15 @@
 import re
 import pandas as pd
 
+
 def get_year_from_date(date):
     if isinstance(date, str):
-        return int(date.split('/')[-1])
+        if len(date.split('/')) == 1:
+            return int(date)
+        else:
+            return int(date.split('/')[-1])
+    elif isinstance(date, int):
+        return date
     elif isinstance(date, pd.Series):
         return date.apply(lambda x: int(x.split('/')[-1]))
     else:

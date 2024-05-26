@@ -1,7 +1,8 @@
+# This code is from "https://github.com/MALerLab/pop-era-classification/blob/main/crawling_data.py"
+
 import pandas as pd
 import yt_dlp
 from concurrent.futures import ThreadPoolExecutor, as_completed
-import csv
 from tqdm import tqdm
 from pathlib import Path
 from argparse import ArgumentParser
@@ -23,7 +24,7 @@ class FileNames:
 
 
 class BillboardMusicCrawler:
-  def __init__(self, input_csv_path: str, save_audio_dir: str, save_csv_name: str, exclude_keywords: list, include_keywords: list):
+  def __init__(self, input_csv_path: str, save_audio_dir: str, save_csv_name: str, exclude_keywords: list, include_keywords: list, query_suffix):
     self.input_csv_path = Path(input_csv_path)
     self.save_audio_dir = Path(save_audio_dir)
     self.save_csv_name = save_csv_name
@@ -37,6 +38,8 @@ class BillboardMusicCrawler:
     self.input_df = self.get_sorted_and_unique_billboard_df()
     self.target_df = self.get_df_with_existing_songs_removed(self.input_df)
 
+    self.query_suffix = query_suffix
+
 
   def _init_result_csv(self):
     parent_dir = Path(self.save_csv_name).parent
@@ -47,7 +50,7 @@ class BillboardMusicCrawler:
     QUERIES_COLUMNS = [self.out_csv_col_names.date, self.out_csv_col_names.title, self.out_csv_col_names.artist] + ['query_idx', 'official', 'topic', 'channel_artist_same', 'keywords', 'video_title', 'video_channel', 'video_url']
     if fns.queries.exists():
       queries_df = pd.read_csv(fns.queries)
-      assert set(queries_df.columns) == set(QUERIES_COLUMNS)
+      assert set(queries_df.columns) == set(QUERIES_COLUMNS), f"columns of {fns.queries} should be {QUERIES_COLUMNS}, but got {queries_df.columns}"
     else:
       queries_df = pd.DataFrame(columns=QUERIES_COLUMNS)
     self.queries_df = queries_df
@@ -85,7 +88,7 @@ class BillboardMusicCrawler:
       'skip_download': True,
       'extract_flat': True,
     } 
-    query = f"{artist} {song}"
+    query = f"{artist} {song} {self.query_suffix}" if self.query_suffix else f"{artist} {song}"
     queries, failed = [], []
     
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -257,15 +260,17 @@ class BillboardMusicCrawler:
   
 
 class FailedMusicCrawler(BillboardMusicCrawler):
-  def __init__(self, save_audio_dir, save_csv_name, exclude_keywords):
+  def __init__(self, save_audio_dir, save_csv_name, exclude_keywords, include_keywords, query_suffix):
     self.save_audio_dir = save_audio_dir
     self.save_csv_name = save_csv_name
     self.exclude_keywords = exclude_keywords
+    self.include_keywords = include_keywords
+    self.query_suffix = query_suffix
     
     for fn in FileNames(self.save_csv_name).__dict__.values():
       assert fn.exists(), f"{fn} does not exist"
     self.input_csv_path = FileNames(self.save_csv_name).failed
-    self.in_csv_col_names = self.out_csv_col_names = CsvColumnNames('Date', 'Song', 'Artist')
+    self.in_csv_col_names = self.out_csv_col_names = CsvColumnNames('Year', 'Song', 'Artist')
 
     self._init_result_csv()
     self.target_df = self.get_sorted_and_unique_billboard_df()
@@ -311,7 +316,7 @@ if __name__ == '__main__':
   python crawling_data.py --input_csv song_list.csv --save_csv_name csv/kpop --save_audio_dir audio
 
   When recrawling failed music:
-  python crawling_data.py --save_csv_name csv/kpop --save_audio_dir audio --crawler_type failed
+  python crawling_data.py --save_csv_name csv/kpop --save_audio_dir audio --crawler_type failed --query_suffix "official audio"
 
   When recrawling remastered music:
   python crawling_data.py --input_csv csv/kpop_chosen.csv --save_csv_name csv/kpop_remaster --save_audio_dir audio_remastered_original --crawler_type remastered
@@ -329,10 +334,10 @@ if __name__ == '__main__':
   argparser.add_argument('--exclude_remaster', action='store_true')
   argparser.add_argument('--include_remaster', action='store_true') # TODO(minigb): Find better approach
   argparser.add_argument('--topk', type=int, default=10)
-  argparser.add_argument('--crawler_type', type=str, default='billboard')
+  argparser.add_argument('--crawler_type', type=str, default='new')
+  argparser.add_argument('--query_suffix', type=str)
   args = argparser.parse_args()
 
-  # Keywords to exclude
   exclude_keywords = EXCLUDE_KEYWORDS_REMASTER_NOT_INCLUDED
   if args.exclude_remaster:
     exclude_keywords.append(REMASTER)
@@ -342,14 +347,14 @@ if __name__ == '__main__':
     include_keywords = [REMASTER]
 
   # Select crawler
-  if args.crawler_type == 'billboard':
+  if args.crawler_type == 'new':
     fns = FileNames(args.save_csv_name)
     assert not fns.chosen.exists(), f"{fns.chosen} already exists. If you are trying to recrawl, use 'failed' as the crawler type."
     crawler = BillboardMusicCrawler(args.input_csv, args.save_audio_dir, args.save_csv_name, exclude_keywords, include_keywords)
   elif args.crawler_type == 'failed':
-    crawler = FailedMusicCrawler(args.save_audio_dir, args.save_csv_name, exclude_keywords)
+    crawler = FailedMusicCrawler(args.save_audio_dir, args.save_csv_name, exclude_keywords, include_keywords, args.query_suffix)
   elif args.crawler_type == 'testset':
-    crawler = FailedMusicCrawler(args.save_audio_dir, args.save_csv_name, exclude_keywords)
+    crawler = FailedMusicCrawler(args.save_audio_dir, args.save_csv_name, exclude_keywords, include_keywords, args.query_suffix)
   # elif args.crawler_type == 'remastered': # TODO(minigb): Do not use RecrawlerForRemastered. This is not guaranteed to work.
   #   crawler = RecrawlerForRemastered(args.input_csv, args.save_audio_dir, args.save_csv_name, exclude_keywords)
   else:
