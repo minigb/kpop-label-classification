@@ -39,6 +39,8 @@ def get_era_from_song_id(song_id): # TODO(minigb): remove this
 
 
 def decode_song_id(song_id):
+    # Note that if there was a '/' in the song or artist, it is replaced with a space,
+    # so the data will not be found in the csv.
     pattern = r"\{([^}]*)\}"
     matches = re.findall(pattern, song_id)
     assert len(matches) == 3, f"song_id should have 3 parts, but got {len(matches)} for {song_id}"
