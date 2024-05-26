@@ -83,11 +83,13 @@ class BillboardMusicCrawler:
   
 
   def make_query(self, song, artist, date, exclude_keywords, topk, include_keywords):
+    song_ID = self._get_song_identifier(date, song, artist)
+
     ydl_opts = {
       'quiet': True,
       'skip_download': True,
       'extract_flat': True,
-    } 
+    }
     query = f"{artist} {song} {self.query_suffix}" if self.query_suffix else f"{artist} {song}"
     queries, failed = [], []
     
@@ -99,7 +101,6 @@ class BillboardMusicCrawler:
       video_title = video.get('title').lower()
       video_channel = video.get('channel') # In case of None, don't change into lower case
       video_duration = video.get('duration')
-      song_ID = self._get_song_identifier(date, song, artist)
       
       if video_channel is not None and 60 <= video_duration <= 600:
         no_valid_video = False
@@ -131,7 +132,8 @@ class BillboardMusicCrawler:
       assert 0 <= priority_num < NUM_OF_PRIORITIES
       is_satisfying = [
         video['official'],
-        'color coded lyrics' in video['video_title'].lower(),
+        'color coded' in video['video_title'] or 'color-coded' in video['video_title'],
+        'lyric' in video['video_title'],
         video['channel_artist_same'] or video['topic'],
       ]
       assert len(is_satisfying) == NUM_OF_PRIORITIES, f"{len(is_satisfying)} != {NUM_OF_PRIORITIES}"
@@ -146,15 +148,7 @@ class BillboardMusicCrawler:
         if _choose_video_with_priority(video, i):
           chosen = video
           break
-    # # 'official audio' in video_title in top 3 queries
-    # if any([video for video in queries[:3] if video['official'] and video['keywords']]):
-    #   chosen = [video for video in queries[:3] if video['official'] and video['keywords']][0]
-    # # video channel and artist name are the same or video channel is topic channel in top 3 queries
-    # elif any([video for video in queries[:3] if (video['channel_artist_same'] and video['keywords']) or (video['topic'] and video['keywords'])]):
-    #   chosen = [video for video in queries[:3] if (video['channel_artist_same'] and video['keywords']) or (video['topic'] and video['keywords'])][0]
-    # # video channel and artist name are the same AND video channel is topic channel in top 4~10 queries
-    # elif any([video for video in queries[3:] if video['channel_artist_same'] and video['topic'] and video['keywords']]):
-    #   chosen = [video for video in queries[3:] if video['channel_artist_same'] and video['topic'] and video['keywords']][0]
+
     if not chosen:
       video_info = {'Failed Reason': 'No suitable video'}
       failed.append(video_info)
@@ -297,41 +291,36 @@ class FailedMusicCrawler(BillboardMusicCrawler):
     self._init_result_csv()
     self.target_df = self.get_sorted_and_unique_billboard_df()
 
-
-# TODO(minigb): Do not use RecrawlerForRemastered. This is not guaranteed to work.
-class RecrawlerForRemastered(BillboardMusicCrawler):
-  REMASTER = 'remaster'
-
-  def __init__(self, input_csv_path: str, save_audio_dir: str, save_csv_name: str, exclude_keywords: list):
-    exclude_keywords = exclude_keywords + [self.REMASTER] if self.REMASTER not in exclude_keywords else exclude_keywords
-
-    self.input_csv_path = Path(input_csv_path)
-    self.save_audio_dir = Path(save_audio_dir)
+class MusicCrawlerReusingQueries(BillboardMusicCrawler):
+  def __init__(self, save_audio_dir, save_csv_name, exclude_keywords, include_keywords):
+    self.save_audio_dir = save_audio_dir
     self.save_csv_name = save_csv_name
     self.exclude_keywords = exclude_keywords
-
-    self.in_csv_col_names = CsvColumnNames('Date', 'Song', 'Artist')
-    self.out_csv_col_names = CsvColumnNames('Date', 'Song', 'Artist')
+    self.include_keywords = include_keywords
+    
+    for fn in FileNames(self.save_csv_name).__dict__.values():
+      assert fn.exists(), f"{fn} does not exist"
+    self.input_csv_path = FileNames(self.save_csv_name).failed
+    self.in_csv_col_names = self.out_csv_col_names = CsvColumnNames('Year', 'Song', 'Artist')
 
     self._init_result_csv()
-    self.input_df = pd.read_csv(self.input_csv_path)
-    self.target_df = self._leave_only_remastered_song(self.input_df)
+    self.target_df = self.get_sorted_and_unique_billboard_df()
 
 
-  def _leave_only_remastered_song(self, df):
-    indexs_to_drop = []
-    for index, row in df.iterrows():
-      video_title = row['video_title']
-      song, artist = row[self.out_csv_col_names.title], row[self.out_csv_col_names.artist]
-      if REMASTER in video_title.lower():
-        pass
-      if not (REMASTER in video_title.lower() and not REMASTER in song.lower() and not REMASTER in artist.lower()):
-        indexs_to_drop.append(index)
+  def make_query(self, song, artist, date, _1, _2, _3):
+    song_ID = self._get_song_identifier(date, song, artist)
 
-    df = df.drop(indexs_to_drop)
-    return df
+    queries_fn = FileNames(self.save_csv_name).queries
+    queries_df = pd.read_csv(queries_fn)
+    queries_df = queries_df[(queries_df[self.out_csv_col_names.date] == date) \
+                            & (queries_df[self.out_csv_col_names.title] == song) \
+                            & (queries_df[self.out_csv_col_names.artist] == artist)]
+    queries_df = queries_df.drop(columns = [self.out_csv_col_names.date, self.out_csv_col_names.title, self.out_csv_col_names.artist])
+    queries = [queries_df.to_dict(orient='records')]
 
-    
+    return song_ID, queries, []
+
+
 if __name__ == '__main__':
   """
   Example line to run the code: 
@@ -339,6 +328,9 @@ if __name__ == '__main__':
 
   When recrawling failed music:
   python crawling_data.py --save_csv_name csv/kpop --save_audio_dir audio --crawler_type failed --query_suffix "official audio"
+
+  When recrawling failed music with reuse of queries:
+  python crawling_data.py --save_csv_name csv/kpop --save_audio_dir audio --crawler_type reuse
 
   When recrawling remastered music:
   python crawling_data.py --input_csv csv/kpop_chosen.csv --save_csv_name csv/kpop_remaster --save_audio_dir audio_remastered_original --crawler_type remastered
@@ -375,10 +367,10 @@ if __name__ == '__main__':
     crawler = BillboardMusicCrawler(args.input_csv, args.save_audio_dir, args.save_csv_name, exclude_keywords, include_keywords)
   elif args.crawler_type == 'failed':
     crawler = FailedMusicCrawler(args.save_audio_dir, args.save_csv_name, exclude_keywords, include_keywords, args.query_suffix)
+  elif args.crawler_type == 'reuse':
+    crawler = MusicCrawlerReusingQueries(args.save_audio_dir, args.save_csv_name, exclude_keywords, include_keywords)
   elif args.crawler_type == 'testset':
     crawler = FailedMusicCrawler(args.save_audio_dir, args.save_csv_name, exclude_keywords, include_keywords, args.query_suffix)
-  # elif args.crawler_type == 'remastered': # TODO(minigb): Do not use RecrawlerForRemastered. This is not guaranteed to work.
-  #   crawler = RecrawlerForRemastered(args.input_csv, args.save_audio_dir, args.save_csv_name, exclude_keywords)
   else:
     raise ValueError(f"Invalid crawler type: {args.crawler_type}")
   
