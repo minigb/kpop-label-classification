@@ -123,21 +123,25 @@ class BillboardMusicCrawler:
 
 
   def filter_queries_and_choose(self, queries, failed):
-    PRIORITIES = 4
+    NUM_OF_PRIORITIES = 3
     def _choose_video_with_priority(video, priority_num):
-      assert 0 <= priority_num < PRIORITIES
+      if not video['keywords']:
+        return False
+      
+      assert 0 <= priority_num < NUM_OF_PRIORITIES
       is_satisfying = [
-        video['official'] and video['keywords'],
-        'color coded lyrics' in video['title'],
-        (video['channel_artist_same'] and video['keywords']) or (video['topic'] and video['keywords']),
-        video['channel_artist_same'] and video['topic'] and video['keywords']
+        video['official'],
+        'color coded lyrics' in video['video_title'].lower(),
+        video['channel_artist_same'] or video['topic'],
       ]
-      assert len(is_satisfying) == PRIORITIES, f"{len(is_satisfying)} != {PRIORITIES}"
+      assert len(is_satisfying) == NUM_OF_PRIORITIES, f"{len(is_satisfying)} != {NUM_OF_PRIORITIES}"
 
       return is_satisfying[priority_num]
 
     chosen = None
-    for i in range(PRIORITIES):
+    for i in range(NUM_OF_PRIORITIES):
+      if chosen:
+        break
       for video in queries:
         if _choose_video_with_priority(video, i):
           chosen = video
