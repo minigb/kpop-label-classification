@@ -365,7 +365,7 @@ if __name__ == '__main__':
   if args.crawler_type == 'new':
     fns = FileNames(args.save_csv_name)
     assert not fns.chosen.exists(), f"{fns.chosen} already exists. If you are trying to recrawl, use 'failed' as the crawler type."
-    crawler = BillboardMusicCrawler(args.input_csv, args.save_audio_dir, args.save_csv_name, exclude_keywords, include_keywords)
+    crawler = BillboardMusicCrawler(args.input_csv, args.save_audio_dir, args.save_csv_name, exclude_keywords, include_keywords, args.query_suffix)
   elif args.crawler_type == 'failed':
     crawler = FailedMusicCrawler(args.save_audio_dir, args.save_csv_name, exclude_keywords, include_keywords, args.query_suffix)
   elif args.crawler_type == 'reuse':
