@@ -123,17 +123,35 @@ class BillboardMusicCrawler:
 
 
   def filter_queries_and_choose(self, queries, failed):
+    PRIORITIES = 4
+    def _choose_video_with_priority(video, priority_num):
+      assert 0 <= priority_num < PRIORITIES
+      is_satisfying = [
+        video['official'] and video['keywords'],
+        'color coded lyrics' in video['title'],
+        (video['channel_artist_same'] and video['keywords']) or (video['topic'] and video['keywords']),
+        video['channel_artist_same'] and video['topic'] and video['keywords']
+      ]
+      assert len(is_satisfying) == PRIORITIES, f"{len(is_satisfying)} != {PRIORITIES}"
+
+      return is_satisfying[priority_num]
+
     chosen = None
-    # 'official audio' in video_title in top 3 queries
-    if any([video for video in queries[:3] if video['official'] and video['keywords']]):
-      chosen = [video for video in queries[:3] if video['official'] and video['keywords']][0]
-    # video channel and artist name are the same or video channel is topic channel in top 3 queries
-    elif any([video for video in queries[:3] if (video['channel_artist_same'] and video['keywords']) or (video['topic'] and video['keywords'])]):
-      chosen = [video for video in queries[:3] if (video['channel_artist_same'] and video['keywords']) or (video['topic'] and video['keywords'])][0]
-    # video channel and artist name are the same AND video channel is topic channel in top 4~10 queries
-    elif any([video for video in queries[3:] if video['channel_artist_same'] and video['topic'] and video['keywords']]):
-      chosen = [video for video in queries[3:] if video['channel_artist_same'] and video['topic'] and video['keywords']][0]
-    else:
+    for i in range(PRIORITIES):
+      for video in queries:
+        if _choose_video_with_priority(video, i):
+          chosen = video
+          break
+    # # 'official audio' in video_title in top 3 queries
+    # if any([video for video in queries[:3] if video['official'] and video['keywords']]):
+    #   chosen = [video for video in queries[:3] if video['official'] and video['keywords']][0]
+    # # video channel and artist name are the same or video channel is topic channel in top 3 queries
+    # elif any([video for video in queries[:3] if (video['channel_artist_same'] and video['keywords']) or (video['topic'] and video['keywords'])]):
+    #   chosen = [video for video in queries[:3] if (video['channel_artist_same'] and video['keywords']) or (video['topic'] and video['keywords'])][0]
+    # # video channel and artist name are the same AND video channel is topic channel in top 4~10 queries
+    # elif any([video for video in queries[3:] if video['channel_artist_same'] and video['topic'] and video['keywords']]):
+    #   chosen = [video for video in queries[3:] if video['channel_artist_same'] and video['topic'] and video['keywords']][0]
+    if not chosen:
       video_info = {'Failed Reason': 'No suitable video'}
       failed.append(video_info)
 
