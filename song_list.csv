@@ -1990,7 +1990,6 @@ Year,Label,Artist,Song
 2014,DSP Media,Park Gyuri,널 잊을래 (Do It) (with From The Airport)
 2016,DSP Media,Park Gyuri,Secret Love (with From The Airport)
 2017,DSP Media,Park Gyuri,The Little Prince (with Jinyoung of B1A4)
-Year,Company,Artist,Title
 2009,DSP Media,Rainbow,Gossip Girl
 2009,DSP Media,Rainbow,Not Your Girl
 2009,DSP Media,Rainbow,I Believe
@@ -2790,7 +2789,6 @@ Year,Company,Artist,Title
 2018,Shinhwa Company,Shinhwa,Kiss Me Like That
 2018,Shinhwa Company,Shinhwa,Level
 2018,Shinhwa Company,Shinhwa,Here I Come
-연도,회사이름,아티스트명,곡제목
 2004,SM Entertainment,TVXQ,Hug
 2004,SM Entertainment,TVXQ,My Little Princess (있잖아요...)
 2004,SM Entertainment,TVXQ,Oh Holy Night
@@ -2869,7 +2867,6 @@ Year,Company,Artist,Title
 2023,SM Entertainment,TVXQ,Parallel Parallel
 2023,SM Entertainment,TVXQ,Reboot
 2023,SM Entertainment,TVXQ,Phantom
-연도,회사이름,아티스트명,곡제목
 2004,SM Entertainment,TraxX,Paradox
 2004,SM Entertainment,TraxX,Scorpio
 2004,SM Entertainment,TraxX,Over the Rainbow
@@ -4121,7 +4118,6 @@ Year,Company,Artist,Title
 2024,Yuehua Entertainment,Tempest,There
 2024,Yuehua Entertainment,Tempest,B.O.K
 2024,Yuehua Entertainment,Tempest,Slow Motion
-Year,Agency,Artist,Song Title
 1999,SidusHQ,g.o.d,어머님께 (To Mother)
 1999,SidusHQ,g.o.d,관찰 (Observation)
 1999,SidusHQ,g.o.d,후회 (Regret)
