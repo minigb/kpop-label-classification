@@ -39,6 +39,7 @@ class BillboardMusicCrawler:
     self._init_result_csv()
     uniq_df = self.get_target_df()
     self.target_df = self.get_df_with_existing_songs_removed(uniq_df)
+    print(f"Number of songs to crawl: {len(self.target_df)}")
 
     self.query_suffix = query_suffix
 
@@ -267,7 +268,6 @@ class BillboardMusicCrawler:
   def run(self, topk):
     song_list = [(row[self.in_csv_col_names.title], row[self.in_csv_col_names.artist], row[self.in_csv_col_names.date], self.exclude_keywords, topk, self.include_keywords) \
                  for _, row in self.target_df.iterrows()]
-    print(f"Number of songs to crawl: {len(song_list)}")
 
     self.run_parallel(song_list) # Results are saved while crawling
 
@@ -291,18 +291,13 @@ class FailedMusicCrawler(BillboardMusicCrawler):
     for fn in FileNames(self.save_csv_name).__dict__.values():
       assert fn.exists(), f"{fn} does not exist"
     self.input_csv_path = FileNames(self.save_csv_name).failed
-    
+
     self.in_csv_col_names = self.out_csv_col_names = CsvColumnNames('Year', 'Song', 'Artist')
     self._init_result_csv()
 
     self.target_df = self.get_target_df()  # use self.input_csv_path
+    print(f"Number of failed songs to re-crawl: {len(self.target_df)}")
 
-  def run(self, topk):
-    song_list = [(row[self.in_csv_col_names.title], row[self.in_csv_col_names.artist], row[self.in_csv_col_names.date], self.exclude_keywords, topk, self.include_keywords) \
-                for _, row in self.target_df.iterrows()]
-    print(f"Number of failed songs to re-crawl: {len(song_list)}")
-
-    self.run_parallel(song_list)  # Results are saved while crawling
 
 class MusicCrawlerReusingQueries(BillboardMusicCrawler):
   def __init__(self, save_audio_dir, save_csv_name, exclude_keywords, include_keywords):
@@ -313,11 +308,12 @@ class MusicCrawlerReusingQueries(BillboardMusicCrawler):
 
     for fn in FileNames(self.save_csv_name).__dict__.values():
       assert fn.exists(), f"{fn} does not exist"
-    self.input_csv_path = FileNames(self.save_csv_name).queries
+    self.input_csv_path = FileNames(self.save_csv_name).failed
     self.in_csv_col_names = self.out_csv_col_names = CsvColumnNames('Year', 'Song', 'Artist')
 
     self._init_result_csv()
     self.target_df = self.get_df_with_existing_songs_removed()
+    print(f"Number of songs to crawl: {len(self.target_df)}")
 
 
   def make_query(self, song, artist, date, _1, _2, _3):
