@@ -1,0 +1,3 @@
+[submodule "kpop-dataset"]
+	path = kpop-dataset
+	url = https://github.com/minigb/kpop-dataset.git
