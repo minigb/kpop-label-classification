@@ -184,10 +184,14 @@ class BillboardMusicCrawler:
     if chosen:
       try:
         self.download_video(chosen, song_ID)
+        # If download is successful, return chosen
+        return song_ID, queries, failed_update, chosen
       except Exception as e:
         print(e)
         failed_update.append({'Failed Reason': str(e)})
-    return song_ID, queries, failed_update, chosen
+    # Return None for chosen if download fails or no video is chosen
+    return song_ID, queries, failed_update, None
+
 
 
   def run_parallel(self, song_list):
