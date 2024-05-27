@@ -164,7 +164,7 @@ class BillboardMusicCrawler:
     song_id = get_song_id(date, song, artist)
     download_opts = {
       'format': 'bestaudio/best',
-      'outtmpl': f'{self.save_audio_dir}/{song_id}',
+      'outtmpl': f'{self.save_audio_dir}/{song_id}.%(ext)s',
       'postprocessors': [{
         'key': 'FFmpegExtractAudio',
         'preferredcodec': 'mp3',
@@ -173,7 +173,9 @@ class BillboardMusicCrawler:
     }
     with yt_dlp.YoutubeDL(download_opts) as ydl:
       ydl.download([chosen['video_url']])
-  
+      # Verify the file was downloaded
+      if not Path(f"{self.save_audio_dir}/{song_id}.mp3").exists():
+          raise Exception(f"Failed to download audio for {song_ID}")
   
   def process_song(self, song):
     song_ID, queries, failed = self.make_query(*song)
@@ -183,6 +185,7 @@ class BillboardMusicCrawler:
         self.download_video(chosen, song_ID)
       except Exception as e:
         print(e)
+        failed_update.append({'Failed Reason': str(e)})
     return song_ID, queries, failed_update, chosen
 
 
@@ -279,12 +282,12 @@ class BillboardMusicCrawler:
 
 class FailedMusicCrawler(BillboardMusicCrawler):
   def __init__(self, save_audio_dir, save_csv_name, exclude_keywords, include_keywords, query_suffix):
-    self.save_audio_dir = save_audio_dir
+    self.save_audio_dir = Path(save_audio_dir)
     self.save_csv_name = save_csv_name
     self.exclude_keywords = exclude_keywords
     self.include_keywords = include_keywords
     self.query_suffix = query_suffix
-    
+
     for fn in FileNames(self.save_csv_name).__dict__.values():
       assert fn.exists(), f"{fn} does not exist"
     self.input_csv_path = FileNames(self.save_csv_name).failed
@@ -292,18 +295,25 @@ class FailedMusicCrawler(BillboardMusicCrawler):
     self.in_csv_col_names = self.out_csv_col_names = CsvColumnNames('Year', 'Song', 'Artist')
     self._init_result_csv()
 
-    self.target_df = self.get_target_df() # use self.input_csv_path
+    self.target_df = self.get_target_df()  # use self.input_csv_path
+
+  def run(self, topk):
+    song_list = [(row[self.in_csv_col_names.title], row[self.in_csv_col_names.artist], row[self.in_csv_col_names.date], self.exclude_keywords, topk, self.include_keywords) \
+                for _, row in self.target_df.iterrows()]
+    print(f"Number of failed songs to re-crawl: {len(song_list)}")
+
+    self.run_parallel(song_list)  # Results are saved while crawling
 
 class MusicCrawlerReusingQueries(BillboardMusicCrawler):
   def __init__(self, save_audio_dir, save_csv_name, exclude_keywords, include_keywords):
-    self.save_audio_dir = save_audio_dir
+    self.save_audio_dir = Path(save_audio_dir)
     self.save_csv_name = save_csv_name
     self.exclude_keywords = exclude_keywords
     self.include_keywords = include_keywords
-    
+
     for fn in FileNames(self.save_csv_name).__dict__.values():
       assert fn.exists(), f"{fn} does not exist"
-    self.input_csv_path = FileNames(self.save_csv_name).failed
+    self.input_csv_path = FileNames(self.save_csv_name).queries
     self.in_csv_col_names = self.out_csv_col_names = CsvColumnNames('Year', 'Song', 'Artist')
 
     self._init_result_csv()
@@ -349,7 +359,7 @@ if __name__ == '__main__':
   argparser.add_argument('--save_csv_name', type=str, required=True)
   argparser.add_argument('--save_audio_dir', type=str, required=True)
   argparser.add_argument('--exclude_remaster', action='store_true')
-  argparser.add_argument('--include_remaster', action='store_true') # TODO(minigb): Find better approach
+  argparser.add_argument('--include_remaster', action='store_true') # TODO: Find better approach
   argparser.add_argument('--topk', type=int, default=10)
   argparser.add_argument('--crawler_type', type=str, default='new')
   argparser.add_argument('--query_suffix', type=str)
@@ -372,8 +382,6 @@ if __name__ == '__main__':
     crawler = FailedMusicCrawler(args.save_audio_dir, args.save_csv_name, exclude_keywords, include_keywords, args.query_suffix)
   elif args.crawler_type == 'reuse':
     crawler = MusicCrawlerReusingQueries(args.save_audio_dir, args.save_csv_name, exclude_keywords, include_keywords)
-  elif args.crawler_type == 'testset':
-    crawler = FailedMusicCrawler(args.save_audio_dir, args.save_csv_name, exclude_keywords, include_keywords, args.query_suffix)
   else:
     raise ValueError(f"Invalid crawler type: {args.crawler_type}")
   
