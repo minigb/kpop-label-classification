@@ -1,6 +1,7 @@
 __pycache__
 .vscode
 .DS_Store
+.cache
 
 *audio
 *audio_tmp
