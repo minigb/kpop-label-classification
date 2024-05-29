@@ -1,6 +1,13 @@
 import requests
 import pandas as pd
 from tqdm.auto import tqdm
+from pathlib import Path
+import logging
+
+logging.basicConfig(filename='musicbrainz_errors.log', level=logging.ERROR,
+                    format='%(asctime)s:%(levelname)s:%(message)s')
+
+LIMIT = 1500
 
 # Step 1: Get the Label ID
 def get_label_id(label_name):
@@ -21,7 +28,7 @@ def get_releases(label_id):
     params = {
         'label': label_id,
         'fmt': 'json',
-        'limit': 1500  # Limit set to 1500 for each request
+        'limit': LIMIT
     }
     release_data = []
     offset = 0
@@ -37,7 +44,7 @@ def get_releases(label_id):
             release_details = get_release_details(release_id)
             if release_details:
                 release_data.append(release_details)
-        offset += 1500
+        offset += LIMIT
     return release_data
 
 # Step 3: Get the detailed information of each release
@@ -60,24 +67,29 @@ def get_release_details(release_id):
     }
 
 # Step 4: Save the Releases to a CSV file
-def save_releases_to_csv(release_data, label_name):
-    df = pd.DataFrame(release_data)
-    df.to_csv(f'{label_name}_releases.csv', index=False)
+def save_releases_to_csv(save_dir, release_data, label_name):
+    save_dir = Path(save_dir)
+    if not save_dir.exists():
+        save_dir.mkdir()
 
-def main(label_name):
+    df = pd.DataFrame(release_data)
+    df.to_csv(f'{save_dir}/{label_name}_releases.csv', index=False)
+
+def main(label_name, save_dir='releases'):
     label_id = get_label_id(label_name)
     if not label_id:
-        print("Label not found")
+        logging.error("Label not found")
         return
 
     release_data = get_releases(label_id)
     if not release_data:
-        print("No releases found for this label")
+        logging.error(f"No releases found for {label_name}")
         return
 
-    save_releases_to_csv(release_data, label_name)
-    print(f"Saved {len(release_data)} releases to {label_name}_releases.csv")
+    save_releases_to_csv(save_dir, release_data, label_name)
 
 if __name__ == '__main__':
-    query_label_name = input("Enter the label name: ")
-    main(query_label_name)
+    labels = pd.read_csv('unique_labels.csv')['Label']
+    for label_name in tqdm(labels):
+        print(f"Processing label: {label_name}")
+        main(label_name)
