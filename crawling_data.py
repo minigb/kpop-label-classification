@@ -32,7 +32,11 @@ class BillboardMusicCrawler:
     self.save_csv_name = save_csv_name
     self.exclude_keywords = exclude_keywords
     self.include_keywords = include_keywords
+    self.query_suffix = query_suffix
+    self._custom_init()
 
+
+  def _custom_init(self):
     self.in_csv_col_names = CsvColumnNames('Year', 'Song', 'Artist')
     self.out_csv_col_names = CsvColumnNames('Year', 'Song', 'Artist')
 
@@ -40,8 +44,6 @@ class BillboardMusicCrawler:
     uniq_df = self.get_target_df()
     self.target_df = self.get_df_with_existing_songs_removed(uniq_df)
     print(f"Number of songs to crawl: {len(self.target_df)}")
-
-    self.query_suffix = query_suffix
 
 
   def _init_result_csv(self):
@@ -285,13 +287,11 @@ class BillboardMusicCrawler:
   
 
 class FailedMusicCrawler(BillboardMusicCrawler):
-  def __init__(self, save_audio_dir, save_csv_name, exclude_keywords, include_keywords, query_suffix):
-    self.save_audio_dir = Path(save_audio_dir)
-    self.save_csv_name = save_csv_name
-    self.exclude_keywords = exclude_keywords
-    self.include_keywords = include_keywords
-    self.query_suffix = query_suffix
+  def __init__(self, input_csv_path, save_audio_dir, save_csv_name, exclude_keywords, include_keywords, query_suffix):
+    super().__init__(input_csv_path, save_audio_dir, save_csv_name, exclude_keywords, include_keywords, query_suffix)
 
+
+  def _custom_init(self):
     for fn in FileNames(self.save_csv_name).__dict__.values():
       assert fn.exists(), f"{fn} does not exist"
     self.input_csv_path = FileNames(self.save_csv_name).failed
@@ -304,12 +304,11 @@ class FailedMusicCrawler(BillboardMusicCrawler):
 
 
 class MusicCrawlerReusingQueries(BillboardMusicCrawler):
-  def __init__(self, save_audio_dir, save_csv_name, exclude_keywords, include_keywords):
-    self.save_audio_dir = Path(save_audio_dir)
-    self.save_csv_name = save_csv_name
-    self.exclude_keywords = exclude_keywords
-    self.include_keywords = include_keywords
+  def __init__(self, input_csv_path, save_audio_dir, save_csv_name, exclude_keywords, include_keywords):
+    super().__init__(input_csv_path, save_audio_dir, save_csv_name, exclude_keywords, include_keywords, None)
 
+
+  def _custom_init(self):
     for fn in FileNames(self.save_csv_name).__dict__.values():
       assert fn.exists(), f"{fn} does not exist"
     self.input_csv_path = FileNames(self.save_csv_name).failed
