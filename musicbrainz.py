@@ -20,46 +20,38 @@ def get_releases(label_id):
     params = {
         'label': label_id,
         'fmt': 'json',
-        'limit': 1500  # Set limit to 100 to get more results per request
+        'limit': 1500  # Increased limit to 1500
     }
-    response = requests.get(url, params=params)
-    data = response.json()
-    releases = data.get('releases', [])
-    release_ids = [release['id'] for release in releases]
-
-    # Handle pagination
-    while 'release-offset' in data:
-        params['offset'] = data['release-offset'] + 100
+    release_data = []
+    offset = 0
+    while True:
+        params['offset'] = offset
         response = requests.get(url, params=params)
         data = response.json()
         releases = data.get('releases', [])
-        release_ids.extend([release['id'] for release in releases])
         if not releases:
             break
+        for release in releases:
+            release_group = release.get('release-group', {})
+            if release_group.get('primary-type') not in ['Video']:
+                release_data.append(release)
+        offset += 1500
+    return release_data
 
-    return release_ids
-
-# Step 3: Get the Artists from the Releases
-def get_artists_from_releases(release_ids):
-    artists = set()
-    for release_id in release_ids:
-        url = f"https://musicbrainz.org/ws/2/release/{release_id}"
-        params = {
-            'inc': 'artist-credits',
-            'fmt': 'json'
-        }
-        response = requests.get(url, params=params)
-        data = response.json()
-        if 'artist-credit' in data:
-            for artist_credit in data['artist-credit']:
-                artists.add(artist_credit['artist']['name'])
-    return list(artists)
-
-def save_to_csv(artists, label_name):
-    # Create a DataFrame from the list of artists
-    df = pd.DataFrame(artists, columns=['artist_name'])
-    # Save the DataFrame to a CSV file
-    df.to_csv(f'{label_name}_artists.csv', index=False)
+# Step 3: Save the Releases to a CSV file
+def save_releases_to_csv(release_data, label_name):
+    releases_info = []
+    for release in release_data:
+        releases_info.append({
+            'release_id': release['id'],
+            'title': release['title'],
+            'status': release.get('status', ''),
+            'release_date': release.get('date', ''),
+            'country': release.get('country', ''),
+        })
+    
+    df = pd.DataFrame(releases_info)
+    df.to_csv(f'{label_name}_releases.csv', index=False)
 
 def main(label_name):
     label_id = get_label_id(label_name)
@@ -67,16 +59,15 @@ def main(label_name):
         print("Label not found")
         return
 
-    release_ids = get_releases(label_id)
-    if not release_ids:
+    release_data = get_releases(label_id)
+    if not release_data:
         print("No releases found for this label")
         return
 
-    artists = get_artists_from_releases(release_ids)
-    save_to_csv(artists, label_name)
-    print(f"Saved {len(artists)} artists to {label_name}_artists.csv")
+    save_releases_to_csv(release_data, label_name)
+    print(f"Saved {len(release_data)} releases to {label_name}_releases.csv")
 
 if __name__ == '__main__':
     # query_label_name = input("Enter the label name: ")
-    query_label_name = "SM Entertainment"
+    query_label_name = 'ADOR'
     main(query_label_name)
