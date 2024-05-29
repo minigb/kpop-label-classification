@@ -3,9 +3,7 @@ from spotipy.oauth2 import SpotifyClientCredentials
 import pandas as pd
 from omegaconf import OmegaConf
 import logging
-from tqdm import tqdm
-from spotipy.exceptions import SpotifyException
-import time
+from tqdm.auto import tqdm
 
 # Configure logging
 logging.basicConfig(filename='errors.log', level=logging.ERROR,
@@ -31,33 +29,24 @@ def get_artist_id_and_name(artist_name):
 
 def get_all_songs(artist_id, artist_name, query_artist_name):
     songs = []
-    try:
-        # Get all albums and singles by the artist
-        albums = sp.artist_albums(artist_id, album_type='album,single', limit=50)
-        for album in albums['items']:
-            # Filter out albums where the artist is not the main artist
-            if album['artists'][0]['name'].lower() != artist_name.lower():
+    # Get all albums and singles by the artist
+    albums = sp.artist_albums(artist_id, album_type='album,single', limit=50)
+    for album in tqdm(albums['items']):
+        # Filter out albums where the artist is not the main artist
+        if album['artists'][0]['name'].lower() != artist_name.lower():
+            continue
+        album_tracks = sp.album_tracks(album['id'])
+        for track in album_tracks['items']:
+            # Filter out tracks where the artist is not the main artist
+            if track['artists'][0]['name'].lower() != artist_name.lower():
                 continue
-            album_tracks = sp.album_tracks(album['id'])
-            for track in album_tracks['items']:
-                # Filter out tracks where the artist is not the main artist
-                if track['artists'][0]['name'].lower() != artist_name.lower():
-                    continue
-                songs.append({
-                    'query_artist_name': query_artist_name,
-                    'song_title': track['name'],
-                    'album_name': album['name'],
-                    'release_date': album['release_date'],
-                    'spotify_artist_name': artist_name
-                })
-    except SpotifyException as e:
-        if e.http_status == 429:
-            retry_after = int(e.headers.get('Retry-After', 5))
-            logging.error(f"Rate limit exceeded, retrying after {retry_after} seconds")
-            time.sleep(retry_after)
-            return get_all_songs(artist_id, artist_name, query_artist_name)
-        else:
-            logging.error(f"SpotifyException for artist {artist_name}: {e}")
+            songs.append({
+                'query_artist_name': query_artist_name,
+                'song_title': track['name'],
+                'album_name': album['name'],
+                'release_date': album['release_date'],
+                'spotify_artist_name': artist_name
+            })
     return songs
 
 def save_to_csv(songs, filename):
@@ -105,18 +94,11 @@ def main():
             # Get all songs by the artist
             songs = get_all_songs(artist_id, spotify_artist_name, query_artist_name)
             all_songs.extend(songs)
-        except SpotifyException as e:
-            if e.http_status == 429:
-                retry_after = int(e.headers.get('Retry-After', 5))
-                logging.error(f"Rate limit exceeded, retrying after {retry_after} seconds")
-                time.sleep(retry_after)
-            else:
-                logging.error(f"SpotifyException for artist {query_artist_name}: {e}")
         except Exception as e:
             logging.error(f"Error processing artist {query_artist_name}: {e}")
 
-    # Save all songs to a single CSV file
-    save_to_csv(all_songs, 'all_songs.csv')
+        # Save all songs to a single CSV file
+        save_to_csv(all_songs, 'all_songs.csv')
     print(f"Saved all songs to all_songs.csv")
 
 if __name__ == '__main__':
