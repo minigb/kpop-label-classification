@@ -1,8 +1,4 @@
-# This code is from "https://github.com/MALerLab/pop-era-classification/blob/main/crawling_data.py"
-
-# TODO(minigb): Currently sometimes the code saves the information in the chosen.csv, but does not download the audio file.
-
-import pandas as pd
+import pandas as pd# This code is from "https://github.com/MALerLab/pop-era-classification/blob/main/crawling_data.py"
 import yt_dlp
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
@@ -25,7 +21,7 @@ class FileNames:
     self.chosen = Path(f'{save_csv_name}_chosen.csv')
 
 
-class BillboardMusicCrawler:
+class MusicCrawler:
   def __init__(self, input_csv_path: str, save_audio_dir: str, save_csv_name: str, exclude_keywords: list, include_keywords: list, query_suffix):
     self.input_csv_path = Path(input_csv_path)
     self.save_audio_dir = Path(save_audio_dir)
@@ -51,29 +47,21 @@ class BillboardMusicCrawler:
     parent_dir.mkdir(parents=True, exist_ok=True)
     fns = FileNames(self.save_csv_name)
 
-    # queries result df
+    # Check if files already exist
+    if fns.queries.exists() or fns.failed.exists() or fns.chosen.exists():
+      raise FileExistsError(f"One or more result files ({fns.queries}, {fns.failed}, {fns.chosen}) already exist. Please remove them before running the crawler.")
+    
+    # Create result files
     QUERIES_COLUMNS = [self.out_csv_col_names.date, self.out_csv_col_names.title, self.out_csv_col_names.artist] + ['query_idx', 'official', 'topic', 'channel_artist_same', 'keywords', 'video_title', 'video_channel', 'video_url']
-    if fns.queries.exists():
-      queries_df = pd.read_csv(fns.queries)
-      assert set(queries_df.columns) == set(QUERIES_COLUMNS), f"columns of {fns.queries} should be {QUERIES_COLUMNS}, but got {queries_df.columns}"
-    else:
-      queries_df = pd.DataFrame(columns=QUERIES_COLUMNS)
-    self.queries_df = queries_df
+    self.queries_df = pd.DataFrame(columns=QUERIES_COLUMNS)
 
-    # failed result df
     FAILED_COLUMNS = [self.out_csv_col_names.date, self.out_csv_col_names.title, self.out_csv_col_names.artist, 'Failed Reason']
     self.failed_df = pd.DataFrame(columns=FAILED_COLUMNS)
 
-    # chosen result df
     CHOSEN_COLUMNS = [self.out_csv_col_names.date, self.out_csv_col_names.title, self.out_csv_col_names.artist] + ['query_idx', 'official', 'topic', 'channel_artist_same', 'keywords', 'video_title', 'video_channel', 'video_url']
-    if fns.chosen.exists():
-      chosen_df = pd.read_csv(fns.chosen)
-      assert set(chosen_df.columns) == set(CHOSEN_COLUMNS)
-    else:
-      chosen_df = pd.DataFrame(columns=CHOSEN_COLUMNS)
-    self.chosen_df = chosen_df
+    self.chosen_df = pd.DataFrame(columns=CHOSEN_COLUMNS)
 
-    
+
   def get_target_df(self) -> pd.DataFrame:
     assert self.input_csv_path.exists(), f"{self.input_csv_path} does not exist"
     df = pd.read_csv(self.input_csv_path)
@@ -277,6 +265,22 @@ class BillboardMusicCrawler:
 
     self.run_parallel(song_list) # Results are saved while crawling
 
+    # Check if all chosen songs have corresponding mp3 files
+    self.check_downloaded_files()
+
+  def check_downloaded_files(self):
+    chosen_fn = FileNames(self.save_csv_name).chosen
+    if not chosen_fn.exists():
+      print("No chosen file found.")
+      return
+
+    chosen_df = pd.read_csv(chosen_fn)
+    total_chosen = len(chosen_df)
+    actual_files = sum(1 for _ in self.save_audio_dir.glob('*.mp3'))
+
+    print(f"Number of songs noted as succeeded: {total_chosen}")
+    print(f"Number of actual MP3 files: {actual_files}")
+
   def _get_song_identifier(self, date, song, artist):
     # This is different from the song_id used for file name
     return f'{date}@@{song}@@{artist}'
@@ -286,7 +290,7 @@ class BillboardMusicCrawler:
     return date, song, artist
   
 
-class FailedMusicCrawler(BillboardMusicCrawler):
+class FailedMusicCrawler(MusicCrawler):
   def __init__(self, input_csv_path, save_audio_dir, save_csv_name, exclude_keywords, include_keywords, query_suffix):
     super().__init__(input_csv_path, save_audio_dir, save_csv_name, exclude_keywords, include_keywords, query_suffix)
 
@@ -303,7 +307,7 @@ class FailedMusicCrawler(BillboardMusicCrawler):
     print(f"Number of failed songs to re-crawl: {len(self.target_df)}")
 
 
-class MusicCrawlerReusingQueries(BillboardMusicCrawler):
+class ReusingQueriesMusicCrawler(MusicCrawler):
   def __init__(self, input_csv_path, save_audio_dir, save_csv_name, exclude_keywords, include_keywords):
     super().__init__(input_csv_path, save_audio_dir, save_csv_name, exclude_keywords, include_keywords, None)
 
@@ -376,11 +380,11 @@ if __name__ == '__main__':
   if args.crawler_type == 'new':
     fns = FileNames(args.save_csv_name)
     assert not fns.chosen.exists(), f"{fns.chosen} already exists. If you are trying to recrawl, use 'failed' as the crawler type."
-    crawler = BillboardMusicCrawler(args.input_csv, args.save_audio_dir, args.save_csv_name, exclude_keywords, include_keywords, args.query_suffix)
+    crawler = MusicCrawler(args.input_csv, args.save_audio_dir, args.save_csv_name, exclude_keywords, include_keywords, args.query_suffix)
   elif args.crawler_type == 'failed':
     crawler = FailedMusicCrawler(args.save_audio_dir, args.save_csv_name, exclude_keywords, include_keywords, args.query_suffix)
   elif args.crawler_type == 'reuse':
-    crawler = MusicCrawlerReusingQueries(args.save_audio_dir, args.save_csv_name, exclude_keywords, include_keywords)
+    crawler = ReusingQueriesMusicCrawler(args.save_audio_dir, args.save_csv_name, exclude_keywords, include_keywords)
   else:
     raise ValueError(f"Invalid crawler type: {args.crawler_type}")
   
