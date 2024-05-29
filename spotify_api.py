@@ -31,7 +31,7 @@ def get_all_songs(artist_id, artist_name, query_artist_name):
     songs = []
     # Get all albums and singles by the artist
     albums = sp.artist_albums(artist_id, album_type='album,single', limit=50)
-    for album in tqdm(albums['items']):
+    for album in albums['items']:
         # Filter out albums where the artist is not the main artist
         if album['artists'][0]['name'].lower() != artist_name.lower():
             continue
@@ -62,7 +62,7 @@ def save_to_csv(songs, filename):
         logging.error(f"Error converting release_date to datetime: {e}")
         return
     # Sort the DataFrame by release_date in ascending order
-    df = df.sort_values(by='release_date')
+    df = df.sort_values(by=['query_artist_name', 'release_date'])
     # Check the DataFrame structure
     logging.info(f"DataFrame columns: {df.columns}")
     logging.info(f"DataFrame head: {df.head()}")
