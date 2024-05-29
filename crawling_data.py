@@ -4,8 +4,13 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
 from pathlib import Path
 from argparse import ArgumentParser
+import logging
 
 from utils import get_song_id
+
+# Configure logging
+logging.basicConfig(filename='download_check.log', level=logging.INFO,
+                    format='%(asctime)s:%(levelname)s:%(message)s')
 
 
 class CsvColumnNames:
@@ -271,15 +276,15 @@ class MusicCrawler:
   def check_downloaded_files(self):
     chosen_fn = FileNames(self.save_csv_name).chosen
     if not chosen_fn.exists():
-      print("No chosen file found.")
-      return
+        logging.info("No chosen file found.")
+        return
 
     chosen_df = pd.read_csv(chosen_fn)
     total_chosen = len(chosen_df)
     actual_files = sum(1 for _ in self.save_audio_dir.glob('*.mp3'))
 
-    print(f"Number of songs noted as succeeded: {total_chosen}")
-    print(f"Number of actual MP3 files: {actual_files}")
+    logging.info(f"Number of songs noted as succeeded: {total_chosen}")
+    logging.info(f"Number of actual MP3 files: {actual_files}")
 
   def _get_song_identifier(self, date, song, artist):
     # This is different from the song_id used for file name
