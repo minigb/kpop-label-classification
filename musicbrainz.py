@@ -1,5 +1,6 @@
 import requests
 import pandas as pd
+from tqdm.auto import tqdm
 
 # Step 1: Get the Label ID
 def get_label_id(label_name):
@@ -20,7 +21,7 @@ def get_releases(label_id):
     params = {
         'label': label_id,
         'fmt': 'json',
-        'limit': 1500  # Increased limit to 1500
+        'limit': 1500  # Limit set to 1500 for each request
     }
     release_data = []
     offset = 0
@@ -31,26 +32,36 @@ def get_releases(label_id):
         releases = data.get('releases', [])
         if not releases:
             break
-        for release in releases:
-            release_group = release.get('release-group', {})
-            if release_group.get('primary-type') not in ['Video']:
-                release_data.append(release)
+        for release in tqdm(releases):
+            release_id = release['id']
+            release_details = get_release_details(release_id)
+            if release_details:
+                release_data.append(release_details)
         offset += 1500
     return release_data
 
-# Step 3: Save the Releases to a CSV file
+# Step 3: Get the detailed information of each release
+def get_release_details(release_id):
+    url = f"https://musicbrainz.org/ws/2/release/{release_id}"
+    params = {
+        'inc': 'artist-credits',
+        'fmt': 'json'
+    }
+    response = requests.get(url, params=params)
+    data = response.json()
+    artist_names = [artist_credit['artist']['name'] for artist_credit in data.get('artist-credit', [])]
+    return {
+        'release_id': data['id'],
+        'title': data['title'],
+        'status': data.get('status', ''),
+        'release_date': data.get('date', ''),
+        'country': data.get('country', ''),
+        'artists': ', '.join(artist_names)
+    }
+
+# Step 4: Save the Releases to a CSV file
 def save_releases_to_csv(release_data, label_name):
-    releases_info = []
-    for release in release_data:
-        releases_info.append({
-            'release_id': release['id'],
-            'title': release['title'],
-            'status': release.get('status', ''),
-            'release_date': release.get('date', ''),
-            'country': release.get('country', ''),
-        })
-    
-    df = pd.DataFrame(releases_info)
+    df = pd.DataFrame(release_data)
     df.to_csv(f'{label_name}_releases.csv', index=False)
 
 def main(label_name):
@@ -68,6 +79,5 @@ def main(label_name):
     print(f"Saved {len(release_data)} releases to {label_name}_releases.csv")
 
 if __name__ == '__main__':
-    # query_label_name = input("Enter the label name: ")
-    query_label_name = 'ADOR'
+    query_label_name = input("Enter the label name: ")
     main(query_label_name)
