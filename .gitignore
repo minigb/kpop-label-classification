@@ -8,5 +8,6 @@ __pycache__
 *audio_tmp
 releases*
 artists
+recordings
 
 spotify_keys.yaml
