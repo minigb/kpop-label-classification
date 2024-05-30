@@ -73,6 +73,7 @@ class MusicCrawler:
 
     # Sort by date
     df_sorted = df.sort_values(by=self.in_csv_col_names.date).reset_index(drop=True)
+    df_sorted = df.sort_values(by=self.in_csv_col_names.date).reset_index(drop=True)
 
     # Remove duplicates
     df_uniq = df_sorted.drop_duplicates(subset=[self.in_csv_col_names.title, self.in_csv_col_names.artist], keep='first')
@@ -354,6 +355,7 @@ if __name__ == '__main__':
   python crawling_data.py --save_csv_name csv/kpop --save_audio_dir audio --crawler_type reuse
 
   When recrawling remastered music:
+  python crawling_data.py --input_csv csv/kpop_chosen.csv --save_csv_name csv/kpop_remaster --save_audio_dir audio_remastered_original --crawler_type remastered
   python crawling_data.py --input_csv csv/kpop_chosen.csv --save_csv_name csv/kpop_remaster --save_audio_dir audio_remastered_original --crawler_type remastered
   
   Add '--exclude_remaster' or '--topk 20' if needed
