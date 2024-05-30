@@ -9,7 +9,7 @@ from fuzzywuzzy import fuzz
 
 # RELEASE_DIR = Path('releases')
 ARTIST_DIR = Path('artists')
-SONG_DIR = Path('songs')
+SAVE_FN = Path('all_songs.csv')
 
 # Configure logging
 logging.basicConfig(filename='spotify_errors.log', level=logging.ERROR,
@@ -75,30 +75,32 @@ def save_to_csv(songs, filename):
         logging.error(f"Error saving DataFrame to CSV: {e}")
 
 def main():
-    all_songs = []
-
-    labels_with_song_list = SONG_DIR.glob('*.csv')
-    for artist_fn in tqdm(list(ARTIST_DIR.glob('*.csv')), desc='Processing artists'):
-        if artist_fn in labels_with_song_list:
-            continue
-        
+    total_artists = []
+    for artist_fn in tqdm(list(ARTIST_DIR.glob('*.csv'))):
         artist_df = pd.read_csv(artist_fn)
         artist_names = artist_df['artists'].unique()
+        total_artists.extend(artist_names)
+    total_artists = list(set(total_artists))
+    
+    existing_song_df = pd.read_csv(SAVE_FN)
+    existing_artists = existing_song_df['query_artist_name'].unique()
+    total_artists = list(set(total_artists) - set(existing_artists))
 
-        # Process each unique artist
-        for query_artist_name in tqdm(artist_names):
-            try:
-                # Get the artist ID and the Spotify artist name for the given artist name
-                artist_id, spotify_artist_name = get_artist_id_and_name(query_artist_name)
-                # Get all songs by the artist
-                songs = get_all_songs(artist_id, spotify_artist_name, query_artist_name)
-                all_songs.extend(songs)
-            except Exception as e:
-                logging.error(f"Error processing artist {query_artist_name}: {e}")
+    # Process each unique artist
+    all_songs = existing_song_df.to_dict('records')
+    for query_artist_name in tqdm(total_artists, desc='Processing artists'):
+        try:
+            # Get the artist ID and the Spotify artist name for the given artist name
+            artist_id, spotify_artist_name = get_artist_id_and_name(query_artist_name)
+            # Get all songs by the artist
+            songs = get_all_songs(artist_id, spotify_artist_name, query_artist_name)
+            all_songs.extend(songs)
+        except Exception as e:
+            logging.error(f"Error processing artist {query_artist_name}: {e}")
 
-            # Save all songs to a single CSV file
-            save_to_csv(all_songs, 'all_songs.csv')
-        print(f"Saved all songs to all_songs.csv")
+        # Save all songs to a single CSV file
+        save_to_csv(all_songs, SAVE_FN)
+    print(f"Saved all songs to {SAVE_FN}")
 
 if __name__ == '__main__':
     main()
