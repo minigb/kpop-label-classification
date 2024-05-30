@@ -14,6 +14,9 @@ logging.basicConfig(filename=log_file, level=logging.ERROR,
                     format='%(asctime)s:%(levelname)s:%(message)s')
 
 LIMIT = 100  # Maximum limit per request set by MusicBrainz
+SAVE_DIR = Path('releases')
+if not SAVE_DIR.exists():
+    SAVE_DIR.mkdir(parents=True, exist_ok=True)
 
 # Step 1: Get the Label ID
 def get_label_id(label_name):
@@ -25,8 +28,10 @@ def get_label_id(label_name):
         }
         response = requests.get(url, params=params)
         data = response.json()
-        if 'labels' in data and len(data['labels']) > 0:
-            return data['labels'][0]['id']
+        if 'labels' in data:
+            for label in data['labels']:
+                if label.get('country') == 'KR':  # 'KR' is the ISO 3166-1 alpha-2 country code for South Korea
+                    return label['id']
         return None
     except Exception as e:
         logging.error(f"Error getting label ID for {label_name}: {e}")
@@ -56,6 +61,7 @@ def get_releases(label_id):
                 if release_details:
                     release_data.append(release_details)
             offset += LIMIT
+            save_releases_to_csv(release_data, label_name)
         return release_data
     except Exception as e:
         logging.error(f"Error getting releases for label ID {label_id}: {e}")
@@ -85,18 +91,19 @@ def get_release_details(release_id):
         return None
 
 # Step 4: Save the Releases to a CSV file
-def save_releases_to_csv(save_dir, release_data, label_name):
+def save_releases_to_csv(release_data, label_name):
     try:
-        save_dir = Path(save_dir)
-        if not save_dir.exists():
-            save_dir.mkdir(parents=True, exist_ok=True)
-
         df = pd.DataFrame(release_data)
-        df.to_csv(f'{save_dir}/{label_name}_releases.csv', index=False)
+        df.to_csv(f'{SAVE_DIR}/{label_name}.csv', index=False)
     except Exception as e:
         logging.error(f"Error saving releases to CSV for label {label_name}: {e}")
 
-def main(label_name, save_dir='releases'):
+def main(label_name):
+    existing_files = list(SAVE_DIR.glob('*.csv'))
+    if any(label_name in file.name for file in existing_files):
+        print(f"Releases for {label_name} already saved to CSV")
+        return
+    
     label_id = get_label_id(label_name)
     if not label_id:
         logging.error(f"Label not found for {label_name}")
@@ -107,7 +114,7 @@ def main(label_name, save_dir='releases'):
         logging.error(f"No releases found for {label_name}")
         return
 
-    save_releases_to_csv(save_dir, release_data, label_name)
+    save_releases_to_csv(release_data, label_name)
 
 if __name__ == '__main__':
     labels = pd.read_csv('unique_labels.csv')['Label']
