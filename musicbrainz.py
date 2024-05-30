@@ -3,6 +3,7 @@ import pandas as pd
 from tqdm.auto import tqdm
 from pathlib import Path
 import logging
+from fuzzywuzzy import fuzz
 
 # Remove the existing log file if it exists
 log_file = 'musicbrainz_errors.log'
@@ -18,8 +19,8 @@ SAVE_DIR = Path('releases')
 if not SAVE_DIR.exists():
     SAVE_DIR.mkdir(parents=True, exist_ok=True)
 
-# Step 1: Get the Label ID
-def get_label_id(label_name):
+# Step 1: Get the Label ID and Name
+def get_label_id_and_name(label_name):
     try:
         url = "https://musicbrainz.org/ws/2/label/"
         params = {
@@ -31,14 +32,16 @@ def get_label_id(label_name):
         if 'labels' in data:
             for label in data['labels']:
                 if label.get('country') == 'KR':  # 'KR' is the ISO 3166-1 alpha-2 country code for South Korea
-                    return label['id']
-        return None
+                    label_name_ratio = fuzz.ratio(label_name.lower(), label['name'].lower())
+                    if label_name_ratio > 80:
+                        return label['id'], label['name']
+        return None, None
     except Exception as e:
         logging.error(f"Error getting label ID for {label_name}: {e}")
-        return None
+        return None, None
 
 # Step 2: Get the Releases of the Label
-def get_releases(label_id):
+def get_releases(label_id, retrieved_label_name, query_label_name):
     try:
         url = f"https://musicbrainz.org/ws/2/release/"
         params = {
@@ -57,18 +60,18 @@ def get_releases(label_id):
                 break
             for release in tqdm(releases, desc=f"Processing releases for label {label_id}"):
                 release_id = release['id']
-                release_details = get_release_details(release_id)
+                release_details = get_release_details(release_id, retrieved_label_name, query_label_name)
                 if release_details:
                     release_data.append(release_details)
             offset += LIMIT
-            save_releases_to_csv(release_data, label_name)
+            save_releases_to_csv(release_data, retrieved_label_name, query_label_name)
         return release_data
     except Exception as e:
         logging.error(f"Error getting releases for label ID {label_id}: {e}")
         return []
 
 # Step 3: Get the detailed information of each release
-def get_release_details(release_id):
+def get_release_details(release_id, retrieved_label_name, query_label_name):
     try:
         url = f"https://musicbrainz.org/ws/2/release/{release_id}"
         params = {
@@ -84,19 +87,22 @@ def get_release_details(release_id):
             'status': data.get('status', ''),
             'release_date': data.get('date', ''),
             'country': data.get('country', ''),
-            'artists': ', '.join(artist_names)
+            'artists': ', '.join(artist_names),
+            'retrieved_label_name': retrieved_label_name,
+            'query_label_name': query_label_name
         }
     except Exception as e:
         logging.error(f"Error getting release details for release ID {release_id}: {e}")
         return None
 
 # Step 4: Save the Releases to a CSV file
-def save_releases_to_csv(release_data, label_name):
+def save_releases_to_csv(release_data, retrieved_label_name, query_label_name):
     try:
+        label_name = f"{query_label_name.replace('/', '_')}"
         df = pd.DataFrame(release_data)
         df.to_csv(f'{SAVE_DIR}/{label_name}.csv', index=False)
     except Exception as e:
-        logging.error(f"Error saving releases to CSV for label {label_name}: {e}")
+        logging.error(f"Error saving releases to CSV for label {query_label_name}: {e}")
 
 def main(label_name):
     existing_files = list(SAVE_DIR.glob('*.csv'))
@@ -104,17 +110,17 @@ def main(label_name):
         print(f"Releases for {label_name} already saved to CSV")
         return
     
-    label_id = get_label_id(label_name)
+    label_id, retrieved_label_name = get_label_id_and_name(label_name)
     if not label_id:
         logging.error(f"Label not found for {label_name}")
         return
 
-    release_data = get_releases(label_id)
+    release_data = get_releases(label_id, retrieved_label_name, label_name)
     if not release_data:
         logging.error(f"No releases found for {label_name}")
         return
 
-    save_releases_to_csv(release_data, label_name)
+    save_releases_to_csv(release_data, retrieved_label_name, label_name)
 
 if __name__ == '__main__':
     labels = pd.read_csv('unique_labels.csv')['Label']
