@@ -3,10 +3,7 @@ import pandas as pd
 from tqdm.auto import tqdm
 from pathlib import Path
 import logging
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from fuzzywuzzy import fuzz
-
-THRESHOLD = 60  # Minimum threshold for label name matching
 
 # Remove the existing log file if it exists
 log_file = 'musicbrainz_errors.log'
@@ -36,7 +33,7 @@ def get_label_id_and_name(label_name):
             for label in data['labels']:
                 if label.get('country') == 'KR':  # 'KR' is the ISO 3166-1 alpha-2 country code for South Korea
                     label_name_ratio = fuzz.ratio(label_name.lower().replace('entertainment', ''), label['name'].lower().replace('entertainment', ''))
-                    if label_name_ratio > THRESHOLD:
+                    if label_name_ratio > 80:
                         return label['id'], label['name']
         return None, None
     except Exception as e:
@@ -61,7 +58,7 @@ def get_releases(label_id, retrieved_label_name, query_label_name):
             releases = data.get('releases', [])
             if not releases:
                 break
-            for release in releases:
+            for release in tqdm(releases, desc=f"Processing releases for label {query_label_name}"):
                 release_id = release['id']
                 release_details = get_release_details(release_id, retrieved_label_name, query_label_name)
                 if release_details:
@@ -107,7 +104,7 @@ def save_releases_to_csv(release_data, retrieved_label_name, query_label_name):
     except Exception as e:
         logging.error(f"Error saving releases to CSV for label {query_label_name}: {e}")
 
-def process_label(label_name):
+def main(label_name):
     existing_files = list(SAVE_DIR.glob('*.csv'))
     if any(label_name in file.name for file in existing_files):
         print(f"Releases for {label_name} already saved to CSV")
@@ -129,9 +126,6 @@ if __name__ == '__main__':
     fn = Path('kpop-dataset/song_list.csv')
     df = pd.read_csv(fn)
     labels = df['Label'].unique()
-
-    # Using ThreadPoolExecutor for parallel processing
-    with ThreadPoolExecutor(max_workers=16) as executor:
-        futures = [executor.submit(process_label, label_name) for label_name in labels]
-        for future in tqdm(as_completed(futures), total=len(futures), desc="Processing labels"):
-            future.result()
+    for label_name in tqdm(labels, desc="Processing labels"):
+        print(f"Processing label: {label_name}")
+        main(label_name)
