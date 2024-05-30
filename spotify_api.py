@@ -86,7 +86,7 @@ def main():
         artist_names = artist_df['artists'].unique()
 
         # Process each unique artist
-        for query_artist_name in artist_names:
+        for query_artist_name in tqdm(artist_names):
             try:
                 # Get the artist ID and the Spotify artist name for the given artist name
                 artist_id, spotify_artist_name = get_artist_id_and_name(query_artist_name)
