@@ -41,13 +41,13 @@ class MusicCrawler:
     self.in_csv_col_names = CsvColumnNames('Year', 'Song', 'Artist')
     self.out_csv_col_names = CsvColumnNames('Year', 'Song', 'Artist')
 
-    self._init_result_csv()
-    uniq_df = self.get_target_df()
+    self._init_save_csv_files()
+    uniq_df = self._get_unique_df()
     self.target_df = self.get_df_with_existing_songs_removed(uniq_df)
     print(f"Number of songs to crawl: {len(self.target_df)}")
 
 
-  def _init_result_csv(self):
+  def _init_save_csv_files(self):
     parent_dir = Path(self.save_csv_name).parent
     parent_dir.mkdir(parents=True, exist_ok=True)
     fns = FileNames(self.save_csv_name)
@@ -67,7 +67,7 @@ class MusicCrawler:
     self.chosen_df = pd.DataFrame(columns=CHOSEN_COLUMNS)
 
 
-  def get_target_df(self) -> pd.DataFrame:
+  def _get_unique_df(self) -> pd.DataFrame:
     assert self.input_csv_path.exists(), f"{self.input_csv_path} does not exist"
     df = pd.read_csv(self.input_csv_path)
 
@@ -306,9 +306,9 @@ class FailedMusicCrawler(MusicCrawler):
     self.input_csv_path = FileNames(self.save_csv_name).failed
 
     self.in_csv_col_names = self.out_csv_col_names = CsvColumnNames('Year', 'Song', 'Artist')
-    self._init_result_csv()
+    self._init_save_csv_files()
 
-    self.target_df = self.get_target_df()  # use self.input_csv_path
+    self.target_df = self._get_unique_df()  # use self.input_csv_path
     print(f"Number of failed songs to re-crawl: {len(self.target_df)}")
 
 
@@ -323,7 +323,7 @@ class ReusingQueriesMusicCrawler(MusicCrawler):
     self.input_csv_path = FileNames(self.save_csv_name).failed
     self.in_csv_col_names = self.out_csv_col_names = CsvColumnNames('Year', 'Song', 'Artist')
 
-    self._init_result_csv()
+    self._init_save_csv_files()
     self.target_df = self.get_df_with_existing_songs_removed()
     print(f"Number of songs to crawl: {len(self.target_df)}")
 
