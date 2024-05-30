@@ -32,7 +32,7 @@ def get_label_id_and_name(label_name):
         if 'labels' in data:
             for label in data['labels']:
                 if label.get('country') == 'KR':  # 'KR' is the ISO 3166-1 alpha-2 country code for South Korea
-                    label_name_ratio = fuzz.ratio(label_name.lower(), label['name'].lower())
+                    label_name_ratio = fuzz.ratio(label_name.lower().replace('entertainment', ''), label['name'].lower().replace('entertainment', ''))
                     if label_name_ratio > 80:
                         return label['id'], label['name']
         return None, None
@@ -58,7 +58,7 @@ def get_releases(label_id, retrieved_label_name, query_label_name):
             releases = data.get('releases', [])
             if not releases:
                 break
-            for release in tqdm(releases, desc=f"Processing releases for label {label_id}"):
+            for release in tqdm(releases, desc=f"Processing releases for label {query_label_name}"):
                 release_id = release['id']
                 release_details = get_release_details(release_id, retrieved_label_name, query_label_name)
                 if release_details:
@@ -123,7 +123,9 @@ def main(label_name):
     save_releases_to_csv(release_data, retrieved_label_name, label_name)
 
 if __name__ == '__main__':
-    labels = pd.read_csv('unique_labels.csv')['Label']
+    fn = Path('kpop-dataset/song_list.csv')
+    df = pd.read_csv(fn)
+    labels = df['Label'].unique()
     for label_name in tqdm(labels, desc="Processing labels"):
         print(f"Processing label: {label_name}")
         main(label_name)
