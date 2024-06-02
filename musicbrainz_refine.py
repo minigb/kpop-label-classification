@@ -56,9 +56,9 @@ for file_name in Path(ARTIST_LIST_DIR).rglob('*.csv'):
     artist_names.update(df['artists'])
 
 revised_artists = set()
+
 # Process each artist
-for artist_name in artist_names:
-    # artist_file = os.path.join(ARTIST_RECORDING_DIR, f'{artist_name}.csv')
+for artist_name in tqdm(artist_names, desc="Processing artists"):
     artist_file = Path(ARTIST_RECORDING_DIR) / f'{artist_name}.csv'
     if not artist_file.exists():
         logging.info(f'File not found for artist: {artist_name}')
@@ -69,7 +69,7 @@ for artist_name in artist_names:
 
     # Get new data from MusicBrainz API
     updated_records = []
-    for _, record in df.iterros():
+    for _, record in df.iterrows():
         recording_id = record['recording_id']
         recording_info = get_recording_info(recording_id)
         if recording_info:
@@ -90,22 +90,12 @@ for artist_name in artist_names:
             updated_records.append(updated_record)
 
     # Save the updated records to the CSV file
-    fieldnames = [
-        'recording_id', 'title', 'length', 'track_artist', 'release_title',
-        'release_artist', 'release_group_type', 'country', 'release_date',
-        'label', 'query_artist_name', 'retrieved_artist_name'
-    ]
-
-    with open(artist_file, mode='w', newline='') as file:
-        writer = csv.DictWriter(file, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerows(updated_records)
+    updated_df = pd.DataFrame(updated_records)
+    updated_df.to_csv(artist_file, index=False)
 
 # Remove unrevised artist CSV files
-# for file_name in os.listdir(ARTIST_RECORDING_DIR):
 for file_name in Path(ARTIST_RECORDING_DIR).glob('*.csv'):
-    if file_name.endswith('.csv'):
-        artist_name = file_name.replace('.csv', '')
-        if artist_name not in revised_artists:
-            file_name.unlink()
-            logging.info(f'Removed unrevised artist file: {file_name}')
+    artist_name = file_name.stem
+    if artist_name not in revised_artists:
+        file_name.unlink()
+        logging.info(f'Removed unrevised artist file: {file_name}')
