@@ -21,7 +21,7 @@ if not SAVE_DIR.exists():
     SAVE_DIR.mkdir(parents=True, exist_ok=True)
 
 # Step 1: Get the Artist ID and Name
-def get_artist_id_and_name(query_artist_name):
+def get_artist_id(query_artist_name):
     try:
         url = f"{BASE_URL}artist/"
         params = {
@@ -36,14 +36,52 @@ def get_artist_id_and_name(query_artist_name):
                     continue
                 ratio = fuzz.ratio(query_artist_name.lower(), artist['name'].lower())
                 if ratio > THRESHOLD:
-                    return artist['id'], artist['name']
-        return None, None
+                    return artist['id']
+        return None
     except Exception as e:
         logging.error(f"Error getting artist ID for {query_artist_name}: {e}")
-        return None, None
+        return None
 
 # Step 2: Get the Recordings of the Artist
-def get_recordings(artist_id, retrieved_artist_name, query_artist_name):
+
+def get_recording_info(recording_id):
+    try:
+        url = f"https://musicbrainz.org/ws/2/recording/{recording_id}"
+        params = {
+            'inc': 'artists+releases',
+            'fmt': 'json'
+        }
+        response = requests.get(url, params=params)
+        recording = response.json()
+        
+        title = recording.get('title', '')
+        length = recording.get('length', '')
+        track_artist = ', '.join(artist['artist']['name'] for artist in recording.get('artist-credit', []))
+        release = recording['releases'][0] if recording.get('releases') else {}
+        release_title = release.get('title', '')
+        release_artist = ', '.join(artist['artist']['name'] for artist in release.get('artist-credit', []))
+        release_group_type = release.get('release-group', {}).get('type', '')
+        country = release.get('country', '')
+        release_date = release.get('date', '')
+        label = ', '.join(label['label']['name'] for label in release.get('label-info', []))
+
+        return {
+            'title': title,
+            'length': length,
+            'track_artist': track_artist,
+            'release_title': release_title,
+            'release_artist': release_artist,
+            'release_group_type': release_group_type,
+            'country': country,
+            'release_date': release_date,
+            'label': label
+        }
+    except Exception as e:
+        logging.error(f"Error fetching data for recording {recording_id}: {e}")
+        return {}
+    
+
+def get_recordings(artist_id, query_artist_name):
     try:
         url = f"{BASE_URL}recording/"
         params = {
@@ -62,14 +100,13 @@ def get_recordings(artist_id, retrieved_artist_name, query_artist_name):
             if not recordings_data:
                 break
             for recording in recordings_data:
-                recordings.append({
-                    'recording_id': recording['id'],
-                    'title': recording['title'],
-                    'release_date': recording.get('first-release-date', ''),
-                    'query_artist_name': query_artist_name,
-                    'retrieved_artist_name': retrieved_artist_name
-                })
+                recording_info = get_recording_info(recording['id'])
+                if not recording_info:
+                    continue
+                recording_info['query_artist'] = query_artist_name
+                recordings.append(recording_info)
             offset += LIMIT
+            save_recordings_to_csv(recordings, query_artist_name) # save every time
 
         return recordings
     except Exception as e:
@@ -85,16 +122,15 @@ def save_recordings_to_csv(recordings, artist_name):
         logging.error(f"Error saving recordings to CSV for artist {artist_name}: {e}")
 
 def process_artist(query_artist_name):
-    artist_id, retrieved_artist_name = get_artist_id_and_name(query_artist_name)
+    artist_id = get_artist_id(query_artist_name)
     if not artist_id:
         logging.error(f"Artist not found for {query_artist_name}")
         return
 
-    recordings = get_recordings(artist_id, retrieved_artist_name, query_artist_name)
+    recordings = get_recordings(artist_id, query_artist_name)
     if not recordings:
         logging.error(f"No recordings found for artist {query_artist_name}")
         return
-
     save_recordings_to_csv(recordings, query_artist_name)
 
 def get_unique_artists_from_csv():
