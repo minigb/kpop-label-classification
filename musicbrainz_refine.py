@@ -4,13 +4,9 @@ import logging
 from tqdm import tqdm
 import pandas as pd
 from pathlib import Path
-import musicbrainzngs
 
 # Set up logging
 logging.basicConfig(filename='artist_update.log', level=logging.INFO)
-
-# Initialize MusicBrainz client
-musicbrainzngs.set_useragent("YourAppName", "1.0", "your-email@example.com")
 
 # Define directories
 ARTIST_LIST_DIR = 'artists'
@@ -18,10 +14,14 @@ ARTIST_RECORDING_DIR = 'recordings_per_artist'
 
 def get_recording_info(recording_id):
     try:
-        result = musicbrainzngs.get_recording_by_id(recording_id, includes=['artists', 'releases'])
-        recording = result['recording']
-
-        # Extract required information
+        url = f"https://musicbrainz.org/ws/2/recording/{recording_id}"
+        params = {
+            'inc': 'artists+releases',
+            'fmt': 'json'
+        }
+        response = requests.get(url, params=params)
+        recording = response.json()
+        
         title = recording.get('title', '')
         length = recording.get('length', '')
         track_artist = ', '.join(artist['artist']['name'] for artist in recording.get('artist-credit', []))
@@ -34,7 +34,6 @@ def get_recording_info(recording_id):
         label = ', '.join(label['label']['name'] for label in release.get('label-info', []))
 
         return {
-            'recording_id': recording_id,
             'title': title,
             'length': length,
             'track_artist': track_artist,
@@ -45,8 +44,8 @@ def get_recording_info(recording_id):
             'release_date': release_date,
             'label': label
         }
-    except musicbrainzngs.WebServiceError as e:
-        logging.error(f'Error fetching data for recording {recording_id}: {e}')
+    except Exception as e:
+        logging.error(f"Error fetching data for recording {recording_id}: {e}")
         return {}
 
 # Get all the list of artist names from all the csv files
@@ -54,12 +53,12 @@ artist_names = set()
 
 for file_name in Path(ARTIST_LIST_DIR).rglob('*.csv'):
     df = pd.read_csv(file_name)
-    artist_names.update(df['artists'].dropna().unique())
+    artist_names.update(df['artists'])
 
 revised_artists = set()
-
 # Process each artist
-for artist_name in tqdm(artist_names, desc="Processing artists"):
+for artist_name in artist_names:
+    # artist_file = os.path.join(ARTIST_RECORDING_DIR, f'{artist_name}.csv')
     artist_file = Path(ARTIST_RECORDING_DIR) / f'{artist_name}.csv'
     if not artist_file.exists():
         logging.info(f'File not found for artist: {artist_name}')
@@ -70,7 +69,7 @@ for artist_name in tqdm(artist_names, desc="Processing artists"):
 
     # Get new data from MusicBrainz API
     updated_records = []
-    for _, record in df.iterrows():
+    for _, record in df.iterros():
         recording_id = record['recording_id']
         recording_info = get_recording_info(recording_id)
         if recording_info:
@@ -91,12 +90,22 @@ for artist_name in tqdm(artist_names, desc="Processing artists"):
             updated_records.append(updated_record)
 
     # Save the updated records to the CSV file
-    updated_df = pd.DataFrame(updated_records)
-    updated_df.to_csv(artist_file, index=False)
+    fieldnames = [
+        'recording_id', 'title', 'length', 'track_artist', 'release_title',
+        'release_artist', 'release_group_type', 'country', 'release_date',
+        'label', 'query_artist_name', 'retrieved_artist_name'
+    ]
+
+    with open(artist_file, mode='w', newline='') as file:
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(updated_records)
 
 # Remove unrevised artist CSV files
+# for file_name in os.listdir(ARTIST_RECORDING_DIR):
 for file_name in Path(ARTIST_RECORDING_DIR).glob('*.csv'):
-    artist_name = file_name.stem
-    if artist_name not in revised_artists:
-        file_name.unlink()
-        logging.info(f'Removed unrevised artist file: {file_name}')
+    if file_name.endswith('.csv'):
+        artist_name = file_name.replace('.csv', '')
+        if artist_name not in revised_artists:
+            file_name.unlink()
+            logging.info(f'Removed unrevised artist file: {file_name}')
