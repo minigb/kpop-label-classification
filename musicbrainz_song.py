@@ -7,8 +7,6 @@ from fuzzywuzzy import fuzz
 
 # Remove the existing log file if it exists
 log_file = 'musicbrainz_songs_errors.log'
-if Path(log_file).exists():
-    Path(log_file).unlink()
 
 # Configure logging
 logging.basicConfig(filename=log_file, level=logging.ERROR,
@@ -34,6 +32,8 @@ def get_artist_id_and_name(query_artist_name):
         data = response.json()
         if 'artists' in data and len(data['artists']) > 0:
             for artist in data['artists']:
+                if artist['country'] not in ['KR', 'JP', 'CN', 'XW']:
+                    continue
                 ratio = fuzz.ratio(query_artist_name.lower(), artist['name'].lower())
                 if ratio > THRESHOLD:
                     return artist['id'], artist['name']
