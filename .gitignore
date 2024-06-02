@@ -6,7 +6,7 @@ __pycache__
 
 *audio
 *audio_tmp
-releases*
-recordings
+# releases*
+# recordings
 
 spotify_keys.yaml
