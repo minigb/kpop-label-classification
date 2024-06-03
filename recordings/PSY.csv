@@ -4,18 +4,17 @@ title,length,track_artist,release_title,release_artist,release_group_type,countr
 77학개론,281000.0,"PSY, 리쌍, 김진표","PSY 6 Rules, Part 1",,,KR,2012-07-15,,PSY
 9INTRO,166437.0,PSY,PSY 9th,,,AF,2022-04-29,,PSY
 ALARM,74000.0,PSY,싸집,,,KR,2006-07-24,,PSY
-BOMB,173000.0,"PSY, B.I, BOBBY",4x2=8,,,KR,2017-05-10,,PSY
 Basica 2.0,233000.0,PSY,싸2,,,KR,2002-01-16,,PSY
 Bitch,131000.0,"PSY, Ray Jay",3마이,,,KR,2002-09-18,,PSY
+BOMB,173000.0,"PSY, B.I, BOBBY",4x2=8,,,KR,2017-05-10,,PSY
 Celeb,200000.0,PSY,PSY 9th,,,AF,2022-04-29,,PSY
 Champion (Live),202000.0,PSY,2014 YG FAMILY CONCERT IN SEOUL,,,AF,2014-11-28,,PSY
 DADDY,230000.0,"PSY, CL",Daddy,,,XW,2015-11-30,,PSY
 Dream,196000.0,"PSY, XIA",PSY 7TH ALBUM,,,XW,2015-12-01,,PSY
 Everyday,276308.0,PSY,PSY 9th,,,AF,2022-04-29,,PSY
 Father,221000.0,PSY,아버지 (Father) (at 썸머스탠드),,,KR,2012-05-08,,PSY
+forEVER,209000.0,"PSY, Tablo",PSY 9th,,,AF,2022-04-29,,PSY
 Freedom,219013.0,PSY,Psy From the Psycho World!,,,KR,2000-10-24,,PSY
-GANJI,172000.0,"PSY, Jessi",PSY 9th,,,AF,2022-04-29,,PSY
-GENTLEMAN,267000.0,PSY,2014 YG FAMILY CONCERT IN SEOUL LIVE,,,XW,2014-11-28,,PSY
 Gangnam Style,243040.0,PSY,"Mastermix: DJ Beats, Volume 2",,,GB,2012,,PSY
 Gangnam Style,220960.0,PSY,Now That's What I Call Music! 62,,,ZA,2012,,PSY
 Gangnam Style,219000.0,PSY,"Absolute House, Volume 2",,,SE,2012,,PSY
@@ -47,6 +46,7 @@ Gangnam Style (Diplo remix explicit version),206585.0,"PSY, 2 Chainz, Tyga",Star
 Gangnam Style (Diplo remix instrumental),205000.0,PSY,Gangnam Style: Remix Style,,,US,2013-03-05,,PSY
 Gangnam Style (Diplo remix),205000.0,"PSY, 2 Chainz, Tyga",Gangnam Style: Remix Style,,,US,2013-03-05,,PSY
 Gangnam Style (Diplo remix),201000.0,"PSY, 2 Chainz, Tyga",Floorfillers: Club Anthems,,,GB,2013-04-08,,PSY
+Gangnam Style (instrumental),220000.0,PSY,Gangnam Style: Remix Style,,,US,2013-03-05,,PSY
 Gangnam Style (JML bootleg),358000.0,PSY,Gangnam Style (JML bootleg),,,XW,2012-09-17,,PSY
 Gangnam Style (Mambo remix),,PSY,Latin Sensation 4,,,FR,2013-06-23,,PSY
 Gangnam Style (Mastermix Christmas edit),245995.0,PSY,Mastermix: DJ Beats: Christmas,,,GB,2013,,PSY
@@ -54,7 +54,6 @@ Gangnam Style (Maximum ParaPara Mix),272516.0,PSY,Super Gangnambeat ~Single~,,,X
 Gangnam Style (Noizefucker remix),288000.0,PSY,Evil Party,,,IT,2013-04-01,,PSY
 Gangnam Style (Phunkstar vocal mix),492000.0,PSY,"The Best of DMC: Bootlegs, Cut-Ups and Two Trackers, Volume 18",,,GB,2013,,PSY
 Gangnam Style (Promo Only intro edit),,PSY,"Promo Only: Club Video, November 2012",,,,2012-11,,PSY
-Gangnam Style (instrumental),220000.0,PSY,Gangnam Style: Remix Style,,,US,2013-03-05,,PSY
 Gangnam Style (강남스타일),208000.0,PSY,The Workout Mix 2013,,,GB,2012-12-24,,PSY
 Gangnam Style (강남스타일),295000.0,PSY,Die ultimative Chart Show: 15 Jahre - Die erfolgreichsten Singles,,,DE,2018-07-20,,PSY
 Gangnam Style (강남스타일),,PSY,Now That’s What I Call 40 Years: Volume 3 2003–2013,,,GB,2023-11-24,,PSY
@@ -63,6 +62,7 @@ Gangnam Style (강남스타일) (Diplo remix edited version),181000.0,"PSY, 2 Ch
 Gangnam Style (강남스타일) (Diplo remix),205000.0,"PSY, 2 Chainz, Tyga",The Sound of Trap,,,GB,2013-12-18,,PSY
 Gangnam Style (강남스타일) (Diplo remix) (clean),205000.0,"PSY, 2 Chainz, Tyga",The Singles,,,GB,2013,,PSY
 Gangnam Style / 2 Legit 2 Quit Mashup,237000.0,"PSY, MC Hammer",Gangnam Style / 2 Legit 2 Quit Mashup,,,US,2012-11-19,,PSY
+GANJI,172000.0,"PSY, Jessi",PSY 9th,,,AF,2022-04-29,,PSY
 Gentleman,195000.0,PSY,"Disco estrella, Vol.16: Los auténticos éxitos del verano 2013",,,ES,2013,,PSY
 Gentleman,198413.0,PSY,Now! 22,,,CA,2013,,PSY
 Gentleman,194466.0,PSY,Gentleman,,,XE,2013-04-12,,PSY
@@ -73,18 +73,19 @@ Gentleman,192000.0,PSY,Clubland 23,,,GB,2013-06-24,,PSY
 Gentleman,194000.0,PSY,Ballermann Hits 2013,,,DE,2013-06-28,,PSY
 Gentleman,110466.0,PSY,Grandmix 2013,,,NL,2014-01-06,,PSY
 Gentleman,120000.0,PSY,Gentleman,,,CA,2014-09-11,,PSY
+GENTLEMAN,267000.0,PSY,2014 YG FAMILY CONCERT IN SEOUL LIVE,,,XW,2014-11-28,,PSY
 Gentleman (Adi Perez remix),249000.0,PSY,Gentleman,,,DE,2012,,PSY
 Gentleman (BFMIX remix),343000.0,PSY,Gentleman,,,DE,2012,,PSY
 Gentleman (ByTz remix),258885.0,PSY,Gentleman (ByTz remix),,,XW,2013-05-15,,PSY
 Gentleman (DJ Igor Pradaa remix),315000.0,PSY,Gentleman,,,DE,2012,,PSY
+Gentleman (extended version),285000.0,PSY,Gentleman,,,DE,2012,,PSY
 Gentleman (Martin & Souza ‘Dutch in Rio' remix),356000.0,PSY,Gentleman,,,DE,2012,,PSY
 Gentleman (Neon Niteclub remix),194000.0,PSY,Gentleman,,,DE,2012,,PSY
 Gentleman (Promo Only clean edit),192862.0,PSY,"Promo Only: Mainstream Radio, June 2013",,,US,2013-06,,PSY
-Gentleman (extended version),285000.0,PSY,Gentleman,,,DE,2012,,PSY
 Hangover,237000.0,"PSY, Snoop Dogg",Hangover,,,CA,2014-06-09,,PSY
 Happier,251374.0,"PSY, Crush",PSY 9th,,,AF,2022-04-29,,PSY
-I LUV IT,188000.0,PSY,4x2=8,,,KR,2017-05-10,,PSY
 I Love Sex,231293.0,"PSY, 조PD",Psy From the Psycho World!,,,KR,2000-10-24,,PSY
+I LUV IT,188000.0,PSY,4x2=8,,,KR,2017-05-10,,PSY
 I Remember You,223000.0,"PSY, Zion.T",PSY 7TH ALBUM,,,XW,2015-12-01,,PSY
 Intro,110106.0,PSY,Psy From the Psycho World!,,,KR,2000-10-24,,PSY
 Intro,139000.0,"PSY, Masta Wu, Jed, Ray Jay, 요한",싸2,,,KR,2002-01-16,,PSY
@@ -93,10 +94,10 @@ It's Art (Live),271000.0,PSY,2014 YG FAMILY CONCERT IN SEOUL,,,AF,2014-11-28,,PS
 JUMP,184000.0,"PSY, 이하늘",싸집,,,KR,2006-07-24,,PSY
 KCB's Wild Summer Gangnam Style (intro),57000.0,PSY,WILD Summer 2013,,,AU,2012-11-09,,PSY
 KOREA,196000.0,PSY,KOREA,,,KR,2012-06-28,,PSY
-LOVE,219000.0,"PSY, TAEYANG",4x2=8,,,KR,2017-05-10,,PSY
 Lady,223386.0,PSY,Psy From the Psycho World!,,,KR,2000-10-24,,PSY
 Life,269453.0,"PSY, Ray Jay, 요타, 디지탈 마스타, Y.Kwan, Small",Psy From the Psycho World!,,,KR,2000-10-24,,PSY
 Life,198000.0,"PSY, 조PD, 이하늘, JP, Masta Wu",Remake & Mix 18번,,,KR,2005-07-23,,PSY
+LOVE,219000.0,"PSY, TAEYANG",4x2=8,,,KR,2017-05-10,,PSY
 Modern Times,207306.0,PSY,Psy From the Psycho World!,,,KR,2000-10-24,,PSY
 NEVER SAY GOODBYE,202000.0,"PSY, 윤도현","PSY 6 Rules, Part 1",,,KR,2012-07-15,,PSY
 New Face,190000.0,PSY,4x2=8,,,KR,2017-05-10,,PSY
@@ -105,9 +106,9 @@ No.1,202426.0,PSY,Psy From the Psycho World!,,,KR,2000-10-24,,PSY
 Outro,135000.0,PSY,Psy From the Psycho World!,,,KR,2000-10-24,,PSY
 Outro (back to the PSYcho world!),135000.0,PSY,3마이,,,KR,2002-09-18,,PSY
 RIGHT NOW,204000.0,PSY,PSYfive,,,GB,2010-10-20,,PSY
-ROCKnROLLbaby,256000.0,"PSY, will.i.am",PSY 7TH ALBUM,,,XW,2015-12-01,,PSY
 Right Now (Live),214000.0,PSY,2014 YG FAMILY CONCERT IN SEOUL,,,AF,2014-11-28,,PSY
 Rock will never die,183000.0,PSY,4x2=8,,,KR,2017-05-10,,PSY
+ROCKnROLLbaby,256000.0,"PSY, will.i.am",PSY 7TH ALBUM,,,XW,2015-12-01,,PSY
 SING (PSYmix),237000.0,"PSY, Ed Sheeran",PSY 7TH ALBUM,,,XW,2015-12-01,,PSY
 Skit-첩보,54000.0,PSY,Remake & Mix 18번,,,KR,2005-07-23,,PSY
 Skit-첩보2,53000.0,PSY,Remake & Mix 18번,,,KR,2005-07-23,,PSY
@@ -117,7 +118,6 @@ Upskail Phenomenon,208720.0,PSY,Psy From the Psycho World!,,,KR,2000-10-24,,PSY
 WE ARE THE ONE,200000.0,PSY,싸집,,,KR,2006-07-24,,PSY
 We Are Young,241000.0,PSY,4x2=8,,,KR,2017-05-10,,PSY
 "Yes, I Am",201000.0,PSY,싸2,,,KR,2002-01-16,,PSY
-forEVER,209000.0,"PSY, Tablo",PSY 9th,,,AF,2022-04-29,,PSY
 감동이야,220187.0,"PSY, 성시경",PSY 9th,,,AF,2022-04-29,,PSY
 계집녀,210306.0,PSY,Psy From the Psycho World!,,,KR,2000-10-24,,PSY
 골목길,203000.0,"PSY, 조PD",Remake & Mix 18번,,,KR,2005-07-23,,PSY

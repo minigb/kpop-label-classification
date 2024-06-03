@@ -75,37 +75,46 @@ def remove_rows_with_nan_of_these_columns(columns):
 
 
 def sort_by_columns(columns):
-    for csv_fn in RECORDINGS_DIR.glob('*.csv'):
+    for csv_fn in tqdm(list(RECORDINGS_DIR.glob('*.csv'))):
         df = pd.read_csv(csv_fn)
-        df = df.sort_values(columns)
-        df.to_csv(csv_fn, index=False)
+        
+        # Create a copy of the DataFrame and lowercase the specified columns
+        df_copy = df.copy()
+        for col in columns:
+            if df_copy[col].dtype == 'object':
+                df_copy[col] = df_copy[col].str.lower()
+        
+        # Sort the copy of the DataFrame
+        sorted_df_copy = df_copy.sort_values(columns)
+        
+        # Reorder the original DataFrame using the sorted indices
+        sorted_df = df.loc[sorted_df_copy.index]
+        
+        # Save the sorted DataFrame back to the CSV file
+        sorted_df.to_csv(csv_fn, index=False)
 
 
 def remove_duplicated_recording():
     for csv_fn in tqdm(list(RECORDINGS_DIR.glob('*.csv'))):
         df = pd.read_csv(csv_fn)
-        title_set = set()
+
         idx_to_remove = []
         for idx, row in df.iterrows():
-            title = row['title']
-            if title in title_set:
+            if idx in idx_to_remove:
                 continue
-            
+            title = row['title']
+
             # Check recordings with this title
-            title_set.add(title)
-            start_idx = last_idx = idx + 1
-            for idx2, row2 in df[start_idx:].iterrows():
-                if not title in row2['title']:
-                    last_idx = idx2
-                    break
-            idx_to_remove.extend(list(range(start_idx, last_idx)))
+            for idx2, row2 in df[idx + 1:].iterrows():
+                if title.lower() in row2['title'].lower():
+                    idx_to_remove.append(idx2)
 
         df = df.drop(idx_to_remove)
         df.to_csv(csv_fn, index=False)
 
 
 if __name__ == '__main__':
-    standardize_apostrophes(['title'])
+    # standardize_apostrophes(['title'])
     # remove_rows_with_nan_of_these_columns(['track_artist', 'release_date', 'title'])
     # remove_multiple_artists()
     # check_artist_names()

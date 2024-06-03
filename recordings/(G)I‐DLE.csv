@@ -1,8 +1,6 @@
 title,length,track_artist,release_title,release_artist,release_group_type,country,release_date,label,query_artist
 7Days,199000.0,(G)I‐DLE,2,,,KR,2024-01-29,,(G)I‐DLE
 7Days,199000.0,(G)I‐DLE,2,,,,2024-01-29,,(G)I‐DLE
-ALREADY,201000.0,(G)I‐DLE,I NEVER DIE,,,KR,2022-03-14,,(G)I‐DLE
-ALREADY,201000.0,(G)I‐DLE,I NEVER DIE,,,,2022-03-14,,(G)I‐DLE
 Abracadabra,182000.0,(G)I‐DLE,Abracadabra,,,KR,2024-03-08,,(G)I‐DLE
 Abracadabra (inst.),182000.0,(G)I‐DLE,Abracadabra,,,KR,2024-03-08,,(G)I‐DLE
 All Night,146000.0,(G)I‐DLE,I feel,,,,2023-05-15,,(G)I‐DLE
@@ -12,16 +10,18 @@ Allergy,180000.0,(G)I‐DLE,Allergy,,,,2023-05-10,,(G)I‐DLE
 Allergy,163000.0,(G)I‐DLE,I feel,,,JP,2023-05-15,,(G)I‐DLE
 Allergy,163000.0,(G)I‐DLE,I feel,,,,2023-05-15,,(G)I‐DLE
 Allergy (commentary),117000.0,(G)I‐DLE,I feel,,,,2023-05-19,,(G)I‐DLE
+ALREADY,201000.0,(G)I‐DLE,I NEVER DIE,,,KR,2022-03-14,,(G)I‐DLE
+ALREADY,201000.0,(G)I‐DLE,I NEVER DIE,,,,2022-03-14,,(G)I‐DLE
 Blow Your Mind,169000.0,(G)I‐DLE,I made,,,KR,2019-02-26,,(G)I‐DLE
 Change,204000.0,(G)I‐DLE,I love,,,KR,2022-10-17,,(G)I‐DLE
 Change,204000.0,(G)I‐DLE,I love,,,,2022-10-17,,(G)I‐DLE
 DAHLIA,190000.0,(G)I‐DLE,I burn,,,KR,2021-01-11,,(G)I‐DLE
 DARK (X‐file),165000.0,(G)I‐DLE,I love,,,,2022-10-17,,(G)I‐DLE
 DARK (X‐file),165000.0,(G)I‐DLE,I love,,,KR,2022-10-17,,(G)I‐DLE
-DON'T TEXT ME,216000.0,(G)I‐DLE,I am,,,KR,2018-05-02,,(G)I‐DLE
-DUMDi DUMDi,210000.0,(G)I‐DLE,Oh my god,,,JP,2020-08-26,,(G)I‐DLE
 Doll,154000.0,(G)I‐DLE,2,,,KR,2024-01-29,,(G)I‐DLE
 Doll,154000.0,(G)I‐DLE,2,,,,2024-01-29,,(G)I‐DLE
+DON'T TEXT ME,216000.0,(G)I‐DLE,I am,,,KR,2018-05-02,,(G)I‐DLE
+DUMDi DUMDi,210000.0,(G)I‐DLE,Oh my god,,,JP,2020-08-26,,(G)I‐DLE
 ESCAPE,209000.0,(G)I‐DLE,I NEVER DIE,,,KR,2022-03-14,,(G)I‐DLE
 ESCAPE,209000.0,(G)I‐DLE,I NEVER DIE,,,,2022-03-14,,(G)I‐DLE
 Eyes Roll,198000.0,(G)I‐DLE,HEAT,,,,2023-10-05,,(G)I‐DLE
@@ -32,11 +32,11 @@ Flip It,177000.0,(G)I‐DLE,HEAT,,,,2023-10-05,,(G)I‐DLE
 Flip It,177000.0,(G)I‐DLE,HEAT,,,,2023-10-05,,(G)I‐DLE
 For You,226000.0,(G)I‐DLE,LATATA,,,JP,2019-07-29,,(G)I‐DLE
 HANN,205000.0,(G)I‐DLE,LATATA,,,JP,2019-07-29,,(G)I‐DLE
+Help Me,238000.0,(G)I‐DLE,"Her Private Life (Original Television Soundtrack), Pt. 1",,,US,2019-04-11,,(G)I‐DLE
+Help Me (inst.),238000.0,(G)I‐DLE,"Her Private Life (Original Television Soundtrack), Pt. 1",,,US,2019-04-11,,(G)I‐DLE
 HWAA,197320.0,(G)I‐DLE,HWAA,,,AF,2021-01-27,,(G)I‐DLE
 HWAA (Dimitri Vegas & Like Mike remix),175560.0,(G)I‐DLE,HWAA (Dimitri Vegas & Like Mike remix),,,AF,2021-02-05,,(G)I‐DLE
 HWAA(火/花),197320.0,(G)I‐DLE,HWAA,,,AF,2021-01-27,,(G)I‐DLE
-Help Me,238000.0,(G)I‐DLE,"Her Private Life (Original Television Soundtrack), Pt. 1",,,US,2019-04-11,,(G)I‐DLE
-Help Me (inst.),238000.0,(G)I‐DLE,"Her Private Life (Original Television Soundtrack), Pt. 1",,,US,2019-04-11,,(G)I‐DLE
 I DO,190113.0,(G)I‐DLE,I DO,,,,2023-07-13,,(G)I‐DLE
 I DO,190000.0,(G)I‐DLE,I DO,,,,2023-07-13,,(G)I‐DLE
 I DO,317000.0,(G)I‐DLE,I DO,,,,2023-07-13,,(G)I‐DLE
@@ -46,7 +46,9 @@ I DO,190000.0,(G)I‐DLE,I DO,,,,2023-07-13,,(G)I‐DLE
 I Want That,214000.0,(G)I‐DLE,I Want That,,,,2023-10-05,,(G)I‐DLE
 I Want That,172000.0,(G)I‐DLE,HEAT,,,,2023-10-05,,(G)I‐DLE
 I Want That,171000.0,(G)I‐DLE,HEAT,,,,2023-10-05,,(G)I‐DLE
+i'M THE TREND,205000.0,(G)I‐DLE,i’M THE TREND,,,AF,2020-07-07,,(G)I‐DLE
 Intro (commentary),26000.0,(G)I‐DLE,I feel,,,,2023-05-19,,(G)I‐DLE
+Last Dance,184920.0,(G)I‐DLE,Last Dance,,,XW,2021-04-29,,(G)I‐DLE
 LATATA,202000.0,(G)I‐DLE,I am,,,KR,2018-05-02,,(G)I‐DLE
 LATATA,202000.0,(G)I‐DLE,LATATA (Japanese ver.),,,XW,2019-06-28,,(G)I‐DLE
 LATATA,202266.0,(G)I‐DLE,LATATA (English ver.),,,,2020-05-15,,(G)I‐DLE
@@ -55,21 +57,20 @@ LATATA (Japanese ver.) MV,205000.0,(G)I‐DLE,LATATA (Japanese ver.),,,XW,2019-0
 LATATA (Japanese ver.) MV MAKING,,(G)I‐DLE,LATATA,,,JP,2019-07-31,,(G)I‐DLE
 LIAR,171000.0,(G)I‐DLE,I NEVER DIE,,,,2022-03-14,,(G)I‐DLE
 LIAR,171000.0,(G)I‐DLE,I NEVER DIE,,,KR,2022-03-14,,(G)I‐DLE
+Light My Fire,231000.0,(G)I‐DLE,LATATA,,,JP,2019-07-29,,(G)I‐DLE
 LION,211000.0,(G)I‐DLE,Queendom < FINAL Comeback >,,,AF,2019-10-25,,(G)I‐DLE
 LOST,181000.0,(G)I‐DLE,I burn,,,KR,2021-01-11,,(G)I‐DLE
 LOVE,197000.0,(G)I‐DLE,I love,,,KR,2022-10-17,,(G)I‐DLE
 LOVE,197000.0,(G)I‐DLE,I love,,,,2022-10-17,,(G)I‐DLE
-Last Dance,184920.0,(G)I‐DLE,Last Dance,,,XW,2021-04-29,,(G)I‐DLE
-Light My Fire,231000.0,(G)I‐DLE,LATATA,,,JP,2019-07-29,,(G)I‐DLE
 Lucid,176000.0,(G)I‐DLE,I feel,,,,2023-05-15,,(G)I‐DLE
 Lucid,176000.0,(G)I‐DLE,I feel,,,JP,2023-05-15,,(G)I‐DLE
 Lucid (commentary),61000.0,(G)I‐DLE,I feel,,,,2023-05-19,,(G)I‐DLE
+Maybe,181000.0,(G)I‐DLE,I trust,,,KR,2020-04-06,,(G)I‐DLE
 MAZE,200000.0,(G)I‐DLE,I am,,,KR,2018-05-02,,(G)I‐DLE
 MAZE,200000.0,(G)I‐DLE,LATATA,,,JP,2019-07-29,,(G)I‐DLE
 MOON,200000.0,(G)I‐DLE,I burn,,,KR,2021-01-11,,(G)I‐DLE
 MY BAG,160000.0,(G)I‐DLE,I NEVER DIE,,,KR,2022-03-14,,(G)I‐DLE
 MY BAG,160000.0,(G)I‐DLE,I NEVER DIE,,,,2022-03-14,,(G)I‐DLE
-Maybe,181000.0,(G)I‐DLE,I trust,,,KR,2020-04-06,,(G)I‐DLE
 Nxde,178000.0,(G)I‐DLE,I love,,,,2022-10-17,,(G)I‐DLE
 Nxde,178000.0,(G)I‐DLE,I love,,,KR,2022-10-17,,(G)I‐DLE
 Nxde,183000.0,(G)I‐DLE,Nxde,,,,2022-10-17,,(G)I‐DLE
@@ -79,12 +80,12 @@ Oh my god,196000.0,(G)I‐DLE,I trust,,,KR,2020-04-06,,(G)I‐DLE
 Oh my god,195000.0,(G)I‐DLE,Oh my god (Japanese ver.),,,XW,2020-08-19,,(G)I‐DLE
 Oh my god (Japanese ver.) MV,209000.0,(G)I‐DLE,Oh my god (Japanese ver.),,,XW,2020-08-19,,(G)I‐DLE
 Outro (commentary),21000.0,(G)I‐DLE,I feel,,,,2023-05-19,,(G)I‐DLE
-POLAROID,218000.0,(G)I‐DLE,I NEVER DIE,,,,2022-03-14,,(G)I‐DLE
-POLAROID,218000.0,(G)I‐DLE,I NEVER DIE,,,KR,2022-03-14,,(G)I‐DLE
 Paradise,189000.0,(G)I‐DLE,I feel,,,JP,2023-05-15,,(G)I‐DLE
 Paradise,189000.0,(G)I‐DLE,I feel,,,,2023-05-15,,(G)I‐DLE
 Paradise (commentary),115000.0,(G)I‐DLE,I feel,,,,2023-05-19,,(G)I‐DLE
 Peter Pan (commentary),173000.0,(G)I‐DLE,I feel,,,,2023-05-19,,(G)I‐DLE
+POLAROID,218000.0,(G)I‐DLE,I NEVER DIE,,,,2022-03-14,,(G)I‐DLE
+POLAROID,218000.0,(G)I‐DLE,I NEVER DIE,,,KR,2022-03-14,,(G)I‐DLE
 Queencard (commentary),115000.0,(G)I‐DLE,I feel,,,,2023-05-19,,(G)I‐DLE
 Reset,182000.0,(G)I‐DLE,I love,,,,2022-10-17,,(G)I‐DLE
 Reset,182000.0,(G)I‐DLE,I love,,,KR,2022-10-17,,(G)I‐DLE
@@ -100,14 +101,14 @@ Show (inst.),191360.0,(G)I‐DLE,"투유프로젝트 - Sugar Man3, Episode. 8",,
 Super Lady,160000.0,(G)I‐DLE,Super Lady,,,,2024-01-29,,(G)I‐DLE
 Super Lady,152000.0,(G)I‐DLE,2,,,KR,2024-01-29,,(G)I‐DLE
 Super Lady,152000.0,(G)I‐DLE,2,,,,2024-01-29,,(G)I‐DLE
+Tall Trees,165000.0,(G)I‐DLE,HEAT,,,,2023-10-05,,(G)I‐DLE
+Tall Trees,165000.0,(G)I‐DLE,HEAT,,,,2023-10-05,,(G)I‐DLE
+The Making of Oh my god (Japanese ver.),,(G)I‐DLE,Oh my god,,,JP,2020-08-26,,(G)I‐DLE
 TOMBOY,174000.0,(G)I‐DLE,I NEVER DIE,,,KR,2022-03-14,,(G)I‐DLE
 TOMBOY,198000.0,(G)I‐DLE,TOMBOY,,,,2022-03-14,,(G)I‐DLE
 TOMBOY,174000.0,(G)I‐DLE,I NEVER DIE,,,,2022-03-14,,(G)I‐DLE
 TOMBOY,174000.0,(G)I‐DLE,I NEVER DIE,,,KR,2022-03-14,,(G)I‐DLE
 TOMBOY (R3HAB remix),129677.0,(G)I‐DLE,TOMBOY (R3HAB remix),,,XW,2022-05-20,,(G)I‐DLE
-Tall Trees,165000.0,(G)I‐DLE,HEAT,,,,2023-10-05,,(G)I‐DLE
-Tall Trees,165000.0,(G)I‐DLE,HEAT,,,,2023-10-05,,(G)I‐DLE
-The Making of Oh my god (Japanese ver.),,(G)I‐DLE,Oh my god,,,JP,2020-08-26,,(G)I‐DLE
 Tung-Tung (Empty),229000.0,(G)I‐DLE,Oh my god,,,JP,2020-08-26,,(G)I‐DLE
 Uh-Oh,207000.0,(G)I‐DLE,Uh-Oh,,,KR,2019-06-26,,(G)I‐DLE
 Uh-Oh,207000.0,(G)I‐DLE,Oh my god,,,JP,2020-08-26,,(G)I‐DLE
@@ -120,7 +121,6 @@ Where is love,177000.0,(G)I‐DLE,I burn,,,KR,2021-01-11,,(G)I‐DLE
 Wife,121000.0,(G)I‐DLE,Wife,,,,2024-01-21,,(G)I‐DLE
 Wife,133000.0,(G)I‐DLE,Wife,,,,2024-01-21,,(G)I‐DLE
 Wife,121000.0,(G)I‐DLE,Wife,,,,2024-01-21,,(G)I‐DLE
-i'M THE TREND,205000.0,(G)I‐DLE,i’M THE TREND,,,AF,2020-07-07,,(G)I‐DLE
 나는 아픈 건 딱 질색이니까,162000.0,(G)I‐DLE,2,,,KR,2024-01-29,,(G)I‐DLE
 나는 아픈 건 딱 질색이니까,162000.0,(G)I‐DLE,2,,,,2024-01-29,,(G)I‐DLE
 달라($$$),211000.0,(G)I‐DLE,I am,,,KR,2018-05-02,,(G)I‐DLE
