@@ -7,11 +7,12 @@ RECORDINGS_NOT_USED_DIR = Path('recordings_not_used')
 ARTIST_DIR = Path('artists')
 
 
-def standardize_apostrophes(columns):
+def standardize(columns):
     for csv_file in tqdm(list(RECORDINGS_DIR.glob('*.csv'))):
         df = pd.read_csv(csv_file)
         for column in columns:
             df[column] = df[column].apply(lambda x: x.replace('’', "'"))
+            df[column] = df[column].apply(lambda x: x.replace('‘', "'"))
         df.to_csv(csv_file, index=False)
 
 
@@ -138,31 +139,36 @@ def remove_different_ver(keywords = []):
         df = df.drop(idx_to_remove)
         df.to_csv(csv_fn, index=False)
 
-def remove_other_types(keywords = []):
+def remove_other_types(keywords=[]):
     for csv_fn in tqdm(list(RECORDINGS_DIR.glob('*.csv'))):
         df = pd.read_csv(csv_fn)
         idx_to_remove = []
         for idx, row in df.iterrows():
-            row_str = str(row)
+            row_str = ' '.join(map(str, row.values))  # Convert all values to strings and join them
             for keyword in keywords:
                 if keyword.lower() in row_str.lower():
                     idx_to_remove.append(idx)
                     break
+        
         df = df.drop(idx_to_remove)
         df.to_csv(csv_fn, index=False)
 
 
 if __name__ == '__main__':
-    # standardize_apostrophes(['title'])
+    # standardize(['title'])
     # remove_rows_with_nan_of_these_columns(['track_artist', 'release_date', 'title'])
     # remove_multiple_artists()
     # check_artist_names()
     # sort_by_columns(['title', 'release_date'])
     # remove_duplicated_recording()
     remove_different_ver(['ver.', 'version', 'instrumental', 'inst.', 'remix', 'music video', \
-                          'official mv', '(live)', '(Rearranged)', '(performance'])
-    remove_other_types(['Making of', 'ARENA TOUR', 'WORLD TOUR', 'Documentary of', 'behind the scenes', \
-                        'FANCLUB EVENT', '2NE1 TV', '2NE1 in Philippines',\
-                        'Japan', 'Asia Promotion'])
-
+                          'official mv', '(live)', '(Rearranged)', '(performance', 'm/v', 'teaser', \
+                            '(ENG.)', 'TV', 'iKON SCHOOL'])
+    remove_other_types(['Making of', 'ARENA TOUR', 'WORLD TOUR', 'DOME TOUR', 'LIVE TOUR', \
+                         'Documentary of', 'behind the scenes', \
+                        'FANCLUB EVENT', '2NE1 in Philippines',\
+                        'Japan', 'Asia Promotion', 'Jacket Shooting Making', 'MAKING FILM', 'READY TO BE with', 'SPECIAL VIDEO',\
+                        'Making Video',  'mv behind', 'teaser behind', 'Recording Making Movie',\
+                        'LIVESTREAM CONCERT', 'DEBUT SHOWCASE', 'SPECIAL EDITION', 'THE LIVE', \
+                        'BEST HIT MEGA BLEND', 'DOCUMENT FILM'])
     remove_empty_csv()
