@@ -74,6 +74,17 @@ def remove_rows_with_nan_of_these_columns(columns):
         df.to_csv(csv_fn, index=False)
 
 
+# def filter_by_country(country_list):
+#     for csv_fn in tqdm(list(RECORDINGS_DIR.glob('*.csv'))):
+#         df = pd.read_csv(csv_fn)
+#         idx_to_remove = []
+#         for idx, row in df.iterrows():
+#             if row['country'] and row['country'] not in country_list:
+#                 idx_to_remove.append(idx)
+#         df = df.drop(idx_to_remove)
+#         df.to_csv(csv_fn, index=False)
+
+
 def sort_by_columns(columns):
     for csv_fn in tqdm(list(RECORDINGS_DIR.glob('*.csv'))):
         df = pd.read_csv(csv_fn)
@@ -113,12 +124,28 @@ def remove_duplicated_recording():
         df.to_csv(csv_fn, index=False)
 
 
+def remove_different_ver(keywords = []):
+    for csv_fn in tqdm(list(RECORDINGS_DIR.glob('*.csv'))):
+        df = pd.read_csv(csv_fn)
+        idx_to_remove = []
+        for idx, row in df.iterrows():
+            # check title
+            title = row['title']
+            for keyword in keywords:
+                if keyword.lower() in title.lower():
+                    idx_to_remove.append(idx)
+                    break
+        df = df.drop(idx_to_remove)
+        df.to_csv(csv_fn, index=False)
+
+
 if __name__ == '__main__':
     # standardize_apostrophes(['title'])
     # remove_rows_with_nan_of_these_columns(['track_artist', 'release_date', 'title'])
     # remove_multiple_artists()
     # check_artist_names()
-    sort_by_columns(['title', 'release_date'])
-    remove_duplicated_recording()
+    # sort_by_columns(['title', 'release_date'])
+    # remove_duplicated_recording()
+    remove_different_ver(['ver.', 'version', 'instrumental', 'inst.', 'remix', 'music video', 'official mv', '(live)', '(Rearranged)', '(performance', 'Making of'])
 
     remove_empty_csv()
