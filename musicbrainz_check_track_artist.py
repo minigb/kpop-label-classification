@@ -6,6 +6,15 @@ RECORDINGS_DIR = Path('recordings')
 RECORDINGS_NOT_USED_DIR = Path('recordings_not_used')
 ARTIST_DIR = Path('artists')
 
+
+def standardize_apostrophes(columns):
+    for csv_file in tqdm(list(RECORDINGS_DIR.glob('*.csv'))):
+        df = pd.read_csv(csv_file)
+        for column in columns:
+            df[column] = df[column].apply(lambda x: x.replace('’', "'"))
+        df.to_csv(csv_file, index=False)
+
+
 def remove_multiple_artists():
     artists_not_used = []
     for csv_file in tqdm(list(ARTIST_DIR.glob('*.csv'))):
@@ -96,10 +105,11 @@ def remove_duplicated_recording():
 
 
 if __name__ == '__main__':
+    standardize_apostrophes(['title'])
     # remove_rows_with_nan_of_these_columns(['track_artist', 'release_date', 'title'])
     # remove_multiple_artists()
     # check_artist_names()
-    sort_by_columns(['title', 'release_date'])
-    remove_duplicated_recording()
+    # sort_by_columns(['title', 'release_date'])
+    # remove_duplicated_recording()
 
     remove_empty_csv()
