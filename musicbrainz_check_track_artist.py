@@ -66,7 +66,8 @@ def remove_rows_with_nan_of_these_columns(columns):
 
 
 if __name__ == '__main__':
-    remove_rows_with_nan_of_these_columns(['track_artist'])
-    remove_multiple_artists()
-    check_artist_names()
+    remove_rows_with_nan_of_these_columns(['track_artist', 'release_date'])
+    # remove_multiple_artists()
+    # check_artist_names()
+
     remove_empty_csv()
