@@ -100,21 +100,25 @@ class MusicCrawler:
       video_title = video.get('title').lower()
       video_channel = video.get('channel') # In case of None, don't change into lower case
       video_duration = video.get('duration')
+      video_url = video.get('url')
       
-      if video_channel is not None and 60 <= video_duration <= 600:
-        no_valid_video = False
-        video_channel = video_channel.lower()
-        keywords = all(keyword.lower() not in video_title for keyword in exclude_keywords) \
-                       and all(keyword.lower() in video_title for keyword in include_keywords) # Check if any exclude_keywords not in song_title are in video_title
-        video_info = {'query_idx': query_idx,
-                      'official': 'official audio' in video_title,
-                      'topic': ' - topic' in video_channel,
-                      'channel_artist_same': artist.lower() in video_channel.replace(' - topic', '') or video_channel.replace(' - topic', '') in artist.lower(),
-                      'keywords': keywords,
-                      'video_title': video_title,
-                      'video_channel': video_channel,
-                      'video_url': video.get('url')}
-        queries.append(video_info)
+      if not (video_channel is not None and 60 <= video_duration <= 600):
+        continue
+      # Check if any exclude_keywords not in song_title are in video_title)
+      if not (all(keyword.lower() not in video_title for keyword in exclude_keywords) \
+                      and all(keyword.lower() in video_title for keyword in include_keywords)):
+        continue
+      if '/shorts/' in video_url:
+        continue
+      
+      no_valid_video = False
+      video_channel = video_channel.lower()
+      video_info = {'query_idx': query_idx,
+                    'channel_artist_same': artist.lower() in video_channel.replace(' - topic', '') or video_channel.replace(' - topic', '') in artist.lower(),
+                    'video_title': video_title,
+                    'video_channel': video_channel,
+                    'video_url': video_url}
+      queries.append(video_info)
 
     if no_valid_video:
       failed.append({'Failed Reason': 'Every channel is None or video duration is not between 60 and 600 seconds'})
@@ -125,15 +129,19 @@ class MusicCrawler:
   def filter_queries_and_choose(self, queries, failed):
     NUM_OF_PRIORITIES = 4
     def _choose_video_with_priority(video, priority_num):
-      if not video['keywords']:
-        return False
+      def _is_official_audio():
+        return 'official audio' in video['video_title']
+      def _is_topic():
+        return ' - topic' in video['video_channel']
+      def _is_channel_artist_same():
+        return video['channel_artist_same']
       
       assert 0 <= priority_num < NUM_OF_PRIORITIES
       is_satisfying = [
-        video['official'],
-        'color coded' in video['video_title'] or 'color-coded' in video['video_title'],
+        _is_official_audio(),
+        _is_channel_artist_same or _is_topic(),
+        'color coded' in video['video_title'].replace('-', ' '),
         'lyric' in video['video_title'],
-        video['channel_artist_same'] or video['topic'],
       ]
       assert len(is_satisfying) == NUM_OF_PRIORITIES, f"len(is_satisfying) should be {NUM_OF_PRIORITIES}, but got {len(is_satisfying)}"
 
@@ -346,7 +354,7 @@ class ReusingQueriesMusicCrawler(MusicCrawler):
 if __name__ == '__main__':
   """
   Example line to run the code: 
-  python crawling_data.py --input_csv song_list.csv --save_csv_name csv/kpop --save_audio_dir audio
+  python crawling_data.py --input_csv kpop-dataset/song_list.csv --save_csv_name kpop-dataset/csv/kpop --save_audio_dir audio
 
   When recrawling failed music, using query suffix:
   python crawling_data.py --save_csv_name csv/kpop --save_audio_dir audio --crawler_type failed --query_suffix "official audio"
@@ -361,7 +369,7 @@ if __name__ == '__main__':
   Add '--exclude_remaster' or '--topk 20' if needed
   """
 
-  EXCLUDE_KEYWORDS_REMASTER_NOT_INCLUDED = ['live', 'cover', 'mv', 'm/v', 'video', 'mix', 'ver', 'version', 'remix', 'remake', 'arrange', 'dj', 'practice']
+  EXCLUDE_KEYWORDS_REMASTER_NOT_INCLUDED = ['live', 'cover', 'mv', 'm/v', 'video', 'mix', 'ver', 'version', 'remix', 'remake', 'arrange', 'dj', 'practice', 'inst', 'teaser', 'performance', 'karaoke', 'inkigayo', '음악중심']
   REMASTER = 'remaster'
 
   argparser = ArgumentParser()
