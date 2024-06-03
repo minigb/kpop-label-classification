@@ -17,7 +17,7 @@ logging.basicConfig(filename=log_file, level=logging.ERROR,
 BASE_URL = "https://musicbrainz.org/ws/2/"
 LIMIT = 100  # Maximum limit per request set by MusicBrainz
 THRESHOLD = 80  # Fuzzy match threshold
-ARTIST_DIR = Path('artists')  # Directory containing artist CSV files
+ARTIST_DIR = Path('artists_per_label')  # Directory containing artist CSV files
 SAVE_DIR = Path('recordings')
 if not SAVE_DIR.exists():
     SAVE_DIR.mkdir(parents=True, exist_ok=True)

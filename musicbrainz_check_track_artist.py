@@ -4,7 +4,7 @@ from tqdm import tqdm
 
 RECORDINGS_DIR = Path('recordings')
 RECORDINGS_NOT_USED_DIR = Path('recordings_not_used')
-ARTIST_DIR = Path('artists')
+ARTIST_DIR = Path('artists_per_label')
 
 
 def standardize(columns):
