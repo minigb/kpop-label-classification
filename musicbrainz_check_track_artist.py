@@ -44,6 +44,15 @@ def check_artist_names():
         df = df.drop(idx_to_remove)
         df.to_csv(csv_fn, index=False)
 
+
+def remove_empty_csv():
+    for csv_fn in RECORDINGS_DIR.glob('*.csv'):
+        df = pd.read_csv(csv_fn)
+        if df.empty:
+            csv_fn.rename(RECORDINGS_NOT_USED_DIR / csv_fn.name)
+
+
 if __name__ == '__main__':
     remove_multiple_artists()
     check_artist_names()
+    remove_empty_csv()
