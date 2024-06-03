@@ -8,7 +8,7 @@ ARTIST_DIR = Path('artists')
 
 def remove_multiple_artists():
     artists_not_used = []
-    for csv_file in ARTIST_DIR.glob('*.csv'):
+    for csv_file in tqdm(list(ARTIST_DIR.glob('*.csv'))):
         df = pd.read_csv(csv_file)
         artists = df['artists']
         artists_idx_to_remove = []
@@ -46,7 +46,7 @@ def check_artist_names():
 
 
 def remove_empty_csv():
-    for csv_fn in RECORDINGS_DIR.glob('*.csv'):
+    for csv_fn in tqdm(list(RECORDINGS_DIR.glob('*.csv'))):
         df = pd.read_csv(csv_fn)
         if df.empty:
             csv_fn.rename(RECORDINGS_NOT_USED_DIR / csv_fn.name)
@@ -66,7 +66,7 @@ def remove_rows_with_nan_of_these_columns(columns):
 
 
 if __name__ == '__main__':
-    remove_rows_with_nan_of_these_columns(['track_artist', 'release_date'])
+    remove_rows_with_nan_of_these_columns(['track_artist', 'release_date', 'title'])
     # remove_multiple_artists()
     # check_artist_names()
 
