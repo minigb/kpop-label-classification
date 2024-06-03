@@ -17,7 +17,7 @@ def standardize(columns):
 
 
 def remove_multiple_artists():
-    artists_not_used = []
+    artists_used = []
     for csv_file in tqdm(list(ARTIST_DIR.glob('*.csv'))):
         df = pd.read_csv(csv_file)
         artists = df['artists']
@@ -25,16 +25,19 @@ def remove_multiple_artists():
         for idx, artist in enumerate(artists):
             if ', ' in artist:
                 artists_idx_to_remove.append(idx)
-                artists_not_used.append(artist)
+            else:
+                artists_used.append(artist)
         df = df.drop(artists_idx_to_remove)
         df.to_csv(csv_file, index=False)
     
     RECORDINGS_NOT_USED_DIR.mkdir(exist_ok=True)
-    for artist_name in tqdm(artists_not_used):
+    for artist_fn in tqdm(list(RECORDINGS_DIR.glob('*.csv'))):
+        artist_name = artist_fn.stem
         csv_fn = RECORDINGS_DIR / f'{artist_name.replace("/", "_")}.csv'
         if not csv_fn.exists():
             continue
-        csv_fn.rename(RECORDINGS_NOT_USED_DIR / csv_fn.name)
+        if artist_name not in artists_used:
+            csv_fn.rename(RECORDINGS_NOT_USED_DIR / csv_fn.name)
 
 
 def check_artist_names():
@@ -157,7 +160,7 @@ def remove_other_types(keywords=[]):
 if __name__ == '__main__':
     # standardize(['title'])
     # remove_rows_with_nan_of_these_columns(['track_artist', 'release_date', 'title'])
-    # remove_multiple_artists()
+    remove_multiple_artists()
     # check_artist_names()
     # sort_by_columns(['title', 'release_date'])
     # remove_duplicated_recording()
