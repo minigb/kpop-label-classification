@@ -1,4 +1,4 @@
-artists
+artists,artist_id
 KARA
 Rainbow
 APRIL
@@ -18,5 +18,5 @@ MIRAE
 KASPER
 Fin.K.L
 YOUNG POSSE
-BABY BLUE
+BABY BLUE,bc42fc7f-b24c-47e7-9a08-b7efb1b7bd8e
 허영지
