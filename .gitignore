@@ -4,8 +4,7 @@ __pycache__
 .cache
 *.log
 
-*audio
-*audio_tmp
+*audio*
 # releases*
 # recordings
 

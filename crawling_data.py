@@ -42,7 +42,7 @@ class MusicCrawler:
 
 
   def _custom_init(self):
-    self.in_csv_col_names = CsvColumnNames('Year', 'Song', 'Artist')
+    self.in_csv_col_names = CsvColumnNames('year', 'title', 'query_artist')
     self.out_csv_col_names = CsvColumnNames('Year', 'Song', 'Artist')
 
     self._init_save_csv_files()
@@ -391,12 +391,12 @@ if __name__ == '__main__':
   argparser.add_argument('--query_suffix', type=str)
   args = argparser.parse_args()
 
-  ex_keywords_path = Path('excluding_keywords.json')
-  with ex_keywords_path.open('r') as f:
-    ex_keywords = json.load(f)
+  exclude_keywords_path = Path('excluding_keywords.json')
+  with exclude_keywords_path.open('r') as f:
+    exclude_keywords = json.load(f)
   
   if args.exclude_remaster:
-    ex_keywords.append(REMASTER)
+    exclude_keywords.append(REMASTER)
   
   include_keywords = []
   if args.include_remaster:
