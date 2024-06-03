@@ -2,7 +2,7 @@ import pandas as pd
 from pathlib import Path
 from tqdm import tqdm
 
-RECORDINGS_DIR = Path('recordings')
+RECORDINGS_DIR = Path('recordings_per_artist')
 RECORDINGS_NOT_USED_DIR = Path('recordings_not_used')
 ARTIST_DIR = Path('artists_per_label')
 

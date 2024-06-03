@@ -18,7 +18,7 @@ BASE_URL = "https://musicbrainz.org/ws/2/"
 LIMIT = 100  # Maximum limit per request set by MusicBrainz
 THRESHOLD = 80  # Fuzzy match threshold
 ARTIST_DIR = Path('artists_per_label')  # Directory containing artist CSV files
-SAVE_DIR = Path('recordings')
+SAVE_DIR = Path('recordings_per_artist')
 if not SAVE_DIR.exists():
     SAVE_DIR.mkdir(parents=True, exist_ok=True)
 
