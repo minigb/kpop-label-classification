@@ -52,7 +52,21 @@ def remove_empty_csv():
             csv_fn.rename(RECORDINGS_NOT_USED_DIR / csv_fn.name)
 
 
+def remove_rows_with_nan_of_these_columns(columns):
+    for csv_fn in RECORDINGS_DIR.glob('*.csv'):
+        df = pd.read_csv(csv_fn)
+        idx_to_remove = []
+        for idx, row in df.iterrows():
+            for column in columns:
+                if pd.isna(row[column]):
+                    idx_to_remove.append(idx)
+                    break
+        df = df.drop(idx_to_remove)
+        df.to_csv(csv_fn, index=False)
+
+
 if __name__ == '__main__':
+    remove_rows_with_nan_of_these_columns(['track_artist'])
     remove_multiple_artists()
     check_artist_names()
     remove_empty_csv()
