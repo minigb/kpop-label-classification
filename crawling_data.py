@@ -9,6 +9,9 @@ import json
 
 from utils import get_song_id
 
+# TODO(minigb): This is not ideal. Find a better way to handle this.
+VIDEO_INFO_COLUMNS = ['query_idx', 'channel_artist_same', 'video_title', 'video_channel', 'video_url']
+
 # Configure logging
 logging.basicConfig(filename='download_check.log', level=logging.INFO,
                     format='%(asctime)s:%(levelname)s:%(message)s')
@@ -58,13 +61,13 @@ class MusicCrawler:
       raise FileExistsError(f"One or more result files ({fns.queries}, {fns.failed}, {fns.chosen}) already exist. Please remove them before running the crawler.")
     
     # Create result files
-    QUERIES_COLUMNS = [self.out_csv_col_names.date, self.out_csv_col_names.title, self.out_csv_col_names.artist] + ['query_idx', 'official', 'topic', 'channel_artist_same', 'keywords', 'video_title', 'video_channel', 'video_url']
+    QUERIES_COLUMNS = [self.out_csv_col_names.date, self.out_csv_col_names.title, self.out_csv_col_names.artist] + VIDEO_INFO_COLUMNS
     self.queries_df = pd.DataFrame(columns=QUERIES_COLUMNS)
 
     FAILED_COLUMNS = [self.out_csv_col_names.date, self.out_csv_col_names.title, self.out_csv_col_names.artist, 'Failed Reason']
     self.failed_df = pd.DataFrame(columns=FAILED_COLUMNS)
 
-    CHOSEN_COLUMNS = [self.out_csv_col_names.date, self.out_csv_col_names.title, self.out_csv_col_names.artist] + ['query_idx', 'official', 'topic', 'channel_artist_same', 'keywords', 'video_title', 'video_channel', 'video_url']
+    CHOSEN_COLUMNS = [self.out_csv_col_names.date, self.out_csv_col_names.title, self.out_csv_col_names.artist] + VIDEO_INFO_COLUMNS
     self.chosen_df = pd.DataFrame(columns=CHOSEN_COLUMNS)
 
 
@@ -376,7 +379,7 @@ if __name__ == '__main__':
   argparser.add_argument('--save_csv_name', type=str, required=True)
   argparser.add_argument('--save_audio_dir', type=str, required=True)
   argparser.add_argument('--exclude_remaster', action='store_true')
-  argparser.add_argument('--include_remaster', action='store_true') # TODO: Find better approach
+  argparser.add_argument('--include_remaster', action='store_true') # TODO(minigb): Find better approach
   argparser.add_argument('--topk', type=int, default=10)
   argparser.add_argument('--crawler_type', type=str, default='new')
   argparser.add_argument('--query_suffix', type=str)
