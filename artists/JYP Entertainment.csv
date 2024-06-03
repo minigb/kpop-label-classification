@@ -1,4 +1,4 @@
-artists
+artists,artist_id
 miss A
 2PM
 Wonder Girls
@@ -43,5 +43,5 @@ MISAMO
 JIHYO
 NEXZ
 JEONGYEON
-VCHA
+VCHA,77ebb78b-17cf-4054-a62e-6e0d52b6fb5e
 규진
