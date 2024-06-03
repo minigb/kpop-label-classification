@@ -28,14 +28,17 @@ def remove_multiple_artists():
 
 
 def check_artist_names():
+    def _refine_artist_name(artist_name):
+        artist_name = artist_name.replace('.', '').lower()
+        return artist_name
+
     for csv_fn in tqdm(list(RECORDINGS_DIR.glob('*.csv'))):
         df = pd.read_csv(csv_fn)
         idx_to_remove = []
         for idx, row in df.iterrows():
             query_artist = row['query_artist']
-            track_artist = row['track_artist']
-            first_artist = track_artist.split(', ')[0]
-            if query_artist != first_artist:
+            first_artist = row['track_artist'].split(', ')[0]
+            if _refine_artist_name(query_artist) != _refine_artist_name(first_artist):
                 idx_to_remove.append(idx)
 
         df = df.drop(idx_to_remove)
@@ -43,4 +46,4 @@ def check_artist_names():
 
 if __name__ == '__main__':
     remove_multiple_artists()
-    # check_artist_names()
+    check_artist_names()
