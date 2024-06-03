@@ -1,4 +1,4 @@
-artists
+artists,artist_id
 S
 강타
 S#arp
@@ -61,10 +61,9 @@ TEN
 윤아
 성민
 NCT
-Paul Kim
 Girls’ Generation‐Oh!GG
 이진솔
-KEY
+KEY,4e848ea9-d9d3-4608-b5ee-baa29acf4cca
 YURI
 YERI
 威神V
@@ -85,7 +84,7 @@ KAI
 aespa
 WayV-TEN & YANGYANG
 은혁
-MARK
+MARK,1d673024-a339-4b97-9f41-52cdc47498c6
 GOT the beat
 SEULGI
 JAEHYUN
