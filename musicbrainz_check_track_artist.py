@@ -162,6 +162,8 @@ def make_total_song_list_csv():
     
     for csv_fn in tqdm(list(RECORDINGS_DIR.glob('*.csv'))):
         df = pd.read_csv(csv_fn)
+        year_list = [int(date.split('-')[0]) if isinstance(date, str) else int(date) for date in df['release_date']]
+        df['year'] = year_list
         song_list.append(df)
     
     if song_list:
@@ -172,22 +174,22 @@ def make_total_song_list_csv():
 
 
 if __name__ == '__main__':
-    # # standardize(['title'])
-    # # remove_rows_with_nan_of_these_columns(['track_artist', 'release_date', 'title'])
-    # remove_multiple_artists()
-    # # check_artist_names()
-    # # sort_by_columns(['title', 'release_date'])
-    # # remove_duplicated_recording()
-    # remove_different_ver(['ver.', 'version', 'instrumental', 'inst.', 'remix', 'music video', \
-    #                       'official mv', '(live)', '(Rearranged)', '(performance', 'm/v', 'teaser', \
-    #                         '(ENG.)', 'TV', 'iKON SCHOOL'])
-    # remove_other_types(['Making of', 'ARENA TOUR', 'WORLD TOUR', 'DOME TOUR', 'LIVE TOUR', \
-    #                      'Documentary of', 'behind the scenes', \
-    #                     'FANCLUB EVENT', '2NE1 in Philippines',\
-    #                     'Japan', 'Asia Promotion', 'Jacket Shooting Making', 'MAKING FILM', 'READY TO BE with', 'SPECIAL VIDEO',\
-    #                     'Making Video',  'mv behind', 'teaser behind', 'Recording Making Movie',\
-    #                     'LIVESTREAM CONCERT', 'DEBUT SHOWCASE', 'SPECIAL EDITION', 'THE LIVE', \
-    #                     'BEST HIT MEGA BLEND', 'DOCUMENT FILM'])
-    # remove_empty_csv()
+    standardize(['title'])
+    remove_rows_with_nan_of_these_columns(['track_artist', 'release_date', 'title'])
+    remove_multiple_artists()
+    check_artist_names()
+    sort_by_columns(['title', 'release_date'])
+    remove_duplicated_recording()
+    remove_different_ver(['ver.', 'version', 'instrumental', 'inst.', 'remix', 'music video', \
+                          'official mv', '(live)', '(Rearranged)', '(performance', 'm/v', 'teaser', \
+                            '(ENG.)', 'TV', 'iKON SCHOOL'])
+    remove_other_types(['Making of', 'ARENA TOUR', 'WORLD TOUR', 'DOME TOUR', 'LIVE TOUR', \
+                         'Documentary of', 'behind the scenes', \
+                        'FANCLUB EVENT', '2NE1 in Philippines',\
+                        'Japan', 'Asia Promotion', 'Jacket Shooting Making', 'MAKING FILM', 'READY TO BE with', 'SPECIAL VIDEO',\
+                        'Making Video',  'mv behind', 'teaser behind', 'Recording Making Movie',\
+                        'LIVESTREAM CONCERT', 'DEBUT SHOWCASE', 'SPECIAL EDITION', 'THE LIVE', \
+                        'BEST HIT MEGA BLEND', 'DOCUMENT FILM'])
+    remove_empty_csv()
 
     make_total_song_list_csv()
