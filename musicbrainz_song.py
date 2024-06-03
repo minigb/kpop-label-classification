@@ -7,6 +7,8 @@ from fuzzywuzzy import fuzz
 
 # Remove the existing log file if it exists
 log_file = 'musicbrainz_songs_errors.log'
+if Path(log_file).exists():
+    Path(log_file).unlink()
 
 # Configure logging
 logging.basicConfig(filename=log_file, level=logging.ERROR,
@@ -32,7 +34,7 @@ def get_artist_id(query_artist_name):
         data = response.json()
         if 'artists' in data and len(data['artists']) > 0:
             for artist in data['artists']:
-                if artist['country'] not in ['KR', 'JP', 'CN', 'XW']:
+                if 'country' in artist.keys() and artist['country'] not in ['KR', 'XW']:
                     continue
                 ratio = fuzz.ratio(query_artist_name.lower(), artist['name'].lower())
                 if ratio > THRESHOLD:
@@ -122,14 +124,19 @@ def save_recordings_to_csv(recordings, artist_name):
         logging.error(f"Error saving recordings to CSV for artist {artist_name}: {e}")
 
 def process_artist(query_artist_name):
+    # check if the file exist
+    if (SAVE_DIR / f'{query_artist_name.replace("/", "_")}.csv').exists():
+        return
+    
+    print(f"Processing artist: {query_artist_name}")
     artist_id = get_artist_id(query_artist_name)
     if not artist_id:
-        logging.error(f"Artist not found for {query_artist_name}")
+        # logging.error(f"Artist not found for {query_artist_name}")
         return
 
     recordings = get_recordings(artist_id, query_artist_name)
     if not recordings:
-        logging.error(f"No recordings found for artist {query_artist_name}")
+        logging.error(f"Artist is found, but no recordings found for artist {query_artist_name}")
         return
     save_recordings_to_csv(recordings, query_artist_name)
 
@@ -144,5 +151,4 @@ def get_unique_artists_from_csv():
 if __name__ == '__main__':
     artists = get_unique_artists_from_csv()
     for artist_name in tqdm(artists, desc="Processing artists"):
-        print(f"Processing artist: {artist_name}")
         process_artist(artist_name)
