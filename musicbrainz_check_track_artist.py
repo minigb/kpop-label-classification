@@ -109,7 +109,7 @@ if __name__ == '__main__':
     # remove_rows_with_nan_of_these_columns(['track_artist', 'release_date', 'title'])
     # remove_multiple_artists()
     # check_artist_names()
-    # sort_by_columns(['title', 'release_date'])
+    sort_by_columns(['title', 'release_date'])
     # remove_duplicated_recording()
 
     remove_empty_csv()
