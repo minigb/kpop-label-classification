@@ -138,6 +138,19 @@ def remove_different_ver(keywords = []):
         df = df.drop(idx_to_remove)
         df.to_csv(csv_fn, index=False)
 
+def remove_other_types(keywords = []):
+    for csv_fn in tqdm(list(RECORDINGS_DIR.glob('*.csv'))):
+        df = pd.read_csv(csv_fn)
+        idx_to_remove = []
+        for idx, row in df.iterrows():
+            row_str = str(row)
+            for keyword in keywords:
+                if keyword.lower() in row_str.lower():
+                    idx_to_remove.append(idx)
+                    break
+        df = df.drop(idx_to_remove)
+        df.to_csv(csv_fn, index=False)
+
 
 if __name__ == '__main__':
     # standardize_apostrophes(['title'])
@@ -146,6 +159,10 @@ if __name__ == '__main__':
     # check_artist_names()
     # sort_by_columns(['title', 'release_date'])
     # remove_duplicated_recording()
-    remove_different_ver(['ver.', 'version', 'instrumental', 'inst.', 'remix', 'music video', 'official mv', '(live)', '(Rearranged)', '(performance', 'Making of'])
+    remove_different_ver(['ver.', 'version', 'instrumental', 'inst.', 'remix', 'music video', \
+                          'official mv', '(live)', '(Rearranged)', '(performance'])
+    remove_other_types(['Making of', 'ARENA TOUR', 'WORLD TOUR', 'Documentary of', 'behind the scenes', \
+                        'FANCLUB EVENT', '2NE1 TV', '2NE1 in Philippines',\
+                        'Japan', 'Asia Promotion'])
 
     remove_empty_csv()
