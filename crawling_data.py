@@ -5,6 +5,7 @@ from tqdm import tqdm
 from pathlib import Path
 from argparse import ArgumentParser
 import logging
+import json
 
 from utils import get_song_id
 
@@ -368,8 +369,6 @@ if __name__ == '__main__':
   
   Add '--exclude_remaster' or '--topk 20' if needed
   """
-
-  EXCLUDE_KEYWORDS_REMASTER_NOT_INCLUDED = ['live', 'cover', 'mv', 'm/v', 'video', 'mix', 'ver', 'version', 'remix', 'remake', 'arrange', 'dj', 'practice', 'inst', 'teaser', 'performance', 'karaoke', 'inkigayo', '음악중심']
   REMASTER = 'remaster'
 
   argparser = ArgumentParser()
@@ -383,9 +382,12 @@ if __name__ == '__main__':
   argparser.add_argument('--query_suffix', type=str)
   args = argparser.parse_args()
 
-  exclude_keywords = EXCLUDE_KEYWORDS_REMASTER_NOT_INCLUDED
+  ex_keywords_path = Path('excluding_keywords.json')
+  with ex_keywords_path.open('r') as f:
+    ex_keywords = json.load(f)
+  
   if args.exclude_remaster:
-    exclude_keywords.append(REMASTER)
+    ex_keywords.append(REMASTER)
   
   include_keywords = []
   if args.include_remaster:
