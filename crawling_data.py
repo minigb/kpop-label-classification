@@ -46,8 +46,8 @@ class MusicCrawler:
     self.out_csv_col_names = CsvColumnNames('Year', 'Song', 'Artist')
 
     self._init_save_csv_files()
-    uniq_df = self._get_unique_df()
-    self.target_df = self.get_df_with_existing_songs_removed(uniq_df)
+    # uniq_df = self._get_df_with_unique_songs()
+    self.target_df = self._get_df_with_existing_songs_removed()
     print(f"Number of songs to crawl: {len(self.target_df)}")
 
 
@@ -56,27 +56,51 @@ class MusicCrawler:
     parent_dir.mkdir(parents=True, exist_ok=True)
     fns = FileNames(self.save_csv_name)
 
-    # Check if files already exist
-    if fns.queries.exists() or fns.failed.exists() or fns.chosen.exists():
-      raise FileExistsError(f"One or more result files ({fns.queries}, {fns.failed}, {fns.chosen}) already exist. Please remove them before running the crawler.")
-    
-    # Create result files
+    # queries result df
+    # if the file exists, read it and check if the columns are correct
+    # if not, create an empty dataframe with the correct columns
     QUERIES_COLUMNS = [self.out_csv_col_names.date, self.out_csv_col_names.title, self.out_csv_col_names.artist] + VIDEO_INFO_COLUMNS
-    self.queries_df = pd.DataFrame(columns=QUERIES_COLUMNS)
+    if fns.queries.exists():
+      queries_df = pd.read_csv(fns.queries)
+      assert set(queries_df.columns) == set(QUERIES_COLUMNS)
+    else:
+      queries_df = pd.DataFrame(columns=QUERIES_COLUMNS)
+    self.queries_df = queries_df
 
+    # failed result df
+    # create an empty dataframe with the correct columns
     FAILED_COLUMNS = [self.out_csv_col_names.date, self.out_csv_col_names.title, self.out_csv_col_names.artist, 'Failed Reason']
     self.failed_df = pd.DataFrame(columns=FAILED_COLUMNS)
 
+    # chosen result df
+    # if the file exists, read it and check if the columns are correct
+    # if not, create an empty dataframe with the correct columns
     CHOSEN_COLUMNS = [self.out_csv_col_names.date, self.out_csv_col_names.title, self.out_csv_col_names.artist] + VIDEO_INFO_COLUMNS
-    self.chosen_df = pd.DataFrame(columns=CHOSEN_COLUMNS)
+    if fns.chosen.exists():
+      chosen_df = pd.read_csv(fns.chosen)
+      assert set(chosen_df.columns) == set(CHOSEN_COLUMNS)
+    else:
+      chosen_df = pd.DataFrame(columns=CHOSEN_COLUMNS)
+    self.chosen_df = self._remove_rows_without_audio(chosen_df)
 
 
-  def _get_unique_df(self) -> pd.DataFrame:
+  def _remove_rows_without_audio(self, df):
+    idx_to_remove = []
+    for idx, row in df.iterrows():
+      date = row[self.out_csv_col_names.date]
+      title = row[self.out_csv_col_names.title]
+      artist = row[self.out_csv_col_names.artist]
+      song_id = get_song_id(date, title, artist)
+      if not Path(f"{self.save_audio_dir}/{song_id}.mp3").exists():
+        idx_to_remove.append(idx)
+    return df.drop(index=idx_to_remove)
+
+
+  def _get_df_with_unique_songs(self) -> pd.DataFrame:
     assert self.input_csv_path.exists(), f"{self.input_csv_path} does not exist"
     df = pd.read_csv(self.input_csv_path)
 
     # Sort by date
-    df_sorted = df.sort_values(by=self.in_csv_col_names.date).reset_index(drop=True)
     df_sorted = df.sort_values(by=self.in_csv_col_names.date).reset_index(drop=True)
 
     # Remove duplicates
@@ -233,48 +257,30 @@ class MusicCrawler:
       df.to_csv(fn, index=False)
 
 
-  def get_df_with_existing_songs_removed(self, df):
-    print(f"Checking existing files for {self.save_csv_name}...")
-    
-    chosen_fn = FileNames(self.save_csv_name).chosen # check whether the result file exists
-    refined_df_fn = f'{self.save_csv_name}_sorted_and_unique_chart.csv'
-    if not chosen_fn.exists():
-      # This means that the songs have not been crawled yet
-      df.to_csv(refined_df_fn, index=False)
-      return df
-    
-    chosen_df = pd.read_csv(chosen_fn)
-    if chosen_df.empty:
-      df.to_csv(refined_df_fn, index=False)
-      return df
+  def _get_df_with_existing_songs_removed(self):
+    input_df = self._get_df_with_unique_songs()
+
+    if self.chosen_df.empty:
+      return input_df
 
     # Remove existing songs to not crawl again
-    refined_df = df
-    existing_file_list = list(self.save_audio_dir.glob('*.mp3')) if self.save_audio_dir.exists() else []
+    # self.chosen_df is already filtered to remove songs without audio
 
-    for _, row in tqdm(chosen_df.iterrows(), total=len(chosen_df)): # Get downloaded songs
+    idx_to_remove = []
+    for _, row in tqdm(self.chosen_df.iterrows(), total=len(self.chosen_df)): # Get downloaded songs
       date = row[self.out_csv_col_names.date]
       title = row[self.out_csv_col_names.title]
       artist = row[self.out_csv_col_names.artist]
 
-      matching_row = refined_df[(refined_df[self.in_csv_col_names.date] == date)
-                                & (refined_df[self.in_csv_col_names.title] == title)
-                                & (refined_df[self.in_csv_col_names.artist] == artist)]
+      matching_row = input_df[(input_df[self.in_csv_col_names.date] == date)
+                                & (input_df[self.in_csv_col_names.title] == title)
+                                & (input_df[self.in_csv_col_names.artist] == artist)]
       assert len(matching_row) == 1, f"len(matching_row) should be 1, but got {len(matching_row)}"
-      song_id = get_song_id(matching_row[self.in_csv_col_names.date].values[0], matching_row[self.in_csv_col_names.title].values[0], matching_row[self.in_csv_col_names.artist].values[0])
-      if f'{song_id}.mp3' in existing_file_list: # Remove only when the file exists
-        refined_df = refined_df.drop(index=matching_row.index)
+      idx_to_remove.append(matching_row.index[0])
 
-    for _, row in chosen_df.iterrows():
-      date = row[self.out_csv_col_names.date]
-      title = row[self.out_csv_col_names.title]
-      artist = row[self.out_csv_col_names.artist]
-      song_id = get_song_id(date, title, artist)
-      fn = f'{song_id}.mp3'
-      assert fn in existing_file_list
+    input_df = input_df.drop(index=idx_to_remove)
 
-    refined_df.to_csv(refined_df_fn, index=False)
-    return refined_df
+    return input_df
             
             
   def run(self, topk):
@@ -321,7 +327,7 @@ class FailedMusicCrawler(MusicCrawler):
     self.in_csv_col_names = self.out_csv_col_names = CsvColumnNames('Year', 'Song', 'Artist')
     self._init_save_csv_files()
 
-    self.target_df = self._get_unique_df()  # use self.input_csv_path
+    self.target_df = self._get_df_with_unique_songs()  # use self.input_csv_path
     print(f"Number of failed songs to re-crawl: {len(self.target_df)}")
 
 
@@ -337,7 +343,7 @@ class ReusingQueriesMusicCrawler(MusicCrawler):
     self.in_csv_col_names = self.out_csv_col_names = CsvColumnNames('Year', 'Song', 'Artist')
 
     self._init_save_csv_files()
-    self.target_df = self.get_df_with_existing_songs_removed()
+    self.target_df = self._get_df_with_existing_songs_removed()
     print(f"Number of songs to crawl: {len(self.target_df)}")
 
 
