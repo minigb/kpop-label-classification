@@ -34,7 +34,7 @@ def get_artist_id(query_artist_name):
         data = response.json()
         if 'artists' in data and len(data['artists']) > 0:
             for artist in data['artists']:
-                if 'country' in artist.keys() and artist['country'] not in ['KR', 'XW']:
+                if 'country' in artist.keys() and artist['country'] not in ['KR']:
                     continue
                 ratio = fuzz.ratio(query_artist_name.lower(), artist['name'].lower())
                 if ratio > THRESHOLD:
@@ -123,15 +123,15 @@ def save_recordings_to_csv(recordings, artist_name):
     except Exception as e:
         logging.error(f"Error saving recordings to CSV for artist {artist_name}: {e}")
 
-def process_artist(query_artist_name):
+def process_artist(query_artist_name, artist_id):
     # check if the file exist
     if (SAVE_DIR / f'{query_artist_name.replace("/", "_")}.csv').exists():
         return
     
     print(f"Processing artist: {query_artist_name}")
-    artist_id = get_artist_id(query_artist_name)
+    artist_id = artist_id if artist_id is not None else get_artist_id(query_artist_name)
     if not artist_id:
-        # logging.error(f"Artist not found for {query_artist_name}")
+        logging.error(f"Artist not found for {query_artist_name}")
         return
 
     recordings = get_recordings(artist_id, query_artist_name)
@@ -141,14 +141,19 @@ def process_artist(query_artist_name):
     save_recordings_to_csv(recordings, query_artist_name)
 
 def get_unique_artists_from_csv():
-    all_artists = set()
+    all_dataframes = []
     for csv_file in ARTIST_DIR.glob('*.csv'):
         df = pd.read_csv(csv_file)
-        artists = df['artists'].unique()
-        all_artists.update(artists)
-    return list(all_artists)
+        all_dataframes.append(df)
+    combined_df = pd.concat(all_dataframes)
+    # Leave unique artists
+    unique_artists_df = combined_df.drop_duplicates(subset='artists', keep=False)
+    unique_artists_df['artist_id'].fillna('')
+    return unique_artists_df
 
 if __name__ == '__main__':
-    artists = get_unique_artists_from_csv()
-    for artist_name in tqdm(artists, desc="Processing artists"):
-        process_artist(artist_name)
+    artists_df = get_unique_artists_from_csv()
+    for _, row in tqdm(artists_df.iterrows(), desc="Processing artists", total=len(artists_df)):
+        artist_name = row['artists']
+        artist_id = row['artist_id'] if row['artist_id'] else None
+        process_artist(artist_name, artist_id)
