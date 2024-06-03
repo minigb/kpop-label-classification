@@ -1,5 +1,11 @@
 __pycache__
 .vscode
 .DS_Store
+.cache
+*.log
 
-audio
+*audio*
+# releases*
+# recordings
+
+spotify_keys.yaml
