@@ -23,6 +23,7 @@ class MusicBrainzResultCleaner:
         self._remove_duplicated_recording()
         self._remove_different_ver()
         self._remove_other_types()
+        
         self._remove_empty_csv()
         self._make_total_song_list_csv()
 
@@ -48,15 +49,6 @@ class MusicBrainzResultCleaner:
                     artists_used.append(artist)
             df = df.drop(artists_idx_to_remove)
             df.to_csv(csv_file, index=False)
-        
-        self.removed_recordings_dir.mkdir(parents=True, exist_ok=True)
-        for artist_fn in tqdm(list(self.recordings_dir.glob('*.csv'))):
-            artist_name = artist_fn.stem
-            csv_fn = self.recordings_dir / f'{artist_name.replace("/", "_")}.csv'
-            if not csv_fn.exists():
-                continue
-            if artist_name not in artists_used:
-                csv_fn.rename(self.removed_recordings_dir / csv_fn.name)
 
     def _check_artist_names(self):
         def _refine_artist_name(artist_name):
