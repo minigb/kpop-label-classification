@@ -5,7 +5,7 @@ import hydra
 from omegaconf import DictConfig
 from utils import load_json
 
-class DataCleaner:
+class MusicBrainzResultCleaner:
     def __init__(self, config):
         self.recordings_dir = Path(config.data.recordings_dir)
         self.artists_dir = Path(config.data.artists_dir)
@@ -145,7 +145,7 @@ class DataCleaner:
 
 @hydra.main(config_path='config', config_name='packed')
 def main(config: DictConfig):
-    processor = DataCleaner(config)
+    processor = MusicBrainzResultCleaner(config)
     processor.run()
 
 
