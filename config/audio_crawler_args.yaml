@@ -1,6 +1,6 @@
-input_csv: "song_list_tmp.csv"
-save_csv_name: "csv_tmp/kpop"
-save_audio_dir: "audio_tmp"
+input_csv: null
+save_csv_name: null
+save_audio_dir: null
 exclude_remaster: false
 include_remaster: false
 topk: 10
