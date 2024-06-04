@@ -14,7 +14,7 @@ class RowInfo:
         self.original_video_title = row['video_title'].lower()
         self.original_video_channel = row['video_channel'].lower()
 
-        self.is_topic = row['topic']
+        self.is_topic = ' - topic' in self.original_video_channel
         self.is_artist_name_in_title = self.artist in self.original_video_title
 
         # refinement
@@ -77,20 +77,39 @@ class AudioDownloadCleaner:
         def _song_token_ratio_above_threshold(self, row, threshold=TOKEN_SORT_THRESHOLD):
             row_info = RowInfo(self.column_names, row)
             return row_info.song_token_ratio >= threshold
+        
+        def _is_topic(self, row):
+            row_info = RowInfo(self.column_names, row)
+            return row_info.is_topic
 
         def is_clean(self, row):
             is_clean = False
             is_clean = is_clean or (self._song_almost_exact_match(row) or self._song_fuzz_above_threshold(row) or self._song_token_ratio_above_threshold(row)) \
-                and (self._artist_almost_exact_match(row) or self._artist_fuzz_above_threshold(row) or row['topic'])
+                and (self._artist_almost_exact_match(row) or self._artist_fuzz_above_threshold(row) or self._is_topic(row))
             is_clean = is_clean or (self._song_almost_exact_match(row))
             return is_clean
 
     def __init__(self, config):
         self.from_dir = Path(config.data.audio_dir)
         self.to_dir = Path(config.data.removed_audio_dir)
-        self.original_csv_path = Path(config.kpop_dataset.chosen_csv_fn)
+        self.original_csv_path = Path(config.kpop_dataset.save_csv_fns.chosen)
         self.things_to_remove_csv_path = Path(f'{config.kpop_dataset.save_csv_name}_to_remove.csv')
         self.column_names = config.csv_column_names.video
+
+    def check_if_audio_files_exist(self):
+        df = pd.read_csv(self.original_csv_path)
+        idx_to_remove = []
+        for idx, row in tqdm(df.iterrows(), total=len(df)):
+            year = row[self.column_names.year]
+            song = row[self.column_names.title]
+            artist = row[self.column_names.artist]
+
+            song_id = get_song_id(year, song, artist)
+            audio_path = self.from_dir / Path(f'{song_id}.mp3')
+            if not audio_path.exists():
+                idx_to_remove.append(idx)
+        df.drop(idx_to_remove, inplace=True)
+        df.to_csv(self.original_csv_path, index=False)
 
     def get_rows_to_remove(self):
         df = pd.read_csv(self.original_csv_path)
@@ -116,16 +135,16 @@ class AudioDownloadCleaner:
         original_df = pd.read_csv(self.original_csv_path)
         remove_df = pd.read_csv(self.things_to_remove_csv_path)
         for _, row in tqdm(remove_df.iterrows(), total=len(remove_df)):
-            date = row[self.column_names.date]
+            year = row[self.column_names.year]
             song = row[self.column_names.title]
             artist = row[self.column_names.artist]
 
-            song_id = get_song_id(date, song, artist)
+            song_id = get_song_id(year, song, artist)
             audio_path = self.from_dir / Path(f'{song_id}.mp3')
             if audio_path.exists():
                 audio_path.rename(self.to_dir / Path(f'{song_id}.mp3'))
 
-            original_df.drop(original_df[(original_df[self.column_names.date] == date) \
+            original_df.drop(original_df[(original_df[self.column_names.year] == year) \
                                          & (original_df[self.column_names.title] == song) \
                                          & (original_df[self.column_names.artist] == artist)].index, inplace=True)
         original_df.to_csv(self.original_csv_path, index=False)
@@ -136,6 +155,7 @@ class AudioDownloadCleaner:
         assert len(remove_df) == len(files_in_to_dir), f"remove_df has {len(remove_df)} rows, but there are {len(files_in_to_dir)} audio files"
 
     def run(self):
+        self.check_if_audio_files_exist()
         self.get_rows_to_remove()
         self.move_audio_files()
 

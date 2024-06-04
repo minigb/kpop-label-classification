@@ -5,13 +5,12 @@ import yt_dlp
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
 from pathlib import Path
-from argparse import ArgumentParser
 import logging
 import json
 import hydra
 
 from utils import get_song_id
-# from dataset_cleanup import 
+from dataset_cleanup import AudioDownloadCleaner
 
 # TODO(minigb): This is not ideal. Find a better way to handle this.
 VIDEO_INFO_COLUMNS = ['query_idx', 'channel_artist_same', 'video_title', 'video_channel', 'video_url']
@@ -23,6 +22,7 @@ logging.basicConfig(filename='download_check.log', level=logging.INFO,
 
 class MusicCrawler:
   def __init__(self, config, exclude_keywords, include_keywords, query_suffix):
+    self.config = config
     self.input_csv_path = Path(config.kpop_dataset.song_list_csv_fn)
     self.save_audio_dir = Path(config.data.audio_dir)
     self.save_csv_fns = config.kpop_dataset.save_csv_fns
@@ -34,14 +34,13 @@ class MusicCrawler:
 
 
   def _custom_init(self):
-    assert not self.save_csv_fns.chosen.exists(), f"{self.save_csv_fns.chosen} already exists. If you are trying to recrawl, use 'failed' as the crawler type."
+    assert not Path(self.save_csv_fns.chosen).exists(), f"{self.save_csv_fns.chosen} already exists. If you are trying to recrawl, use 'failed' as the crawler type."
 
     self.in_csv_col_names = self.csv_column_names.song
     self.out_csv_col_names = self.csv_column_names.video
 
     self._init_save_csv_files()
-    # uniq_df = self._get_df_with_unique_songs()
-    self.target_df = self._get_df_with_existing_songs_removed()
+    self.target_df = self._remove_existing_songs_from_the_input_df()
     print(f"Number of songs to crawl: {len(self.target_df)}")
 
 
@@ -53,7 +52,7 @@ class MusicCrawler:
     # if the file exists, read it and check if the columns are correct
     # if not, create an empty dataframe with the correct columns
     QUERIES_COLUMNS = [self.out_csv_col_names.year, self.out_csv_col_names.title, self.out_csv_col_names.artist] + VIDEO_INFO_COLUMNS
-    if self.save_csv_fns.queries.exists():
+    if Path(self.save_csv_fns.queries).exists():
       queries_df = pd.read_csv(self.save_csv_fns.queries)
       assert set(queries_df.columns) == set(QUERIES_COLUMNS)
     else:
@@ -69,7 +68,7 @@ class MusicCrawler:
     # if the file exists, read it and check if the columns are correct
     # if not, create an empty dataframe with the correct columns
     CHOSEN_COLUMNS = [self.out_csv_col_names.year, self.out_csv_col_names.title, self.out_csv_col_names.artist] + VIDEO_INFO_COLUMNS
-    if self.save_csv_fns.chosen.exists():
+    if Path(self.save_csv_fns.chosen).exists():
       chosen_df = pd.read_csv(self.save_csv_fns.chosen)
       assert set(chosen_df.columns) == set(CHOSEN_COLUMNS)
     else:
@@ -90,7 +89,7 @@ class MusicCrawler:
 
 
   def _get_df_with_unique_songs(self) -> pd.DataFrame:
-    assert self.input_csv_path.exists(), f"{self.input_csv_path} does not exist"
+    assert Path(self.input_csv_path).exists(), f"{self.input_csv_path} does not exist"
     df = pd.read_csv(self.input_csv_path)
 
     # Sort by date
@@ -118,11 +117,20 @@ class MusicCrawler:
     
     no_valid_video = True
     for query_idx, video in enumerate(info['entries']):
+      # Add video info to queries
       video_title = video.get('title').lower()
       video_channel = video.get('channel') # In case of None, don't change into lower case
       video_duration = video.get('duration')
       video_url = video.get('url')
+      video_channel = video_channel.lower()
+      video_info = {'query_idx': query_idx,
+                    'channel_artist_same': artist.lower() in video_channel.replace(' - topic', '') or video_channel.replace(' - topic', '') in artist.lower(),
+                    'video_title': video_title,
+                    'video_channel': video_channel,
+                    'video_url': video_url}
+      queries.append(video_info)
       
+      # Check if video is valid
       if not (video_channel is not None and 60 <= video_duration <= 600):
         continue
       # Check if any exclude_keywords not in song_title are in video_title)
@@ -133,13 +141,6 @@ class MusicCrawler:
         continue
       
       no_valid_video = False
-      video_channel = video_channel.lower()
-      video_info = {'query_idx': query_idx,
-                    'channel_artist_same': artist.lower() in video_channel.replace(' - topic', '') or video_channel.replace(' - topic', '') in artist.lower(),
-                    'video_title': video_title,
-                    'video_channel': video_channel,
-                    'video_url': video_url}
-      queries.append(video_info)
 
     if no_valid_video:
       failed.append({'Failed Reason': 'Every channel is None or video duration is not between 60 and 600 seconds'})
@@ -148,34 +149,31 @@ class MusicCrawler:
 
 
   def filter_queries_and_choose(self, queries, failed):
-    NUM_OF_PRIORITIES = 4
-    def _choose_video_with_priority(video, priority_num):
-      def _is_official_audio():
-        return 'official audio' in video['video_title']
-      def _is_topic():
-        return ' - topic' in video['video_channel']
-      def _is_channel_artist_same():
-        return video['channel_artist_same']
-      
-      assert 0 <= priority_num < NUM_OF_PRIORITIES
-      is_satisfying = [
-        _is_official_audio(),
-        _is_channel_artist_same or _is_topic(),
-        'color coded' in video['video_title'].replace('-', ' '),
-        'lyric' in video['video_title'],
-      ]
-      assert len(is_satisfying) == NUM_OF_PRIORITIES, f"len(is_satisfying) should be {NUM_OF_PRIORITIES}, but got {len(is_satisfying)}"
-
-      return is_satisfying[priority_num]
+    def _is_official_audio(video):
+      return 'official audio' in video['video_title']
+    def _is_topic(video):
+      return ' - topic' in video['video_channel']
+    def _is_channel_artist_same(video):
+      return video['channel_artist_same']
+    def _is_lyric_video(video):
+      for keyword in ['color coded', 'lyric', '가사']:
+        if keyword in video['video_title'].replace('-', ' '):
+          return True
+    
+    is_satisfying = [
+      _is_official_audio,
+      _is_channel_artist_same or _is_topic,
+      _is_lyric_video,
+    ]
 
     chosen = None
-    for i in range(NUM_OF_PRIORITIES):
-      if chosen:
-        break
+    for check_func in is_satisfying:
       for video in queries:
-        if _choose_video_with_priority(video, i):
+        if check_func(video):
           chosen = video
           break
+      if chosen:
+        break
 
     if not chosen:
       video_info = {'Failed Reason': 'No suitable video'}
@@ -202,7 +200,8 @@ class MusicCrawler:
       # Verify the file was downloaded
       if not Path(f"{self.save_audio_dir}/{song_id}.mp3").exists():
           raise Exception(f"Failed to download audio for {song_ID}")
-  
+
+
   def process_song(self, song):
     song_ID, queries, failed = self.make_query(*song)
     chosen, failed_update = self.filter_queries_and_choose(queries, failed)
@@ -216,7 +215,6 @@ class MusicCrawler:
         failed_update.append({'Failed Reason': str(e)})
     # Return None for chosen if download fails or no video is chosen
     return song_ID, queries, failed_update, None
-
 
 
   def run_parallel(self, song_list):
@@ -249,7 +247,7 @@ class MusicCrawler:
       df.to_csv(fn, index=False)
 
 
-  def _get_df_with_existing_songs_removed(self):
+  def _remove_existing_songs_from_the_input_df(self):
     input_df = self._get_df_with_unique_songs()
 
     if self.chosen_df.empty:
@@ -306,63 +304,68 @@ class MusicCrawler:
     return date, song, artist
   
 
-class FailedMusicCrawler(MusicCrawler):
-  def __init__(self, input_csv_path, save_audio_dir, save_csv_fns, exclude_keywords, include_keywords, query_suffix):
-    super().__init__(input_csv_path, save_audio_dir, save_csv_fns, exclude_keywords, include_keywords, query_suffix)
+class AdditionalMusicCrawler(MusicCrawler):
+  def __init__(self, config, exclude_keywords, include_keywords, query_suffix):
+    super().__init__(config, exclude_keywords, include_keywords, query_suffix)
 
 
   def _custom_init(self):
-    for fn in self.save_csv_fns.__dict__.values():
-      assert fn.exists(), f"{fn} does not exist"
-    self.input_csv_path = self.save_csv_fns.failed
+    for fn in [self.save_csv_fns.chosen, self.save_csv_fns.queries, self.save_csv_fns.failed]: # TODO(minigb): Better way to handle this?
+      assert Path(fn).exists(), f"{fn} does not exist"
 
-    self.in_csv_col_names = self.out_csv_col_names = self.config.video
+    # Remove noisy results
+    cleaner = AudioDownloadCleaner(self.config)
+    cleaner.run()
+
+    self.in_csv_col_names = self.csv_column_names.song
+    self.out_csv_col_names = self.csv_column_names.video
+ 
     self._init_save_csv_files()
-
-    self.target_df = self._get_df_with_unique_songs()  # use self.input_csv_path
-    print(f"Number of failed songs to re-crawl: {len(self.target_df)}")
-
-
-class ReusingQueriesMusicCrawler(MusicCrawler):
-  def __init__(self, input_csv_path, save_audio_dir, save_csv_fns, exclude_keywords, include_keywords):
-    super().__init__(input_csv_path, save_audio_dir, save_csv_fns, exclude_keywords, include_keywords, None)
+    self.target_df = self._remove_existing_songs_from_the_input_df()
+    print(f"Number of failed songs to additionally crawl: {len(self.target_df)}")
 
 
-  def _custom_init(self):
-    for fn in self.save_csv_fns.__dict__.values():
-      assert fn.exists(), f"{fn} does not exist"
-    self.input_csv_path = self.save_csv_fns.failed
-    self.in_csv_col_names = self.out_csv_col_names = self.csv_column_names.video
-
-    self._init_save_csv_files()
-    self.target_df = self._get_df_with_existing_songs_removed()
-    print(f"Number of songs to crawl: {len(self.target_df)}")
+# TODO(minigb): Implement this
+# class ReusingQueriesMusicCrawler(MusicCrawler):
+#   def __init__(self, input_csv_path, save_audio_dir, save_csv_fns, exclude_keywords, include_keywords):
+#     super().__init__(input_csv_path, save_audio_dir, save_csv_fns, exclude_keywords, include_keywords, None)
 
 
-  def make_query(self, song, artist, date, _1, _2, _3):
-    song_ID = self._get_song_identifier(date, song, artist)
+#   def _custom_init(self):
+#     for fn in self.save_csv_fns.__dict__.values():
+#       assert fn.exists(), f"{fn} does not exist"
+#     self.input_csv_path = self.save_csv_fns.failed
+#     self.in_csv_col_names = self.out_csv_col_names = self.csv_column_names.video
 
-    queries_fn = self.save_csv_fns.queries
-    queries_df = pd.read_csv(queries_fn)
-    queries_df = queries_df[(queries_df[self.out_csv_col_names.year] == date) \
-                            & (queries_df[self.out_csv_col_names.title] == song) \
-                            & (queries_df[self.out_csv_col_names.artist] == artist)]
-    queries_df = queries_df.drop(columns = [self.out_csv_col_names.year, self.out_csv_col_names.title, self.out_csv_col_names.artist])
-    queries = queries_df.to_dict(orient='records')
-
-    return song_ID, queries, []
+#     self._init_save_csv_files()
+#     self.target_df = self._remove_existing_songs_from_the_input_df()
+#     print(f"Number of songs to crawl: {len(self.target_df)}")
 
 
-def update_config_with_args(config, args):
-  if args.input_csv:
-    config.kpop_dataset.song_list_csv_fn = args.input_csv
-  if args.save_csv_name:
-    for cur_fn in config.kpop_dataset.save_csv_fns.__dict__.values():
-      cur_fn = Path(cur_fn)
-      cur_fn.parent.mkdir(parents=True, exist_ok=True)
-      cur_fn = cur_fn.with_name(f"{args.save_csv_name}_{cur_fn.name}")
-  if args.save_audio_dir:
-    config.data.audio_dir = args.save_audio_dir
+#   def make_query(self, song, artist, date, _1, _2, _3):
+#     song_ID = self._get_song_identifier(date, song, artist)
+
+#     queries_fn = self.save_csv_fns.queries
+#     queries_df = pd.read_csv(queries_fn)
+#     queries_df = queries_df[(queries_df[self.out_csv_col_names.year] == date) \
+#                             & (queries_df[self.out_csv_col_names.title] == song) \
+#                             & (queries_df[self.out_csv_col_names.artist] == artist)]
+#     queries_df = queries_df.drop(columns = [self.out_csv_col_names.year, self.out_csv_col_names.title, self.out_csv_col_names.artist])
+#     queries = queries_df.to_dict(orient='records')
+
+#     return song_ID, queries, []
+
+
+def update_config(config):
+  if not config.input_csv:
+    config.input_csv = config.kpop_dataset.song_list_csv_fn
+  if config.save_csv_name:
+    # TODO(minigb): Better way to handle this?
+    config.kpop_dataset.save_csv_fns.chosen = f"{config.save_csv_name}_chosen.csv"
+    config.kpop_dataset.save_csv_fns.queries = f"{config.save_csv_name}_queries.csv"
+    config.kpop_dataset.save_csv_fns.failed = f"{config.save_csv_name}_failed.csv"
+  if config.save_audio_dir:
+    config.data.audio_dir = config.save_audio_dir
 
 
 @hydra.main(config_path='config', config_name='packed')
@@ -385,41 +388,31 @@ def main(config):
   """
   REMASTER = 'remaster'
 
-  argparser = ArgumentParser()
-  argparser.add_argument('--input_csv', type=str)
-  argparser.add_argument('--save_csv_name', type=str)
-  argparser.add_argument('--save_audio_dir', type=str)
-  argparser.add_argument('--exclude_remaster', action='store_true')
-  argparser.add_argument('--include_remaster', action='store_true') # TODO(minigb): Find better approach
-  argparser.add_argument('--topk', type=int, default=10)
-  argparser.add_argument('--crawler_type', type=str, default='new')
-  argparser.add_argument('--query_suffix', type=str)
-  args = argparser.parse_args()
-  update_config_with_args(config, args)
+  update_config(config)
 
   exclude_keywords_path = Path(config.exclude_keywords.video_title_fn)
   with exclude_keywords_path.open('r') as f:
     exclude_keywords = json.load(f)
   
-  if args.exclude_remaster:
+  if config.exclude_remaster:
     exclude_keywords.append(REMASTER)
   
   include_keywords = []
-  if args.include_remaster:
+  if config.include_remaster:
     include_keywords = [REMASTER]
 
   # Select crawler
-  if args.crawler_type == 'new':
-    crawler = MusicCrawler(config, exclude_keywords, include_keywords, args.query_suffix)
-  elif args.crawler_type == 'failed':
-    crawler = FailedMusicCrawler(config, exclude_keywords, include_keywords, args.query_suffix)
-  elif args.crawler_type == 'reuse':
-    crawler = ReusingQueriesMusicCrawler(config, exclude_keywords, include_keywords, args.query_suffix)
+  if config.crawler_type == 'new':
+    crawler = MusicCrawler(config, exclude_keywords, include_keywords, config.query_suffix)
+  elif config.crawler_type == 'additional':
+    crawler = AdditionalMusicCrawler(config, exclude_keywords, include_keywords, config.query_suffix)
+  # elif config.crawler_type == 'reuse':
+  #   crawler = ReusingQueriesMusicCrawler(config, exclude_keywords, include_keywords, config.query_suffix)
   else:
-    raise ValueError(f"Invalid crawler type: {args.crawler_type}")
+    raise ValueError(f"Invalid crawler type: {config.crawler_type}")
   
   # Run
-  crawler.run(args.topk)
+  crawler.run(config.topk)
   
 if __name__ == '__main__':
   main()
