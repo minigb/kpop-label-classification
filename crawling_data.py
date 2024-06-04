@@ -11,7 +11,7 @@ import json
 import hydra
 
 from utils import get_song_id
-# from dataset_cleanup import 
+from dataset_cleanup import AudioDownloadCleaner
 
 # TODO(minigb): This is not ideal. Find a better way to handle this.
 VIDEO_INFO_COLUMNS = ['query_idx', 'channel_artist_same', 'video_title', 'video_channel', 'video_url']
@@ -23,6 +23,7 @@ logging.basicConfig(filename='download_check.log', level=logging.INFO,
 
 class MusicCrawler:
   def __init__(self, config, exclude_keywords, include_keywords, query_suffix):
+    self.config = config
     self.input_csv_path = Path(config.kpop_dataset.song_list_csv_fn)
     self.save_audio_dir = Path(config.data.audio_dir)
     self.save_csv_fns = config.kpop_dataset.save_csv_fns
@@ -40,7 +41,6 @@ class MusicCrawler:
     self.out_csv_col_names = self.csv_column_names.video
 
     self._init_save_csv_files()
-    # uniq_df = self._get_df_with_unique_songs()
     self.target_df = self._remove_existing_songs_from_the_input_df()
     print(f"Number of songs to crawl: {len(self.target_df)}")
 
@@ -307,50 +307,54 @@ class MusicCrawler:
   
 
 class AdditionalMusicCrawler(MusicCrawler):
-  def __init__(self, input_csv_path, save_audio_dir, save_csv_fns, exclude_keywords, include_keywords, query_suffix):
-    super().__init__(input_csv_path, save_audio_dir, save_csv_fns, exclude_keywords, include_keywords, query_suffix)
+  def __init__(self, config, input_csv_path, save_audio_dir, save_csv_fns, exclude_keywords, include_keywords, query_suffix):
+    super().__init__(config, input_csv_path, save_audio_dir, save_csv_fns, exclude_keywords, include_keywords, query_suffix)
 
 
   def _custom_init(self):
     for fn in self.save_csv_fns.__dict__.values():
       assert fn.exists(), f"{fn} does not exist"
-    self.input_csv_path = self.save_csv_fns.failed
 
-    self.in_csv_col_names = self.out_csv_col_names = self.config.video
-    self._init_save_csv_files()
+    # Remove noisy results
+    cleaner = AudioDownloadCleaner(self.config)
+    cleaner.run()
 
-    self.target_df = self._get_df_with_unique_songs()  # use self.input_csv_path
-    print(f"Number of failed songs to re-crawl: {len(self.target_df)}")
-
-
-class ReusingQueriesMusicCrawler(MusicCrawler):
-  def __init__(self, input_csv_path, save_audio_dir, save_csv_fns, exclude_keywords, include_keywords):
-    super().__init__(input_csv_path, save_audio_dir, save_csv_fns, exclude_keywords, include_keywords, None)
-
-
-  def _custom_init(self):
-    for fn in self.save_csv_fns.__dict__.values():
-      assert fn.exists(), f"{fn} does not exist"
-    self.input_csv_path = self.save_csv_fns.failed
-    self.in_csv_col_names = self.out_csv_col_names = self.csv_column_names.video
-
+    self.in_csv_col_names = self.csv_column_names.song
+    self.out_csv_col_names = self.csv_column_names.video
+ 
     self._init_save_csv_files()
     self.target_df = self._remove_existing_songs_from_the_input_df()
-    print(f"Number of songs to crawl: {len(self.target_df)}")
+    print(f"Number of failed songs to additionally crawl: {len(self.target_df)}")
 
 
-  def make_query(self, song, artist, date, _1, _2, _3):
-    song_ID = self._get_song_identifier(date, song, artist)
+# class ReusingQueriesMusicCrawler(MusicCrawler):
+#   def __init__(self, input_csv_path, save_audio_dir, save_csv_fns, exclude_keywords, include_keywords):
+#     super().__init__(input_csv_path, save_audio_dir, save_csv_fns, exclude_keywords, include_keywords, None)
 
-    queries_fn = self.save_csv_fns.queries
-    queries_df = pd.read_csv(queries_fn)
-    queries_df = queries_df[(queries_df[self.out_csv_col_names.year] == date) \
-                            & (queries_df[self.out_csv_col_names.title] == song) \
-                            & (queries_df[self.out_csv_col_names.artist] == artist)]
-    queries_df = queries_df.drop(columns = [self.out_csv_col_names.year, self.out_csv_col_names.title, self.out_csv_col_names.artist])
-    queries = queries_df.to_dict(orient='records')
 
-    return song_ID, queries, []
+#   def _custom_init(self):
+#     for fn in self.save_csv_fns.__dict__.values():
+#       assert fn.exists(), f"{fn} does not exist"
+#     self.input_csv_path = self.save_csv_fns.failed
+#     self.in_csv_col_names = self.out_csv_col_names = self.csv_column_names.video
+
+#     self._init_save_csv_files()
+#     self.target_df = self._remove_existing_songs_from_the_input_df()
+#     print(f"Number of songs to crawl: {len(self.target_df)}")
+
+
+#   def make_query(self, song, artist, date, _1, _2, _3):
+#     song_ID = self._get_song_identifier(date, song, artist)
+
+#     queries_fn = self.save_csv_fns.queries
+#     queries_df = pd.read_csv(queries_fn)
+#     queries_df = queries_df[(queries_df[self.out_csv_col_names.year] == date) \
+#                             & (queries_df[self.out_csv_col_names.title] == song) \
+#                             & (queries_df[self.out_csv_col_names.artist] == artist)]
+#     queries_df = queries_df.drop(columns = [self.out_csv_col_names.year, self.out_csv_col_names.title, self.out_csv_col_names.artist])
+#     queries = queries_df.to_dict(orient='records')
+
+#     return song_ID, queries, []
 
 
 def update_config_with_args(config, args):
@@ -413,8 +417,8 @@ def main(config):
     crawler = MusicCrawler(config, exclude_keywords, include_keywords, args.query_suffix)
   elif args.crawler_type == 'failed':
     crawler = AdditionalMusicCrawler(config, exclude_keywords, include_keywords, args.query_suffix)
-  elif args.crawler_type == 'reuse':
-    crawler = ReusingQueriesMusicCrawler(config, exclude_keywords, include_keywords, args.query_suffix)
+  # elif args.crawler_type == 'reuse':
+  #   crawler = ReusingQueriesMusicCrawler(config, exclude_keywords, include_keywords, args.query_suffix)
   else:
     raise ValueError(f"Invalid crawler type: {args.crawler_type}")
   
