@@ -41,7 +41,7 @@ class MusicCrawler:
 
     self._init_save_csv_files()
     # uniq_df = self._get_df_with_unique_songs()
-    self.target_df = self._get_df_with_existing_songs_removed()
+    self.target_df = self._remove_existing_songs_from_the_input_df()
     print(f"Number of songs to crawl: {len(self.target_df)}")
 
 
@@ -249,7 +249,7 @@ class MusicCrawler:
       df.to_csv(fn, index=False)
 
 
-  def _get_df_with_existing_songs_removed(self):
+  def _remove_existing_songs_from_the_input_df(self):
     input_df = self._get_df_with_unique_songs()
 
     if self.chosen_df.empty:
@@ -306,7 +306,7 @@ class MusicCrawler:
     return date, song, artist
   
 
-class FailedMusicCrawler(MusicCrawler):
+class AdditionalMusicCrawler(MusicCrawler):
   def __init__(self, input_csv_path, save_audio_dir, save_csv_fns, exclude_keywords, include_keywords, query_suffix):
     super().__init__(input_csv_path, save_audio_dir, save_csv_fns, exclude_keywords, include_keywords, query_suffix)
 
@@ -335,7 +335,7 @@ class ReusingQueriesMusicCrawler(MusicCrawler):
     self.in_csv_col_names = self.out_csv_col_names = self.csv_column_names.video
 
     self._init_save_csv_files()
-    self.target_df = self._get_df_with_existing_songs_removed()
+    self.target_df = self._remove_existing_songs_from_the_input_df()
     print(f"Number of songs to crawl: {len(self.target_df)}")
 
 
@@ -412,7 +412,7 @@ def main(config):
   if args.crawler_type == 'new':
     crawler = MusicCrawler(config, exclude_keywords, include_keywords, args.query_suffix)
   elif args.crawler_type == 'failed':
-    crawler = FailedMusicCrawler(config, exclude_keywords, include_keywords, args.query_suffix)
+    crawler = AdditionalMusicCrawler(config, exclude_keywords, include_keywords, args.query_suffix)
   elif args.crawler_type == 'reuse':
     crawler = ReusingQueriesMusicCrawler(config, exclude_keywords, include_keywords, args.query_suffix)
   else:
