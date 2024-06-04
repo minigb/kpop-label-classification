@@ -1,6 +1,6 @@
 defaults:
   - base
-  - args
+  - audio_crawler_args
 
 hydra:
   run:

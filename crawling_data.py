@@ -5,7 +5,6 @@ import yt_dlp
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
 from pathlib import Path
-from argparse import ArgumentParser
 import logging
 import json
 import hydra
@@ -35,7 +34,7 @@ class MusicCrawler:
 
 
   def _custom_init(self):
-    assert not self.save_csv_fns.chosen.exists(), f"{self.save_csv_fns.chosen} already exists. If you are trying to recrawl, use 'failed' as the crawler type."
+    assert not Path(self.save_csv_fns.chosen).exists(), f"{self.save_csv_fns.chosen} already exists. If you are trying to recrawl, use 'failed' as the crawler type."
 
     self.in_csv_col_names = self.csv_column_names.song
     self.out_csv_col_names = self.csv_column_names.video
@@ -53,7 +52,7 @@ class MusicCrawler:
     # if the file exists, read it and check if the columns are correct
     # if not, create an empty dataframe with the correct columns
     QUERIES_COLUMNS = [self.out_csv_col_names.year, self.out_csv_col_names.title, self.out_csv_col_names.artist] + VIDEO_INFO_COLUMNS
-    if self.save_csv_fns.queries.exists():
+    if Path(self.save_csv_fns.queries).exists():
       queries_df = pd.read_csv(self.save_csv_fns.queries)
       assert set(queries_df.columns) == set(QUERIES_COLUMNS)
     else:
@@ -69,7 +68,7 @@ class MusicCrawler:
     # if the file exists, read it and check if the columns are correct
     # if not, create an empty dataframe with the correct columns
     CHOSEN_COLUMNS = [self.out_csv_col_names.year, self.out_csv_col_names.title, self.out_csv_col_names.artist] + VIDEO_INFO_COLUMNS
-    if self.save_csv_fns.chosen.exists():
+    if Path(self.save_csv_fns.chosen).exists():
       chosen_df = pd.read_csv(self.save_csv_fns.chosen)
       assert set(chosen_df.columns) == set(CHOSEN_COLUMNS)
     else:
@@ -90,7 +89,7 @@ class MusicCrawler:
 
 
   def _get_df_with_unique_songs(self) -> pd.DataFrame:
-    assert self.input_csv_path.exists(), f"{self.input_csv_path} does not exist"
+    assert Path(self.input_csv_path).exists(), f"{self.input_csv_path} does not exist"
     df = pd.read_csv(self.input_csv_path)
 
     # Sort by date
@@ -307,13 +306,13 @@ class MusicCrawler:
   
 
 class AdditionalMusicCrawler(MusicCrawler):
-  def __init__(self, config, input_csv_path, save_audio_dir, save_csv_fns, exclude_keywords, include_keywords, query_suffix):
-    super().__init__(config, input_csv_path, save_audio_dir, save_csv_fns, exclude_keywords, include_keywords, query_suffix)
+  def __init__(self, config, exclude_keywords, include_keywords, query_suffix):
+    super().__init__(config, exclude_keywords, include_keywords, query_suffix)
 
 
   def _custom_init(self):
-    for fn in self.save_csv_fns.__dict__.values():
-      assert fn.exists(), f"{fn} does not exist"
+    for fn in [self.save_csv_fns.chosen, self.save_csv_fns.queries, self.save_csv_fns.failed]: # TODO(minigb): Better way to handle this?
+      assert Path(fn).exists(), f"{fn} does not exist"
 
     # Remove noisy results
     cleaner = AudioDownloadCleaner(self.config)
@@ -357,16 +356,16 @@ class AdditionalMusicCrawler(MusicCrawler):
 #     return song_ID, queries, []
 
 
-def update_config_with_args(config, args):
-  if args.input_csv:
-    config.kpop_dataset.song_list_csv_fn = args.input_csv
-  if args.save_csv_name:
-    for cur_fn in config.kpop_dataset.save_csv_fns.__dict__.values():
-      cur_fn = Path(cur_fn)
-      cur_fn.parent.mkdir(parents=True, exist_ok=True)
-      cur_fn = cur_fn.with_name(f"{args.save_csv_name}_{cur_fn.name}")
-  if args.save_audio_dir:
-    config.data.audio_dir = args.save_audio_dir
+def update_config(config):
+  if not config.input_csv:
+    config.input_csv = config.kpop_dataset.song_list_csv_fn
+  if config.save_csv_name:
+    # TODO(minigb): Better way to handle this?
+    config.kpop_dataset.save_csv_fns.chosen = f"{config.save_csv_name}_chosen.csv"
+    config.kpop_dataset.save_csv_fns.queries = f"{config.save_csv_name}_queries.csv"
+    config.kpop_dataset.save_csv_fns.failed = f"{config.save_csv_name}_failed.csv"
+  if config.save_audio_dir:
+    config.data.audio_dir = config.save_audio_dir
 
 
 @hydra.main(config_path='config', config_name='packed')
@@ -389,41 +388,31 @@ def main(config):
   """
   REMASTER = 'remaster'
 
-  argparser = ArgumentParser()
-  argparser.add_argument('--input_csv', type=str)
-  argparser.add_argument('--save_csv_name', type=str)
-  argparser.add_argument('--save_audio_dir', type=str)
-  argparser.add_argument('--exclude_remaster', action='store_true')
-  argparser.add_argument('--include_remaster', action='store_true') # TODO(minigb): Find better approach
-  argparser.add_argument('--topk', type=int, default=10)
-  argparser.add_argument('--crawler_type', type=str, default='new')
-  argparser.add_argument('--query_suffix', type=str)
-  args = argparser.parse_args()
-  update_config_with_args(config, args)
+  update_config(config)
 
   exclude_keywords_path = Path(config.exclude_keywords.video_title_fn)
   with exclude_keywords_path.open('r') as f:
     exclude_keywords = json.load(f)
   
-  if args.exclude_remaster:
+  if config.exclude_remaster:
     exclude_keywords.append(REMASTER)
   
   include_keywords = []
-  if args.include_remaster:
+  if config.include_remaster:
     include_keywords = [REMASTER]
 
   # Select crawler
-  if args.crawler_type == 'new':
-    crawler = MusicCrawler(config, exclude_keywords, include_keywords, args.query_suffix)
-  elif args.crawler_type == 'failed':
-    crawler = AdditionalMusicCrawler(config, exclude_keywords, include_keywords, args.query_suffix)
-  # elif args.crawler_type == 'reuse':
-  #   crawler = ReusingQueriesMusicCrawler(config, exclude_keywords, include_keywords, args.query_suffix)
+  if config.crawler_type == 'new':
+    crawler = MusicCrawler(config, exclude_keywords, include_keywords, config.query_suffix)
+  elif config.crawler_type == 'additional':
+    crawler = AdditionalMusicCrawler(config, exclude_keywords, include_keywords, config.query_suffix)
+  # elif config.crawler_type == 'reuse':
+  #   crawler = ReusingQueriesMusicCrawler(config, exclude_keywords, include_keywords, config.query_suffix)
   else:
-    raise ValueError(f"Invalid crawler type: {args.crawler_type}")
+    raise ValueError(f"Invalid crawler type: {config.crawler_type}")
   
   # Run
-  crawler.run(args.topk)
+  crawler.run(config.topk)
   
 if __name__ == '__main__':
   main()

@@ -14,7 +14,7 @@ class RowInfo:
         self.original_video_title = row['video_title'].lower()
         self.original_video_channel = row['video_channel'].lower()
 
-        self.is_topic = row['topic']
+        self.is_topic = ' - topic' in self.original_video_channel
         self.is_artist_name_in_title = self.artist in self.original_video_title
 
         # refinement
@@ -77,18 +77,22 @@ class AudioDownloadCleaner:
         def _song_token_ratio_above_threshold(self, row, threshold=TOKEN_SORT_THRESHOLD):
             row_info = RowInfo(self.column_names, row)
             return row_info.song_token_ratio >= threshold
+        
+        def _is_topic(self, row):
+            row_info = RowInfo(self.column_names, row)
+            return row_info.is_topic
 
         def is_clean(self, row):
             is_clean = False
             is_clean = is_clean or (self._song_almost_exact_match(row) or self._song_fuzz_above_threshold(row) or self._song_token_ratio_above_threshold(row)) \
-                and (self._artist_almost_exact_match(row) or self._artist_fuzz_above_threshold(row) or row['topic'])
+                and (self._artist_almost_exact_match(row) or self._artist_fuzz_above_threshold(row) or _is_topic(row))
             is_clean = is_clean or (self._song_almost_exact_match(row))
             return is_clean
 
     def __init__(self, config):
         self.from_dir = Path(config.data.audio_dir)
         self.to_dir = Path(config.data.removed_audio_dir)
-        self.original_csv_path = Path(config.kpop_dataset.chosen_csv_fn)
+        self.original_csv_path = Path(config.kpop_dataset.save_csv_fns.chosen)
         self.things_to_remove_csv_path = Path(f'{config.kpop_dataset.save_csv_name}_to_remove.csv')
         self.column_names = config.csv_column_names.video
 
