@@ -3,6 +3,7 @@ __pycache__
 .DS_Store
 .cache
 *.log
+.hydra
 
 *audio*
 # releases*

@@ -10,7 +10,7 @@ class MusicBrainzResultCleaner:
         self.recordings_dir = Path(config.data.recordings_dir)
         self.artists_dir = Path(config.data.artists_dir)
         self.removed_recordings_dir = Path(config.data.removed_recordings_dir)
-        self.song_list_csv_fn = Path(config.dataset.song_list_csv_fn)
+        self.song_list_csv_fn = Path(config.kpop_dataset.song_list_csv_fn)
         self.excluding_keywords_for_song_title = load_json(config.exclude_keywords.song_title_fn)
         self.excluding_keywords_for_song_info = load_json(config.exclude_keywords.song_info_fn)
 
@@ -77,12 +77,18 @@ class MusicBrainzResultCleaner:
         for csv_fn in tqdm(list(self.recordings_dir.glob('*.csv'))):
             df = pd.read_csv(csv_fn)
             if df.empty:
-                csv_fn.rename(self.removed_recordings_dir / csv_fn.name)
+                csv_fn.unlink()
 
     def _remove_rows_with_nan_of_these_columns(self, columns):
         for csv_fn in tqdm(list(self.recordings_dir.glob('*.csv'))):
             df = pd.read_csv(csv_fn)
-            df.dropna(subset=columns, inplace=True)
+            idx_to_remove = []
+            for idx, row in df.iterrows():
+                for column in columns:
+                    if pd.isna(row[column]):
+                        idx_to_remove.append(idx)
+                        break
+            df = df.drop(idx_to_remove)
             df.to_csv(csv_fn, index=False)
 
     def _sort_by_columns(self, columns):
@@ -99,9 +105,19 @@ class MusicBrainzResultCleaner:
     def _remove_duplicated_recording(self):
         for csv_fn in tqdm(list(self.recordings_dir.glob('*.csv'))):
             df = pd.read_csv(csv_fn)
-            titles = df['title'].str.lower()
-            duplicates = titles.duplicated(keep='first')
-            df = df[~duplicates]
+
+            idx_to_remove = []
+            for idx, row in df.iterrows():
+                if idx in idx_to_remove:
+                    continue
+                title = row['title']
+
+                # Check recordings with this title
+                for idx2, row2 in df[idx + 1:].iterrows():
+                    if title.lower() in row2['title'].lower():
+                        idx_to_remove.append(idx2)
+
+            df = df.drop(idx_to_remove)
             df.to_csv(csv_fn, index=False)
 
     def _remove_different_ver(self):

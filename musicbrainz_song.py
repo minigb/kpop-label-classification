@@ -110,6 +110,7 @@ class MusicBrainzProcessor:
                     recording_info['query_artist'] = query_artist_name
                     recordings.append(recording_info)
                 offset += self.LIMIT
+            self.save_recordings_to_csv(recordings, query_artist_name) # save every time
 
             return recordings
         except Exception as e:
@@ -117,6 +118,8 @@ class MusicBrainzProcessor:
             return []
 
     def save_recordings_to_csv(self, recordings, artist_name):
+        if not recordings:
+            return
         try:
             df = pd.DataFrame(recordings)
             df.to_csv(self.save_dir / f'{artist_name.replace("/", "_")}.csv', index=False)
@@ -148,7 +151,7 @@ class MusicBrainzProcessor:
         combined_df = pd.concat(all_dataframes)
         # Leave unique artists
         unique_artists_df = combined_df.drop_duplicates(subset='artists', keep=False)
-        unique_artists_df['artist_id'].fillna('', inplace=True)
+        unique_artists_df['artist_id'].fillna('')
         return unique_artists_df
 
     def run(self):
