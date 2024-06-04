@@ -1,12 +1,9 @@
-import requests
 import pandas as pd
 from tqdm.auto import tqdm
 from fuzzywuzzy import fuzz
 from pathlib import Path
 import hydra
-from omegaconf import DictConfig
 from utils.song_id import get_song_id
-
 
 
 class CsvColumnNames:
@@ -150,7 +147,7 @@ class AudioDownloadCleaner:
 
 
 @hydra.main(config_path='config', config_name='packed')
-def main(config: DictConfig):
+def main(config):
     processor = AudioDownloadCleaner(config)
     processor.run()
 
