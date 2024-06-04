@@ -117,11 +117,20 @@ class MusicCrawler:
     
     no_valid_video = True
     for query_idx, video in enumerate(info['entries']):
+      # Add video info to queries
       video_title = video.get('title').lower()
       video_channel = video.get('channel') # In case of None, don't change into lower case
       video_duration = video.get('duration')
       video_url = video.get('url')
+      video_channel = video_channel.lower()
+      video_info = {'query_idx': query_idx,
+                    'channel_artist_same': artist.lower() in video_channel.replace(' - topic', '') or video_channel.replace(' - topic', '') in artist.lower(),
+                    'video_title': video_title,
+                    'video_channel': video_channel,
+                    'video_url': video_url}
+      queries.append(video_info)
       
+      # Check if video is valid
       if not (video_channel is not None and 60 <= video_duration <= 600):
         continue
       # Check if any exclude_keywords not in song_title are in video_title)
@@ -132,13 +141,6 @@ class MusicCrawler:
         continue
       
       no_valid_video = False
-      video_channel = video_channel.lower()
-      video_info = {'query_idx': query_idx,
-                    'channel_artist_same': artist.lower() in video_channel.replace(' - topic', '') or video_channel.replace(' - topic', '') in artist.lower(),
-                    'video_title': video_title,
-                    'video_channel': video_channel,
-                    'video_url': video_url}
-      queries.append(video_info)
 
     if no_valid_video:
       failed.append({'Failed Reason': 'Every channel is None or video duration is not between 60 and 600 seconds'})
@@ -326,6 +328,7 @@ class AdditionalMusicCrawler(MusicCrawler):
     print(f"Number of failed songs to additionally crawl: {len(self.target_df)}")
 
 
+# TODO(minigb): Implement this
 # class ReusingQueriesMusicCrawler(MusicCrawler):
 #   def __init__(self, input_csv_path, save_audio_dir, save_csv_fns, exclude_keywords, include_keywords):
 #     super().__init__(input_csv_path, save_audio_dir, save_csv_fns, exclude_keywords, include_keywords, None)
