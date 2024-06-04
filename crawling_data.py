@@ -157,13 +157,16 @@ class MusicCrawler:
         return ' - topic' in video['video_channel']
       def _is_channel_artist_same():
         return video['channel_artist_same']
+      def _is_lyric_video():
+        for keyword in ['color coded', 'lyric', '가사']:
+          if keyword in video['video_title'].replace('-', ' '):
+            return True
       
       assert 0 <= priority_num < NUM_OF_PRIORITIES
       is_satisfying = [
         _is_official_audio(),
         _is_channel_artist_same or _is_topic(),
-        'color coded' in video['video_title'].replace('-', ' '),
-        'lyric' in video['video_title'],
+        _is_lyric_video(),
       ]
       assert len(is_satisfying) == NUM_OF_PRIORITIES, f"len(is_satisfying) should be {NUM_OF_PRIORITIES}, but got {len(is_satisfying)}"
 
@@ -203,7 +206,8 @@ class MusicCrawler:
       # Verify the file was downloaded
       if not Path(f"{self.save_audio_dir}/{song_id}.mp3").exists():
           raise Exception(f"Failed to download audio for {song_ID}")
-  
+
+
   def process_song(self, song):
     song_ID, queries, failed = self.make_query(*song)
     chosen, failed_update = self.filter_queries_and_choose(queries, failed)
@@ -217,7 +221,6 @@ class MusicCrawler:
         failed_update.append({'Failed Reason': str(e)})
     # Return None for chosen if download fails or no video is chosen
     return song_ID, queries, failed_update, None
-
 
 
   def run_parallel(self, song_list):
