@@ -42,7 +42,11 @@ class Info:
         words_to_remove = [
             'official audio',
             self.artist,
+            # 'official video',
+            # 'official music video',
             'audio',
+            # 'video',
+            # 'music video',
             '()',
             '[]',
         ]
@@ -55,43 +59,42 @@ class Info:
         return video_channel.lower().replace(' - topic', '')
 
 
-class DatasetCleaner:
-    FUZZ_THRESHOLD = 70
-    ALMOST_EQUAL_THRESHOLD = 95
-    TOKEN_SORT_THRESHOLD = 95
-    
-    def __init__(self):
-        pass
+class AudioDownloadCleaner:
+    class _DatasetCleaner:
+        FUZZ_THRESHOLD = 70
+        ALMOST_EQUAL_THRESHOLD = 95
+        TOKEN_SORT_THRESHOLD = 95
+        
+        def __init__(self):
+            pass
 
-    def _song_almost_exact_match(self, row, threshold=ALMOST_EQUAL_THRESHOLD):
-        info = Info(row)
-        return info.song_partial_ratio >= threshold
+        def _song_almost_exact_match(self, row, threshold=ALMOST_EQUAL_THRESHOLD):
+            info = Info(row)
+            return info.song_partial_ratio >= threshold
 
-    def _artist_almost_exact_match(self, row, threshold=ALMOST_EQUAL_THRESHOLD):
-        info = Info(row)
-        return info.artist_partial_ratio >= threshold
+        def _artist_almost_exact_match(self, row, threshold=ALMOST_EQUAL_THRESHOLD):
+            info = Info(row)
+            return info.artist_partial_ratio >= threshold
 
-    def _song_fuzz_above_threshold(self, row, threshold=FUZZ_THRESHOLD):
-        info = Info(row)
-        return info.song_fuzz_ratio >= threshold
+        def _song_fuzz_above_threshold(self, row, threshold=FUZZ_THRESHOLD):
+            info = Info(row)
+            return info.song_fuzz_ratio >= threshold
 
-    def _artist_fuzz_above_threshold(self, row, threshold=FUZZ_THRESHOLD):
-        info = Info(row)
-        return info.artist_fuzz_ratio >= threshold
+        def _artist_fuzz_above_threshold(self, row, threshold=FUZZ_THRESHOLD):
+            info = Info(row)
+            return info.artist_fuzz_ratio >= threshold
 
-    def _song_token_ratio_above_threshold(self, row, threshold=TOKEN_SORT_THRESHOLD):
-        info = Info(row)
-        return info.song_token_ratio >= threshold
+        def _song_token_ratio_above_threshold(self, row, threshold=TOKEN_SORT_THRESHOLD):
+            info = Info(row)
+            return info.song_token_ratio >= threshold
 
-    def is_clean(self, row):
-        is_clean = False
-        is_clean = is_clean or (self._song_almost_exact_match(row) or self._song_fuzz_above_threshold(row) or self._song_token_ratio_above_threshold(row)) \
-            and (self._artist_almost_exact_match(row) or self._artist_fuzz_above_threshold(row) or row['topic'])
-        is_clean = is_clean or (self._song_almost_exact_match(row))
-        return is_clean
+        def is_clean(self, row):
+            is_clean = False
+            is_clean = is_clean or (self._song_almost_exact_match(row) or self._song_fuzz_above_threshold(row) or self._song_token_ratio_above_threshold(row)) \
+                and (self._artist_almost_exact_match(row) or self._artist_fuzz_above_threshold(row) or row['topic'])
+            is_clean = is_clean or (self._song_almost_exact_match(row))
+            return is_clean
 
-
-class AudioDownloadRefiner:
     def __init__(self, config):
         self.from_dir = Path(config.data.audio_dir)
         self.to_dir = Path(config.data.removed_audio_dir)
@@ -100,7 +103,7 @@ class AudioDownloadRefiner:
 
     def get_rows_to_remove(self):
         df = pd.read_csv(self.original_csv_path)
-        cleaner = DatasetCleaner()
+        cleaner = self._DatasetCleaner()
 
         idx_to_keep = []
 
@@ -148,7 +151,7 @@ class AudioDownloadRefiner:
 
 @hydra.main(config_path='config', config_name='packed')
 def main(config: DictConfig):
-    processor = AudioDownloadRefiner(config)
+    processor = AudioDownloadCleaner(config)
     processor.run()
 
 
