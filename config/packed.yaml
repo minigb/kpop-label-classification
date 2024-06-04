@@ -7,10 +7,11 @@ kpop_dataset:
 
   song_list_csv_fn: ${_dir}/song_list.csv
 
-  _audio_crawl_result_csv_prefix: ${_dir}/csv/kpop
-  chosen_csv_fn: ${_audio_crawl_result_csv_prefix}_chosen.csv
-  failed_csv_fn: ${_audio_crawl_result_csv_prefix}_failed.csv
-  queries_csv_fn: ${_audio_crawl_result_csv_prefix}_queries.csv
+  save_csv_name: ${_dir}/csv/kpop
+  save_csv_fns:
+    chosen: ${save_csv_name}_chosen.csv
+    failed: ${save_csv_name}_failed.csv
+    queries: ${save_csv_name}_queries.csv
 
 data:
   _dir: . # TODO(minigb): change this to kpop-dataset

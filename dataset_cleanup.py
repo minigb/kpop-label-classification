@@ -89,7 +89,7 @@ class AudioDownloadCleaner:
         self.from_dir = Path(config.data.audio_dir)
         self.to_dir = Path(config.data.removed_audio_dir)
         self.original_csv_path = Path(config.kpop_dataset.chosen_csv_fn)
-        self.things_to_remove_csv_path = Path(f'{config.kpop_dataset.audio_crawl_result_csv_prefix}_to_remove.csv')
+        self.things_to_remove_csv_path = Path(f'{config.kpop_dataset.save_csv_name}_to_remove.csv')
         self.column_names = config.csv_column_names.video
 
     def get_rows_to_remove(self):
