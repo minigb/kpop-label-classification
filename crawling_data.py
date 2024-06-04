@@ -149,37 +149,31 @@ class MusicCrawler:
 
 
   def filter_queries_and_choose(self, queries, failed):
-    NUM_OF_PRIORITIES = 4
-    def _choose_video_with_priority(video, priority_num):
-      def _is_official_audio():
-        return 'official audio' in video['video_title']
-      def _is_topic():
-        return ' - topic' in video['video_channel']
-      def _is_channel_artist_same():
-        return video['channel_artist_same']
-      def _is_lyric_video():
-        for keyword in ['color coded', 'lyric', '가사']:
-          if keyword in video['video_title'].replace('-', ' '):
-            return True
-      
-      assert 0 <= priority_num < NUM_OF_PRIORITIES
-      is_satisfying = [
-        _is_official_audio(),
-        _is_channel_artist_same or _is_topic(),
-        _is_lyric_video(),
-      ]
-      assert len(is_satisfying) == NUM_OF_PRIORITIES, f"len(is_satisfying) should be {NUM_OF_PRIORITIES}, but got {len(is_satisfying)}"
-
-      return is_satisfying[priority_num]
+    def _is_official_audio():
+      return 'official audio' in video['video_title']
+    def _is_topic():
+      return ' - topic' in video['video_channel']
+    def _is_channel_artist_same():
+      return video['channel_artist_same']
+    def _is_lyric_video():
+      for keyword in ['color coded', 'lyric', '가사']:
+        if keyword in video['video_title'].replace('-', ' '):
+          return True
+    
+    is_satisfying = [
+      _is_official_audio(),
+      _is_channel_artist_same or _is_topic(),
+      _is_lyric_video(),
+    ]
 
     chosen = None
-    for i in range(NUM_OF_PRIORITIES):
-      if chosen:
-        break
+    for check_func in is_satisfying:
       for video in queries:
-        if _choose_video_with_priority(video, i):
+        if check_func(video):
           chosen = video
           break
+      if chosen:
+        break
 
     if not chosen:
       video_info = {'Failed Reason': 'No suitable video'}
