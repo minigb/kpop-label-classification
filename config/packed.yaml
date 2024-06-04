@@ -1,0 +1,41 @@
+hydra:
+  run:
+    dir: .
+
+kpop_dataset:
+  _dir: kpop-dataset
+
+  song_list_csv_fn: ${kpop_dataset._dir}/song_list.csv
+
+  save_csv_name: ${kpop_dataset._dir}/csv/kpop
+  save_csv_fns:
+    chosen: ${kpop_dataset.save_csv_name}_chosen.csv
+    failed: ${kpop_dataset.save_csv_name}_failed.csv
+    queries: ${kpop_dataset.save_csv_name}_queries.csv
+
+data:
+  _dir: . # TODO(minigb): change this to kpop-dataset
+  audio_dir: ${data._dir}/audio
+  recordings_dir: ${data._dir}/recordings_per_artist
+  artists_dir: ${data._dir}/artists_per_label
+
+  _removed_suffix: removed
+  removed_audio_dir: ${data.audio_dir}_${data._removed_suffix}
+  removed_recordings_dir: ${data.recordings_dir}_${data._removed_suffix}
+  removed_artists_dir: ${data.artists_dir}_${data._removed_suffix}
+
+exclude_keywords:
+  _dir: excluding_keywords
+  video_title_fn: ${exclude_keywords._dir}/video_title.json
+  song_title_fn: ${exclude_keywords._dir}/song_title.json
+  song_info_fn: ${exclude_keywords._dir}/song_info.json
+
+csv_column_names:
+  song:
+    year: year
+    title: title
+    artist: query_artist
+  video:
+    year: Year
+    title: Song
+    artist: Artist
