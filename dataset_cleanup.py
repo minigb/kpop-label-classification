@@ -7,17 +7,8 @@ import hydra
 from utils.song_id import get_song_id
 
 
-class CsvColumnNames:
-    def __init__(self, date, title, artist):
-        self.date = date
-        self.title = title
-        self.artist = artist
-
-column_names = CsvColumnNames('Year', 'Song', 'Artist')
-
-
-class Info:
-    def __init__(self, row):
+class RowInfo:
+    def __init__(self, column_names, row):
         self.song_title = row[column_names.title].lower()
         self.artist = row[column_names.artist].lower()
         self.original_video_title = row['video_title'].lower()
@@ -63,28 +54,29 @@ class AudioDownloadCleaner:
         ALMOST_EQUAL_THRESHOLD = 95
         TOKEN_SORT_THRESHOLD = 95
         
-        def __init__(self):
+        def __init__(self, column_names):
+            self.column_names = column_names
             pass
 
         def _song_almost_exact_match(self, row, threshold=ALMOST_EQUAL_THRESHOLD):
-            info = Info(row)
-            return info.song_partial_ratio >= threshold
+            row_info = RowInfo(self.column_names, row)
+            return row_info.song_partial_ratio >= threshold
 
         def _artist_almost_exact_match(self, row, threshold=ALMOST_EQUAL_THRESHOLD):
-            info = Info(row)
-            return info.artist_partial_ratio >= threshold
+            row_info = RowInfo(self.column_names, row)
+            return row_info.artist_partial_ratio >= threshold
 
         def _song_fuzz_above_threshold(self, row, threshold=FUZZ_THRESHOLD):
-            info = Info(row)
-            return info.song_fuzz_ratio >= threshold
+            row_info = RowInfo(self.column_names, row)
+            return row_info.song_fuzz_ratio >= threshold
 
         def _artist_fuzz_above_threshold(self, row, threshold=FUZZ_THRESHOLD):
-            info = Info(row)
-            return info.artist_fuzz_ratio >= threshold
+            row_info = RowInfo(self.column_names, row)
+            return row_info.artist_fuzz_ratio >= threshold
 
         def _song_token_ratio_above_threshold(self, row, threshold=TOKEN_SORT_THRESHOLD):
-            info = Info(row)
-            return info.song_token_ratio >= threshold
+            row_info = RowInfo(self.column_names, row)
+            return row_info.song_token_ratio >= threshold
 
         def is_clean(self, row):
             is_clean = False
@@ -98,10 +90,11 @@ class AudioDownloadCleaner:
         self.to_dir = Path(config.data.removed_audio_dir)
         self.original_csv_path = Path(config.kpop_dataset.chosen_csv_fn)
         self.things_to_remove_csv_path = Path(f'{config.kpop_dataset.audio_crawl_result_csv_prefix}_to_remove.csv')
+        self.column_names = config.csv_column_names.video
 
     def get_rows_to_remove(self):
         df = pd.read_csv(self.original_csv_path)
-        cleaner = self._DatasetCleaner()
+        cleaner = self._DatasetCleaner(self.column_names)
 
         idx_to_keep = []
 
@@ -112,9 +105,9 @@ class AudioDownloadCleaner:
         df_to_remove = df.drop(idx_to_keep)
 
         for idx, row in df_to_remove.iterrows():
-            info = Info(row)
-            df_to_remove.loc[idx, 'song_fuzz'] = info.song_fuzz_ratio
-            df_to_remove.loc[idx, 'song_partial_fuzz'] = info.song_partial_ratio
+            row_info = RowInfo(self.column_names, row)
+            df_to_remove.loc[idx, 'song_fuzz'] = row_info.song_fuzz_ratio
+            df_to_remove.loc[idx, 'song_partial_fuzz'] = row_info.song_partial_ratio
         df_to_remove.to_csv(self.things_to_remove_csv_path, index=False)
 
     def move_audio_files(self):
@@ -123,18 +116,18 @@ class AudioDownloadCleaner:
         original_df = pd.read_csv(self.original_csv_path)
         remove_df = pd.read_csv(self.things_to_remove_csv_path)
         for _, row in tqdm(remove_df.iterrows(), total=len(remove_df)):
-            date = row[column_names.date]
-            song = row[column_names.title]
-            artist = row[column_names.artist]
+            date = row[self.column_names.date]
+            song = row[self.column_names.title]
+            artist = row[self.column_names.artist]
 
             song_id = get_song_id(date, song, artist)
             audio_path = self.from_dir / Path(f'{song_id}.mp3')
             if audio_path.exists():
                 audio_path.rename(self.to_dir / Path(f'{song_id}.mp3'))
 
-            original_df.drop(original_df[(original_df[column_names.date] == date) \
-                                         & (original_df[column_names.title] == song) \
-                                         & (original_df[column_names.artist] == artist)].index, inplace=True)
+            original_df.drop(original_df[(original_df[self.column_names.date] == date) \
+                                         & (original_df[self.column_names.title] == song) \
+                                         & (original_df[self.column_names.artist] == artist)].index, inplace=True)
         original_df.to_csv(self.original_csv_path, index=False)
 
         files_in_from_dir = list(self.from_dir.glob('*.mp3'))

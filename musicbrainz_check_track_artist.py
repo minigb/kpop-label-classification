@@ -11,8 +11,8 @@ class MusicBrainzResultCleaner:
         self.artists_dir = Path(config.data.artists_dir)
         self.removed_recordings_dir = Path(config.data.removed_recordings_dir)
         self.song_list_csv_fn = Path(config.dataset.song_list_csv_fn)
-        self.excluding_keywords_for_song_title = load_json(config.exclude_keywords.song_title)
-        self.excluding_keywords_for_song_info = load_json(config.exclude_keywords.song_info)
+        self.excluding_keywords_for_song_title = load_json(config.exclude_keywords.song_title_fn)
+        self.excluding_keywords_for_song_info = load_json(config.exclude_keywords.song_info_fn)
 
     def run(self):
         self._standardize(['title'])

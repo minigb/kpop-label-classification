@@ -25,6 +25,16 @@ data:
 
 exclude_keywords:
   _dir: excluding_keywords
-  video_title: ${_dir}/video_title.json
-  song_title: ${_dir}/song_title.json
-  song_info: ${_dir}/song_info.json
+  video_title_fn: ${_dir}/video_title.json
+  song_title_fn: ${_dir}/song_title.json
+  song_info_fn: ${_dir}/song_info.json
+
+csv_column_names:
+  song:
+    year: year
+    title: title
+    artist: query_artist
+  video:
+    year: Year
+    title: Song
+    artist: Artist
