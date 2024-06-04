@@ -3,19 +3,20 @@ hydra:
     dir: .
 
 kpop_dataset:
-  dir: kpop-dataset
+  _dir: kpop-dataset
 
-  song_list_csv_fn: ${dir}/song_list.csv
+  song_list_csv_fn: ${_dir}/song_list.csv
 
-  audio_crawl_result_csv_prefix: ${dir}/csv/kpop
+  _audio_crawl_result_csv_prefix: ${_dir}/csv/kpop
   chosen_csv_fn: ${_audio_crawl_result_csv_prefix}_chosen.csv
   failed_csv_fn: ${_audio_crawl_result_csv_prefix}_failed.csv
   queries_csv_fn: ${_audio_crawl_result_csv_prefix}_queries.csv
 
 data:
-  audio_dir: audio
-  recordings_dir: recordings_per_artist
-  artists_dir: artists_per_label
+  _dir: . # TODO(minigb): change this to kpop-dataset
+  audio_dir: ${_dir}/audio
+  recordings_dir: ${_dir}/recordings_per_artist
+  artists_dir: ${_dir}/artists_per_label
 
   _removed_suffix: removed
   removed_audio_dir: ${audio_dir}_${_removed_suffix}
