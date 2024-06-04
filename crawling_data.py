@@ -149,21 +149,21 @@ class MusicCrawler:
 
 
   def filter_queries_and_choose(self, queries, failed):
-    def _is_official_audio():
+    def _is_official_audio(video):
       return 'official audio' in video['video_title']
-    def _is_topic():
+    def _is_topic(video):
       return ' - topic' in video['video_channel']
-    def _is_channel_artist_same():
+    def _is_channel_artist_same(video):
       return video['channel_artist_same']
-    def _is_lyric_video():
+    def _is_lyric_video(video):
       for keyword in ['color coded', 'lyric', '가사']:
         if keyword in video['video_title'].replace('-', ' '):
           return True
     
     is_satisfying = [
-      _is_official_audio(),
-      _is_channel_artist_same or _is_topic(),
-      _is_lyric_video(),
+      _is_official_audio,
+      _is_channel_artist_same or _is_topic,
+      _is_lyric_video,
     ]
 
     chosen = None
