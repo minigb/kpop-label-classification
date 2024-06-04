@@ -353,29 +353,49 @@ class ReusingQueriesMusicCrawler(MusicCrawler):
     return song_ID, queries, []
 
 
+def update_config_with_args(config, args):
+  if args.input_csv:
+    config.kpop_dataset.song_list_csv_fn = args.input_csv
+  if args.save_csv_name:
+    for cur_fn in config.kpop_dataset.save_csv_fns.__dict__.values():
+      cur_fn = Path(cur_fn)
+      cur_fn.parent.mkdir(parents=True, exist_ok=True)
+      cur_fn = cur_fn.with_name(f"{args.save_csv_name}_{cur_fn.name}")
+  if args.save_audio_dir:
+    config.data.audio_dir = args.save_audio_dir
+
+
 @hydra.main(config_path='config', config_name='packed')
 def main(config):
   """
   Example line to run the code: 
-  python crawling_data.py
+  python crawling_data.py --input_csv kpop-dataset/song_list.csv --save_csv_name kpop-dataset/csv/kpop --save_audio_dir audio
 
   When recrawling failed music, using query suffix:
-  python crawling_data.py "official audio"
+  python crawling_data.py --save_csv_name csv/kpop --save_audio_dir audio --crawler_type failed --query_suffix "official audio"
 
   When recrawling failed music with reuse of queries:
-  python crawling_data.py reuse
+  python crawling_data.py --save_csv_name csv/kpop --save_audio_dir audio --crawler_type reuse
 
-  Add other arguments like '--exclude_remaster' or '--topk 20' if needed
+  When recrawling remastered music:
+  python crawling_data.py --input_csv csv/kpop_chosen.csv --save_csv_name csv/kpop_remaster --save_audio_dir audio_remastered_original --crawler_type remastered
+  python crawling_data.py --input_csv csv/kpop_chosen.csv --save_csv_name csv/kpop_remaster --save_audio_dir audio_remastered_original --crawler_type remastered
+  
+  Add '--exclude_remaster' or '--topk 20' if needed
   """
   REMASTER = 'remaster'
 
   argparser = ArgumentParser()
+  argparser.add_argument('--input_csv', type=str)
+  argparser.add_argument('--save_csv_name', type=str)
+  argparser.add_argument('--save_audio_dir', type=str)
   argparser.add_argument('--exclude_remaster', action='store_true')
   argparser.add_argument('--include_remaster', action='store_true') # TODO(minigb): Find better approach
   argparser.add_argument('--topk', type=int, default=10)
   argparser.add_argument('--crawler_type', type=str, default='new')
   argparser.add_argument('--query_suffix', type=str)
   args = argparser.parse_args()
+  update_config_with_args(config, args)
 
   exclude_keywords_path = Path(config.exclude_keywords.video_title_fn)
   with exclude_keywords_path.open('r') as f:
