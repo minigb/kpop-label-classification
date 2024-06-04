@@ -35,8 +35,10 @@ class MusicBrainzArtistByLabelCrawler:
             response = requests.get(url, params=params)
             data = response.json()
             if 'labels' in data:
+                if len(data['labels']) == 1:
+                    return data['labels'][0]['id'], data['labels'][0]['name']
                 for label in data['labels']:
-                    if label.get('country') == 'KR':
+                    if label.get('country') in ['KR', 'XW']:
                         label_name_ratio = fuzz.ratio(label_name.lower().replace('entertainment', ''), label['name'].lower().replace('entertainment', ''))
                         if label_name_ratio > 80:
                             return label['id'], label['name']
@@ -140,6 +142,7 @@ class MusicBrainzArtistByLabelCrawler:
                 df = pd.read_csv(csv_file)
             except pd.errors.EmptyDataError:
                 df = pd.DataFrame(columns=['artists', 'artist_id'])
+                df.to_csv(csv_file, index=False)
             if df.empty:
                 print(f"Processing label: {label_name}")
                 self.get_artists_in_the_label(label_name)
