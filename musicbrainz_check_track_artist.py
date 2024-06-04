@@ -144,6 +144,7 @@ class MusicBrainzResultCleaner:
             song_list.append(df)
         if song_list:
             song_list_df = pd.concat(song_list, ignore_index=True)
+            song_list_df = song_list_df.sort_values(['year', 'track_artist'])
             song_list_df.to_csv(self.song_list_csv_fn, index=False)
         else:
             print("No data found to merge.")

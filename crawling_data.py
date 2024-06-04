@@ -110,25 +110,18 @@ class MusicCrawler:
       'extract_flat': True,
     }
     query = f"{artist} {song} {self.query_suffix}" if self.query_suffix else f"{artist} {song}"
-    queries, failed = [], []
+    valid_queries, failed = [], []
     
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
       info = ydl.extract_info(f"ytsearch{topk}:{query}", download=False)
     
     no_valid_video = True
     for query_idx, video in enumerate(info['entries']):
-      # Add video info to queries
+      # Add video info to valid_queries
       video_title = video.get('title').lower()
       video_channel = video.get('channel') # In case of None, don't change into lower case
       video_duration = video.get('duration')
       video_url = video.get('url')
-      video_channel = video_channel.lower()
-      video_info = {'query_idx': query_idx,
-                    'channel_artist_same': artist.lower() in video_channel.replace(' - topic', '') or video_channel.replace(' - topic', '') in artist.lower(),
-                    'video_title': video_title,
-                    'video_channel': video_channel,
-                    'video_url': video_url}
-      queries.append(video_info)
       
       # Check if video is valid
       if not (video_channel is not None and 60 <= video_duration <= 600):
@@ -141,11 +134,18 @@ class MusicCrawler:
         continue
       
       no_valid_video = False
+      video_channel = video_channel.lower() # there are cases where channel is None
+      video_info = {'query_idx': query_idx,
+                    'channel_artist_same': artist.lower() in video_channel.replace(' - topic', '') or video_channel.replace(' - topic', '') in artist.lower(),
+                    'video_title': video_title,
+                    'video_channel': video_channel,
+                    'video_url': video_url}
+      valid_queries.append(video_info)
 
     if no_valid_video:
       failed.append({'Failed Reason': 'Every channel is None or video duration is not between 60 and 600 seconds'})
         
-    return song_ID, queries, failed
+    return song_ID, valid_queries, failed
 
 
   def filter_queries_and_choose(self, queries, failed):
