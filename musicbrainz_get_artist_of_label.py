@@ -62,7 +62,7 @@ class MusicBrainzArtistByLabelCrawler:
                 releases = data.get('releases', [])
                 if not releases:
                     break
-                for release in tqdm(releases, desc=f"Processing releases for label {query_label_name}"):
+                for release in tqdm(releases):
                     release_id = release['id']
                     release_details = self.get_release_details(release_id, retrieved_label_name, query_label_name)
                     if release_details:
@@ -108,7 +108,7 @@ class MusicBrainzArtistByLabelCrawler:
                 for artist in release['artists']:
                     artist_data.append(artist)
             label_name = f"{query_label_name.replace('/', '_')}"
-            df = pd.DataFrame(artist_data)
+            df = pd.DataFrame(artist_data).drop_duplicates()
             df.to_csv(f'{self.save_dir}/{label_name}.csv', index=False)
         except Exception as e:
             logging.error(f"Error saving artists to CSV for label {query_label_name}: {e}")
@@ -131,13 +131,15 @@ class MusicBrainzArtistByLabelCrawler:
             logging.error(f"No releases found for {label_name}")
             return
 
-        
         self.save_artists_to_csv(release_data, label_name)
 
     def run(self):
         for csv_file in tqdm(list(self.save_dir.glob('*.csv'))):
             label_name = csv_file.stem
-            df = pd.read_csv(csv_file)
+            try:
+                df = pd.read_csv(csv_file)
+            except pd.errors.EmptyDataError:
+                df = pd.DataFrame(columns=['artists', 'artist_id'])
             if df.empty:
                 print(f"Processing label: {label_name}")
                 self.get_artists_in_the_label(label_name)
