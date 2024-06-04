@@ -9,7 +9,6 @@ class MusicBrainzResultCleaner:
     def __init__(self, config):
         self.recordings_dir = Path(config.data.recordings_dir)
         self.artists_dir = Path(config.data.artists_dir)
-        self.removed_recordings_dir = Path(config.data.removed_recordings_dir)
         self.song_list_csv_fn = Path(config.kpop_dataset.song_list_csv_fn)
         self.excluding_keywords_for_song_title = load_json(config.exclude_keywords.song_title_fn)
         self.excluding_keywords_for_song_info = load_json(config.exclude_keywords.song_info_fn)
@@ -23,7 +22,6 @@ class MusicBrainzResultCleaner:
         self._remove_duplicated_recording()
         self._remove_different_ver()
         self._remove_other_types()
-        
         self._remove_empty_csv()
         self._make_total_song_list_csv()
 
