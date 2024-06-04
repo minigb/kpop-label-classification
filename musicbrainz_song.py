@@ -105,7 +105,7 @@ def get_recordings(artist_id, query_artist_name):
                 recording_info['query_artist'] = query_artist_name
                 recordings.append(recording_info)
             offset += LIMIT
-            save_recordings_to_csv(recordings, query_artist_name, save_dir) # save every time
+            # save_recordings_to_csv(recordings, query_artist_name, save_dir) # save every time
 
         return recordings
     except Exception as e:
