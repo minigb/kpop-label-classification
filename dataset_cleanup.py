@@ -85,7 +85,7 @@ class AudioDownloadCleaner:
         def is_clean(self, row):
             is_clean = False
             is_clean = is_clean or (self._song_almost_exact_match(row) or self._song_fuzz_above_threshold(row) or self._song_token_ratio_above_threshold(row)) \
-                and (self._artist_almost_exact_match(row) or self._artist_fuzz_above_threshold(row) or _is_topic(row))
+                and (self._artist_almost_exact_match(row) or self._artist_fuzz_above_threshold(row) or self._is_topic(row))
             is_clean = is_clean or (self._song_almost_exact_match(row))
             return is_clean
 
