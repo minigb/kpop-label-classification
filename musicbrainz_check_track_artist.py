@@ -9,7 +9,6 @@ class MusicBrainzResultCleaner:
     def __init__(self, config):
         self.recordings_dir = Path(config.data.recordings_dir)
         self.artists_dir = Path(config.data.artists_dir)
-        self.removed_recordings_dir = Path(config.data.removed_recordings_dir)
         self.song_list_csv_fn = Path(config.kpop_dataset.song_list_csv_fn)
         self.excluding_keywords_for_song_title = load_json(config.exclude_keywords.song_title_fn)
         self.excluding_keywords_for_song_info = load_json(config.exclude_keywords.song_info_fn)
@@ -48,15 +47,6 @@ class MusicBrainzResultCleaner:
                     artists_used.append(artist)
             df = df.drop(artists_idx_to_remove)
             df.to_csv(csv_file, index=False)
-        
-        self.removed_recordings_dir.mkdir(parents=True, exist_ok=True)
-        for artist_fn in tqdm(list(self.recordings_dir.glob('*.csv'))):
-            artist_name = artist_fn.stem
-            csv_fn = self.recordings_dir / f'{artist_name.replace("/", "_")}.csv'
-            if not csv_fn.exists():
-                continue
-            if artist_name not in artists_used:
-                csv_fn.rename(self.removed_recordings_dir / csv_fn.name)
 
     def _check_artist_names(self):
         def _refine_artist_name(artist_name):
