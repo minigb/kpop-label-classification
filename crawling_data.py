@@ -1,4 +1,6 @@
-import pandas as pd# This code is from "https://github.com/MALerLab/pop-era-classification/blob/main/crawling_data.py"
+# This code an updated vesion of "https://github.com/MALerLab/pop-era-classification/blob/main/crawling_data.py"
+
+import pandas as pd
 import yt_dlp
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
@@ -6,6 +8,7 @@ from pathlib import Path
 from argparse import ArgumentParser
 import logging
 import json
+import hydra
 
 from utils import get_song_id
 
@@ -361,7 +364,8 @@ class ReusingQueriesMusicCrawler(MusicCrawler):
     return song_ID, queries, []
 
 
-if __name__ == '__main__':
+@hydra.main(config_path='config', config_name='packed')
+def main(config):
   """
   Example line to run the code: 
   python crawling_data.py --input_csv kpop-dataset/song_list.csv --save_csv_name kpop-dataset/csv/kpop --save_audio_dir audio
@@ -381,9 +385,9 @@ if __name__ == '__main__':
   REMASTER = 'remaster'
 
   argparser = ArgumentParser()
-  argparser.add_argument('--input_csv', type=str)
-  argparser.add_argument('--save_csv_name', type=str, required=True)
-  argparser.add_argument('--save_audio_dir', type=str, required=True)
+  argparser.add_argument('--input_csv', type=str, default=config.kpop_dataset.song_list_csv_fn)
+  argparser.add_argument('--save_csv_name', type=str, default=config.kpop_dataset.audio_crawl_result_csv_prefix)
+  argparser.add_argument('--save_audio_dir', type=str, default=config.data.audio_dir)
   argparser.add_argument('--exclude_remaster', action='store_true')
   argparser.add_argument('--include_remaster', action='store_true') # TODO(minigb): Find better approach
   argparser.add_argument('--topk', type=int, default=10)
@@ -416,3 +420,6 @@ if __name__ == '__main__':
   
   # Run
   crawler.run(args.topk)
+  
+if __name__ == '__main__':
+  main()

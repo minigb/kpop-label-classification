@@ -4,6 +4,7 @@ from tqdm.auto import tqdm
 from pathlib import Path
 import logging
 from fuzzywuzzy import fuzz
+import hydra
 
 # Remove the existing log file if it exists
 log_file = 'musicbrainz_songs_errors.log'
@@ -17,10 +18,6 @@ logging.basicConfig(filename=log_file, level=logging.ERROR,
 BASE_URL = "https://musicbrainz.org/ws/2/"
 LIMIT = 100  # Maximum limit per request set by MusicBrainz
 THRESHOLD = 80  # Fuzzy match threshold
-ARTIST_DIR = Path('artists_per_label')  # Directory containing artist CSV files
-SAVE_DIR = Path('recordings_per_artist')
-if not SAVE_DIR.exists():
-    SAVE_DIR.mkdir(parents=True, exist_ok=True)
 
 # Step 1: Get the Artist ID and Name
 def get_artist_id(query_artist_name):
@@ -108,7 +105,7 @@ def get_recordings(artist_id, query_artist_name):
                 recording_info['query_artist'] = query_artist_name
                 recordings.append(recording_info)
             offset += LIMIT
-            save_recordings_to_csv(recordings, query_artist_name) # save every time
+            save_recordings_to_csv(recordings, query_artist_name, save_dir) # save every time
 
         return recordings
     except Exception as e:
@@ -116,16 +113,16 @@ def get_recordings(artist_id, query_artist_name):
         return []
 
 # Step 3: Save the Recordings to a CSV file
-def save_recordings_to_csv(recordings, artist_name):
+def save_recordings_to_csv(recordings, artist_name, save_dir):
     try:
         df = pd.DataFrame(recordings)
-        df.to_csv(f'{SAVE_DIR}/{artist_name.replace("/", "_")}.csv', index=False)
+        df.to_csv(f'{save_dir}/{artist_name.replace("/", "_")}.csv', index=False)
     except Exception as e:
         logging.error(f"Error saving recordings to CSV for artist {artist_name}: {e}")
 
 def process_artist(query_artist_name, artist_id):
     # check if the file exist
-    if (SAVE_DIR / f'{query_artist_name.replace("/", "_")}.csv').exists():
+    if (save_dir / f'{query_artist_name.replace("/", "_")}.csv').exists():
         return
     
     print(f"Processing artist: {query_artist_name}")
@@ -138,11 +135,11 @@ def process_artist(query_artist_name, artist_id):
     if not recordings:
         logging.error(f"Artist is found, but no recordings found for artist {query_artist_name}")
         return
-    save_recordings_to_csv(recordings, query_artist_name)
+    save_recordings_to_csv(recordings, query_artist_name, save_dir)
 
-def get_unique_artists_from_csv():
+def get_unique_artists_from_csv(artists_dir):
     all_dataframes = []
-    for csv_file in ARTIST_DIR.glob('*.csv'):
+    for csv_file in artists_dir.glob('*.csv'):
         df = pd.read_csv(csv_file)
         all_dataframes.append(df)
     combined_df = pd.concat(all_dataframes)
@@ -151,9 +148,19 @@ def get_unique_artists_from_csv():
     unique_artists_df['artist_id'].fillna('')
     return unique_artists_df
 
-if __name__ == '__main__':
-    artists_df = get_unique_artists_from_csv()
+
+@hydra.main(config_path='config', config_name='packed')
+def main(config):
+    artists_dir = Path(config.data.artists_dir)
+    save_dir = Path(config.data.recordings_dir)
+    if not save_dir.exists():
+        save_dir.mkdir(parents=True, exist_ok=True)
+
+    artists_df = get_unique_artists_from_csv(artists_dir)
     for _, row in tqdm(artists_df.iterrows(), desc="Processing artists", total=len(artists_df)):
         artist_name = row['artists']
         artist_id = row['artist_id'] if row['artist_id'] else None
         process_artist(artist_name, artist_id)
+
+if __name__ == '__main__':
+    main()

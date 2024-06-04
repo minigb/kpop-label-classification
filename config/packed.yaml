@@ -1,0 +1,29 @@
+hydra:
+  run:
+    dir: .
+
+kpop_dataset:
+  dir: kpop-dataset
+
+  song_list_csv_fn: ${dir}/song_list.csv
+
+  audio_crawl_result_csv_prefix: ${dir}/csv/kpop
+  chosen_csv_fn: ${_audio_crawl_result_csv_prefix}_chosen.csv
+  failed_csv_fn: ${_audio_crawl_result_csv_prefix}_failed.csv
+  queries_csv_fn: ${_audio_crawl_result_csv_prefix}_queries.csv
+
+data:
+  audio_dir: audio
+  recordings_dir: recordings_per_artist
+  artists_dir: artists_per_label
+
+  _removed_suffix: removed
+  removed_audio_dir: ${audio_dir}_${_removed_suffix}
+  removed_recordings_dir: ${recordings_dir}_${_removed_suffix}
+  removed_artists_dir: ${artists_dir}_${_removed_suffix}
+
+exclude_keywords:
+  _dir: excluding_keywords
+  video_title: ${_dir}/video_title.json
+  song_title: ${_dir}/song_title.json
+  song_info: ${_dir}/song_info.json

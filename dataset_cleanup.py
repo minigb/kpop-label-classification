@@ -3,8 +3,8 @@ from fuzzywuzzy import fuzz
 from pathlib import Path
 from tqdm import tqdm
 from utils.song_id import get_song_id
+import hydra
 
-CSV_DIR = Path('csv')
 FUZZ_THRESHOLD = 70
 ALMOST_EQUAL_THRESHOLD = 95
 TOKEN_SORT_THRESHOLD = 95
@@ -144,11 +144,16 @@ def move_audio_files(from_dir, to_dir, original_csv_path, things_to_remove_csv_p
     assert len(remove_df) == len(files_in_to_dir), f"remove_df has {len(remove_df)} rows, but there are {len(files_in_to_dir)} audio files"
 
 
-if __name__ == '__main__':
-    from_dir = Path('audio')
-    to_dir = Path('audio_tmp')
-    original_csv_path = CSV_DIR / Path('kpop_chosen.csv')
-    things_to_remove_csv_path = CSV_DIR / Path('kpop_things_to_remove.csv')
+@hydra.main(config_path='config', config_name='packed')
+def main(config):
+    from_dir = Path(config.data.audio_dir)
+    to_dir = Path(config.data.removed_audio_dir)
+    original_csv_path = Path(config.kpop_dataset.chosen_csv_fn)
+    things_to_remove_csv_path = Path(f'{config.kpop_dataset.audio_crawl_result_csv_prefix}_to_remove.csv')
 
     get_rows_to_remove(original_csv_path, things_to_remove_csv_path)
     move_audio_files(from_dir, to_dir, original_csv_path, things_to_remove_csv_path)
+
+
+if __name__ == '__main__':
+    main()
