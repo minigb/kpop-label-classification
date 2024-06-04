@@ -5,30 +5,30 @@ hydra:
 kpop_dataset:
   _dir: kpop-dataset
 
-  song_list_csv_fn: ${_dir}/song_list.csv
+  song_list_csv_fn: ${kpop_dataset._dir}/song_list.csv
 
-  save_csv_name: ${_dir}/csv/kpop
+  save_csv_name: ${kpop_dataset._dir}/csv/kpop
   save_csv_fns:
-    chosen: ${save_csv_name}_chosen.csv
-    failed: ${save_csv_name}_failed.csv
-    queries: ${save_csv_name}_queries.csv
+    chosen: ${kpop_dataset.save_csv_name}_chosen.csv
+    failed: ${kpop_dataset.save_csv_name}_failed.csv
+    queries: ${kpop_dataset.save_csv_name}_queries.csv
 
 data:
   _dir: . # TODO(minigb): change this to kpop-dataset
-  audio_dir: ${_dir}/audio
-  recordings_dir: ${_dir}/recordings_per_artist
-  artists_dir: ${_dir}/artists_per_label
+  audio_dir: ${data._dir}/audio
+  recordings_dir: ${data._dir}/recordings_per_artist
+  artists_dir: ${data._dir}/artists_per_label
 
   _removed_suffix: removed
-  removed_audio_dir: ${audio_dir}_${_removed_suffix}
-  removed_recordings_dir: ${recordings_dir}_${_removed_suffix}
-  removed_artists_dir: ${artists_dir}_${_removed_suffix}
+  removed_audio_dir: ${data.audio_dir}_${data._removed_suffix}
+  removed_recordings_dir: ${data.recordings_dir}_${data._removed_suffix}
+  removed_artists_dir: ${data.artists_dir}_${data._removed_suffix}
 
 exclude_keywords:
   _dir: excluding_keywords
-  video_title_fn: ${_dir}/video_title.json
-  song_title_fn: ${_dir}/song_title.json
-  song_info_fn: ${_dir}/song_info.json
+  video_title_fn: ${exclude_keywords._dir}/video_title.json
+  song_title_fn: ${exclude_keywords._dir}/song_title.json
+  song_info_fn: ${exclude_keywords._dir}/song_info.json
 
 csv_column_names:
   song:
