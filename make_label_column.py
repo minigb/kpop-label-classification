@@ -4,6 +4,12 @@ from pathlib import Path
 from tqdm import tqdm
 
 class ArtistAndLabelMatcher:
+    # Column names
+    # TODO(minigb): 1) Change column names to singular form 2) control this by config
+    # Need to also fix the other codes.
+
+    ARTIST = 'artists'
+    LABEL = 'labels'
     def __init__(self, config):
         self.artists_per_label_dir = Path(config.data.artists_dir)
         self.save_fn = Path(config.kpop_dataset.artist_list_csv_fn)
@@ -13,22 +19,18 @@ class ArtistAndLabelMatcher:
         self._save_result(artists_label)
     
     def _get_artist_labels(self):
-        artists_label = {}
+        artists_label = []
         for csv_file in tqdm(list(self.artists_per_label_dir.glob('*.csv'))):
             label_name = csv_file.stem
             df = pd.read_csv(csv_file)
-            for artist in df['artists']:
-                if artist not in artists_label:
-                    artists_label[artist] = []
-                artists_label[artist].append(label_name)
+            for artist in df[self.ARTIST]:
+                artists_label.append({self.ARTIST: artist, self.LABEL: label_name})
 
         return artists_label
 
     def _save_result(self, artists_label):
         self.save_fn.parent.mkdir(parents=True, exist_ok=True)
-        # TODO(minigb): Change column names to singular form
-        # Need to also fix the other codes for this.
-        df = pd.DataFrame(artists_label.items(), columns=['artists', 'labels'])
+        df = pd.DataFrame(artists_label, columns=[self.ARTIST, self.LABEL, 'start_year', 'end_year'])
         df.to_csv(self.save_fn, index=False)
 
 
