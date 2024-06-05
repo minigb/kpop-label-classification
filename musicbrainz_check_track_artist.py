@@ -25,7 +25,7 @@ class MusicBrainzResultCleaner:
         self._remove_other_types()
         self._move_artists_not_used()
         self._remove_empty_csv()
-        # self._make_total_song_list_csv()
+        self._make_total_song_list_csv()
 
     def _standardize(self, columns):
         for csv_file in tqdm(list(self.recordings_dir.glob('*.csv'))):

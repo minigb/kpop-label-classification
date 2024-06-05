@@ -9,8 +9,7 @@ class LabelAnnotator:
         self.artists_per_label_dir = Path(config.data.artists_dir)
         self.recordings_per_artist_dir = Path(config.data.recordings_dir)
         self.artist_list_csv_fn = Path(config.kpop_dataset.artist_list_csv_fn)
-        # self.song_list_csv_fn = Path(config.kpop_dataset.song_list_csv_fn)
-        self.song_list_csv_fn = Path('song_list_tmp.csv')
+        self.song_list_csv_fn = Path(config.kpop_dataset.song_list_csv_fn)
         self.case_study_artist_json_fn = Path(config.kpop_dataset.type.case_study.artist_fn)
         self.case_study_keyword_json_fn = Path(config.kpop_dataset.type.case_study.artist_fn)
         self.column_name = config.column_name
@@ -49,6 +48,9 @@ class LabelAnnotator:
                 start_date = artist_df_row[self.column_name.label_start]
                 end_date = artist_df_row[self.column_name.label_end]
                 pick_this = False
+
+                assert not (pd.isnull(start_date) and pd.isnull(end_date))
+                
                 if pd.isnull(start_date):
                     if release_date <= end_date:
                         pick_this = True
