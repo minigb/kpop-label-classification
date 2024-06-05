@@ -8,11 +8,11 @@ class ArtistAndLabelMatcher:
     # Column names
     # TODO(minigb): 1) Change column names to singular form 2) control this by config
     # Need to also fix the other codes.
-
     ARTIST = 'artists'
     LABEL = 'labels'
     START = 'start_date'
     END = 'end_date'
+
     def __init__(self, config):
         self.artists_per_label_dir = Path(config.data.artists_dir)
         self.save_fn = Path(config.kpop_dataset.artist_list_csv_fn)
@@ -47,6 +47,16 @@ class ArtistAndLabelMatcher:
 
     def _save_result(self, df):
         self.save_fn.parent.mkdir(parents=True, exist_ok=True)
+
+        if self.save_fn.exists():
+            original_df = pd.read_csv(self.save_fn)
+            idx_already_exist = []
+            for idx, row in df.iterrows():
+                if not original_df[original_df[self.ARTIST] == row[self.ARTIST] & original_df[self.LABEL] == row[self.LABEL]].empty:
+                    idx_already_exist.append(idx)
+            df = df.drop(idx_already_exist)
+            df = pd.concat([original_df, df]).sort_values(by=[self.ARTIST, self.LABEL])
+            
         df.to_csv(self.save_fn, index=False)
 
 
