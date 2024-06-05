@@ -6,6 +6,7 @@ kpop_dataset:
   _dir: kpop-dataset
 
   song_list_csv_fn: ${kpop_dataset._dir}/song_list.csv
+  artist_list_csv_fn: ${kpop_dataset._dir}/artist_list.csv
 
   save_csv_name: ${kpop_dataset._dir}/csv/kpop
   save_csv_fns:
