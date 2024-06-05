@@ -2,6 +2,7 @@ defaults:
   - base
   - audio_crawler_args
   - column_name
+  - train
   - _self_
 
 hydra:

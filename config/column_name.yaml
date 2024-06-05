@@ -16,3 +16,4 @@ column_name:
   is_train: is_train
   is_test: is_test
   is_case_study: is_case_study
+  small_set: small_set
