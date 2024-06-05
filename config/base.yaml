@@ -13,6 +13,13 @@ kpop_dataset:
     chosen: ${kpop_dataset.save_csv_name}_chosen.csv
     failed: ${kpop_dataset.save_csv_name}_failed.csv
     queries: ${kpop_dataset.save_csv_name}_queries.csv
+  
+  type:
+    _dir: ${kpop_dataset._dir}/data_type
+    case_study:
+      _dir: ${kpop_dataset.type._dir}/case_study
+      artist_fn: ${kpop_dataset.type.case_study._dir}/artist.json
+      keyword_fn: ${kpop_dataset.type.case_study._dir}/keyword.json
 
 data:
   _dir: . # TODO(minigb): change this to kpop-dataset
