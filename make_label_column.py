@@ -11,8 +11,8 @@ class ArtistAndLabelMatcher:
 
     ARTIST = 'artists'
     LABEL = 'labels'
-    START = 'start_year'
-    END = 'last_year'
+    START = 'start_date'
+    END = 'end_date'
     def __init__(self, config):
         self.artists_per_label_dir = Path(config.data.artists_dir)
         self.save_fn = Path(config.kpop_dataset.artist_list_csv_fn)
