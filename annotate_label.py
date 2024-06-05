@@ -1,5 +1,6 @@
 import pandas as pd
 from pathlib import Path
+from tqdm import tqdm
 import hydra
 
 from utils import load_json
@@ -32,7 +33,7 @@ class LabelAnnotator:
         label_list = []
 
         artist_label_df = pd.read_csv(self.artist_list_csv_fn)
-        for _, row in self.df.iterrows():
+        for _, row in tqdm(self.df.iterrows(), total=len(self.df)):
             artist_name = row[self.column_name.song.artist]
             artist_df = artist_label_df[artist_label_df[self.column_name.artist] == artist_name]
             assert not artist_df.empty
@@ -47,20 +48,15 @@ class LabelAnnotator:
             for _, artist_df_row in artist_df.iterrows():
                 start_date = artist_df_row[self.column_name.label_start]
                 end_date = artist_df_row[self.column_name.label_end]
-                pick_this = False
 
                 assert not (pd.isnull(start_date) and pd.isnull(end_date))
-                
                 if pd.isnull(start_date):
-                    if release_date <= end_date:
-                        pick_this = True
-                elif pd.isnull(end_date):
-                    if start_date <= release_date:
-                        pick_this = True
-                else:
-                    if start_date <= release_date <= end_date:
-                        pick_this = True
-                if pick_this:
+                    start_date = '0'
+                if pd.isnull(end_date):
+                    end_date = '9'
+                assert start_date < end_date
+                
+                if start_date <= release_date <= end_date:
                     label = artist_df_row[self.column_name.label]
                     break
 
