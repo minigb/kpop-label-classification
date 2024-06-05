@@ -31,6 +31,7 @@ exclude_keywords:
   song_title_fn: ${exclude_keywords._dir}/song_title.json
   song_info_fn: ${exclude_keywords._dir}/song_info.json
 
+# TODO(minigb): Move this to column_name.yaml
 csv_column_names:
   song:
     year: year
