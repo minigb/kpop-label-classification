@@ -20,7 +20,8 @@ class ArtistAndLabelMatcher:
     def run(self):
         artist_label_list = self._get_artist_labels()
         artist_label_df = self._get_df_with_year_added(artist_label_list)
-        self._save_result(artist_label_df)
+        result_df = self._merge_original_and_updated_df(artist_label_df)
+        self._save_result(result_df)
     
     def _get_artist_labels(self):
         artist_label = []
@@ -45,18 +46,35 @@ class ArtistAndLabelMatcher:
         df = df.sort_values(by=[self.ARTIST, self.LABEL])
         return df
 
+    def _merge_original_and_updated_df(self, new_df):
+        if not self.save_fn.exists():
+            return new_df
+        original_df = pd.read_csv(self.save_fn)
+
+        # original_df: if artist and label does not exist in the new_df, remove it.
+        idx_to_remove = []
+        for idx, row in original_df.iterrows():
+            # if empty
+            if new_df[(new_df[self.ARTIST] == row[self.ARTIST]) & (new_df[self.LABEL] == row[self.LABEL])].empty:
+                idx_to_remove.append(idx)
+        original_df = original_df.drop(idx_to_remove)
+
+        # new_df: if artist and label already exist in the original_df, remove it.
+        idx_to_remove = []
+        for idx, row in new_df.iterrows():
+            # if not empty
+            if not original_df[(original_df[self.ARTIST] == row[self.ARTIST]) & (original_df[self.LABEL] == row[self.LABEL])].empty:
+                idx_to_remove.append(idx)
+        new_df = new_df.drop(idx_to_remove)
+
+        merged_df = pd.concat([original_df, new_df])
+
+        return merged_df
+
     def _save_result(self, df):
         self.save_fn.parent.mkdir(parents=True, exist_ok=True)
-
-        if self.save_fn.exists():
-            original_df = pd.read_csv(self.save_fn)
-            idx_already_exist = []
-            for idx, row in df.iterrows():
-                if not original_df[original_df[self.ARTIST] == row[self.ARTIST] & original_df[self.LABEL] == row[self.LABEL]].empty:
-                    idx_already_exist.append(idx)
-            df = df.drop(idx_already_exist)
-            df = pd.concat([original_df, df]).sort_values(by=[self.ARTIST, self.LABEL])
-            
+        
+        df = df.sort_values(by=[self.ARTIST, self.LABEL])
         df.to_csv(self.save_fn, index=False)
 
 
