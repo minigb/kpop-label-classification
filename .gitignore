@@ -6,7 +6,5 @@ __pycache__
 .hydra
 
 audio
-# releases*
-# recordings
 
-spotify_keys.yaml
+tmp_*

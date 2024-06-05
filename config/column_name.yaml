@@ -1,4 +1,13 @@
 column_name:
+  song:
+    year: year
+    title: title
+    artist: query_artist
+  video:
+    year: Year
+    title: Song
+    artist: Artist
+  
   artist: artists # TODO(minigb): Change this to singular form 'artist'
   label: label
   date: release_date
