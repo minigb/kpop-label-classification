@@ -5,6 +5,6 @@ __pycache__
 *.log
 .hydra
 
-audio
+audio*
 
 tmp_*

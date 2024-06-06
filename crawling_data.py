@@ -302,13 +302,28 @@ class MusicCrawler:
     if not chosen_fn.exists():
         logging.info("No chosen file found.")
         return
-
+    
     chosen_df = pd.read_csv(chosen_fn)
-    total_chosen = len(chosen_df)
-    actual_files = sum(1 for _ in self.save_audio_dir.glob('*.mp3'))
+    mp3_files = list(self.save_audio_dir.glob('*.mp3'))
 
-    logging.info(f"Number of songs noted as succeeded: {total_chosen}")
-    logging.info(f"Number of actual MP3 files: {actual_files}")
+    for _, row in pd.read_csv(chosen_fn).iterrows():
+        date = row[self.out_csv_col_names.year]
+        title = row[self.out_csv_col_names.title]
+        artist = row[self.out_csv_col_names.artist]
+        song_id = get_song_id(date, title, artist)
+        mp3_fn = Path(f"{self.save_audio_dir}/{song_id}.mp3")
+
+        if mp3_fn.exists():
+          mp3_files.remove(mp3_fn)
+
+    for mp3_fn in mp3_files:
+      mp3_fn.rename(self.removed_audio_dir / mp3_fn.name)
+
+    total_chosen_len = len(chosen_df)
+    actual_files_len = len(list(self.save_audio_dir.glob('*.mp3')))
+
+    logging.info(f"Number of songs noted as succeeded: {total_chosen_len}")
+    logging.info(f"Number of actual MP3 files: {actual_files_len}")
 
   def _get_song_identifier(self, date, song, artist):
     # This is different from the song_id used for file name
