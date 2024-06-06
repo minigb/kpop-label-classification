@@ -292,7 +292,7 @@ class MusicCrawler:
     song_list = [(row[self.in_csv_col_names.title], row[self.in_csv_col_names.artist], row[self.in_csv_col_names.year], self.exclude_keywords, topk, self.include_keywords) \
                  for _, row in self.target_df.iterrows()]
 
-    self.run_parallel(song_list) # Results are saved while crawling
+    # self.run_parallel(song_list) # Results are saved while crawling
 
     # Check if all chosen songs have corresponding mp3 files
     self.check_downloaded_files()

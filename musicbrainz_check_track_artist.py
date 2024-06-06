@@ -20,10 +20,11 @@ class MusicBrainzResultCleaner:
         self._remove_multiple_artists()
         self._check_artist_names()
         self._sort_by_columns(['title', 'release_date'])
-        self._remove_duplicated_recording()
         self._remove_different_ver()
         self._remove_other_types()
         self._move_artists_not_used()
+        
+        self._remove_duplicated_recording()
         self._remove_empty_csv()
         self._make_total_song_list_csv()
 
