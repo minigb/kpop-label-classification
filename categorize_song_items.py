@@ -6,7 +6,8 @@ from sklearn.model_selection import train_test_split
 from collections import defaultdict
 import random
 
-from utils import get_song_id, load_json, save_json
+from utils.song_id import get_song_id
+from utils.json import load_json, save_json
 
 class Categorizer:
     def __init__(self, config):
