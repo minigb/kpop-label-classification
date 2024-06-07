@@ -141,7 +141,7 @@ class Categorizer:
         save_json(self.song_usage_json_fn, self.result_dict)
 
 
-@hydra.main(config_path="config", config_name="packed")
+@hydra.main(config_path="../config", config_name="packed")
 def main(config):
     categorizer = Categorizer(config)
     categorizer.run()

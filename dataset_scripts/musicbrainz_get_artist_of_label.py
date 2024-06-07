@@ -148,7 +148,7 @@ class MusicBrainzArtistByLabelCrawler:
                 self.get_artists_in_the_label(label_name)
 
 
-@hydra.main(config_path='config', config_name='packed')
+@hydra.main(config_path="../config", config_name='packed')
 def main(config):
     crawler = MusicBrainzArtistByLabelCrawler(config)
     crawler.run()

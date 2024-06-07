@@ -161,7 +161,7 @@ class MusicBrainzProcessor:
             artist_id = row['artist_id'] if row['artist_id'] else None
             self.process_artist(artist_name, artist_id)
 
-@hydra.main(config_path='config', config_name='packed')
+@hydra.main(config_path="../config", config_name='packed')
 def main(config):
     processor = MusicBrainzProcessor(config)
     processor.run()
