@@ -96,6 +96,11 @@ class MusicCrawler:
         idx_to_remove.append(idx)
         if mp3_fn.exists():
           mp3_fn.rename(self.removed_audio_dir / Path(f'{song_id}.mp3'))
+      elif not self._is_okay_with_keyword(row['video_title'], self.exclude_keywords, self.include_keywords):
+        idx_to_remove.append(idx)
+        # TODO(minigb): This is duplicated. Refactor this
+        if mp3_fn.exists():
+          mp3_fn.rename(self.removed_audio_dir / Path(f'{song_id}.mp3'))
 
     chosen_df = chosen_df.drop(index=idx_to_remove)
     chosen_df.to_csv(self.save_csv_fns.chosen, index=False)
@@ -114,6 +119,11 @@ class MusicCrawler:
     df_uniq = df_sorted.drop_duplicates(subset=[self.in_csv_col_names.title, self.in_csv_col_names.artist], keep='first')
     
     return df_uniq
+  
+
+  def _is_okay_with_keyword(self, video_title, exclude_keywords, include_keywords):
+    return all(keyword.lower() not in video_title for keyword in exclude_keywords) \
+      and all(keyword.lower() in video_title for keyword in include_keywords)
   
 
   def make_query(self, song, artist, date, exclude_keywords, topk, include_keywords):
@@ -142,8 +152,7 @@ class MusicCrawler:
       if not (video_channel is not None and 60 <= video_duration <= 600):
         continue
       # Check if any exclude_keywords not in song_title are in video_title)
-      if not (all(keyword.lower() not in video_title for keyword in exclude_keywords) \
-                      and all(keyword.lower() in video_title for keyword in include_keywords)):
+      if not self._is_okay_with_keyword(video_title, exclude_keywords, include_keywords):
         continue
       if '/shorts/' in video_url:
         continue
@@ -292,6 +301,7 @@ class MusicCrawler:
     song_list = [(row[self.in_csv_col_names.title], row[self.in_csv_col_names.artist], row[self.in_csv_col_names.year], self.exclude_keywords, topk, self.include_keywords) \
                  for _, row in self.target_df.iterrows()]
 
+    # TODO(minigb): Unhide this later. This is removed now since I am using the crawler to refine the chosen songs
     # self.run_parallel(song_list) # Results are saved while crawling
 
     # Check if all chosen songs have corresponding mp3 files
@@ -336,8 +346,9 @@ class MusicCrawler:
 
 class AdditionalMusicCrawler(MusicCrawler):
   def __init__(self, config, exclude_keywords, include_keywords, query_suffix):
-    super().__init__(config, exclude_keywords, include_keywords, query_suffix)
     self.removed_audio_dir = Path(config.data.removed_audio_dir)
+    self.removed_audio_dir.mkdir(parents=True, exist_ok=True)
+    super().__init__(config, exclude_keywords, include_keywords, query_suffix)
 
 
   def _custom_init(self):
