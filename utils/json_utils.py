@@ -12,4 +12,4 @@ def save_json(fn, data):
     fn = Path(fn)
     fn.parent.mkdir(parents=True, exist_ok=True)
     with open(fn, 'w') as f:
-        json.dump(data, f, indent=4)
+        json.dump(data, f, ensure_ascii=False, indent=4)
