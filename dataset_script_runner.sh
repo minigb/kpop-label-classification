@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+dir_name="dataset_scripts"
 
 scripts=(
     # "musicbrainz_get_artist_of_label.py"
@@ -19,7 +20,7 @@ scripts=(
 for script in "${scripts[@]}"; 
 do
     echo "Running $script"
-    python "$script"
+    python "$dir_name"/"$script"
 done
 
 echo "All scripts have been executed successfully."
