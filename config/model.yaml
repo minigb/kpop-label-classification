@@ -1,0 +1,9 @@
+spec_model:
+  sr: 48000
+  n_fft: 1024
+  hop_length: 512
+  n_mels: 80
+
+model:
+  n_in_channel: 1
+  

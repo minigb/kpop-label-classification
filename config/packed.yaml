@@ -4,6 +4,7 @@ defaults:
   - column_name
   - dict_key
   - train
+  - model
   - _self_
 
 hydra:
