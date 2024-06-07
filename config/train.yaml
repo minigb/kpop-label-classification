@@ -1,7 +1,5 @@
-train:
+data_setting:
   val_ratio: 0.1
   test_ratio: 0.1
-
   inference_size: 3000
-
   seed: 0

@@ -22,7 +22,7 @@ class Categorizer:
         self.column_name = config.column_name
         self.dict_key = config.dict_key
 
-        self.train_config = config.train
+        self.data_setting_config = config.data_setting
 
         # case study
         self.case_study_fn = Path(config.kpop_dataset.type.case_study_fn)
@@ -90,7 +90,7 @@ class Categorizer:
         self.result_dict[self.dict_key.major_label] = song_ids_dict
 
     def _split_train_test(self):
-        random.seed(self.train_config.seed)
+        random.seed(self.data_setting_config.seed)
 
         # get minimum size
         label_dict = self.result_dict[self.dict_key.major_label]
@@ -101,13 +101,13 @@ class Categorizer:
         val_song_ids_dict = {}
         test_song_ids_dict = {}
         
-        val_ratio = self.train_config.val_ratio
-        test_ratio = self.train_config.test_ratio
+        val_ratio = self.data_setting_config.val_ratio
+        test_ratio = self.data_setting_config.test_ratio
         for label_representation, song_ids_list in label_dict.items():
             songs_used = random.sample(song_ids_list, min_size)
 
-            train, test = train_test_split(songs_used, test_size=test_ratio, random_state=self.train_config.seed)
-            train, valid = train_test_split(train, test_size=val_ratio/(1-test_ratio), random_state=self.train_config.seed)
+            train, test = train_test_split(songs_used, test_size=test_ratio, random_state=self.data_setting_config.seed)
+            train, valid = train_test_split(train, test_size=val_ratio/(1-test_ratio), random_state=self.data_setting_config.seed)
             
             train_song_ids_dict[label_representation] = train
             val_song_ids_dict[label_representation] = valid
@@ -122,7 +122,7 @@ class Categorizer:
 
     def _select_inference_songs(self):
         non_major_label_df = self.df[self.df[self.column_name.is_major_label] == False]
-        random_pick_song = non_major_label_df.sample(n=self.train_config.inference_size, random_state=self.train_config.seed)
+        random_pick_song = non_major_label_df.sample(n=self.data_setting_config.inference_size, random_state=self.data_setting_config.seed)
 
         song_ids_dict = {'_': # dummy key
                          [self._get_song_id(row) for _, row in random_pick_song.iterrows()]}
