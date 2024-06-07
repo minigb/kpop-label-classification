@@ -5,3 +5,5 @@ dict_key:
 
   case_study: case_study
   major_label: major_label
+
+  inference: inference

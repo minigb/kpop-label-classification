@@ -4,6 +4,7 @@ from tqdm import tqdm
 import hydra
 from sklearn.model_selection import train_test_split
 from collections import defaultdict
+import random
 
 from utils import get_song_id, load_json, save_json
 
@@ -15,6 +16,9 @@ class Categorizer:
 
         self.column_name = config.column_name
         self.dict_key = config.dict_key
+
+        self.train_config = config.train
+        self.inference_config = config.inference
 
         # case study
         self.case_study_fn = Path(config.kpop_dataset.type.case_study_fn)
@@ -30,8 +34,9 @@ class Categorizer:
         self._drop_songs_without_audio()
         self._check_case_study()
         self._check_major_label()
-        # self._split_train_test_val_inference()
-        self._save_result()
+        self._split_train_test()
+        self._select_inference_songs()
+        self._save_result() # save result
 
     def _drop_songs_without_audio(self):
         idx_to_remove = []
@@ -62,10 +67,11 @@ class Categorizer:
         self.df = self.df.drop(case_study_idx)
 
     def _check_major_label(self):
+        major_label_df = self.df[self.df[self.column_name.is_major_label]]
         label_dict = load_json(self.major_label_json_fn)
-        
+
         song_ids_dict = defaultdict(list)
-        for _, row in tqdm(self.df.iterrows(), total=len(self.df)):
+        for _, row in tqdm(major_label_df.iterrows(), total=len(major_label_df)):
             if not row[self.column_name.is_major_label]:
                 continue
             
@@ -79,6 +85,33 @@ class Categorizer:
 
         self.result_dict[self.dict_key.major_label] = song_ids_dict
 
+    def _split_train_test(self):
+        random.seed(self.train_config.seed)
+
+        # get minimum size
+        label_dict = self.result_dict[self.dict_key.major_label]
+        min_size = min([len(song_ids_list) for song_ids_list in label_dict.values()])
+
+        # split
+        train_song_ids_dict = {}
+        test_song_ids_dict = {}
+        for label_representation, song_ids_list in label_dict.items():
+            songs_used = random.sample(song_ids_list, min_size)
+            train, test = train_test_split(songs_used, test_size=self.train_config.test_size, random_state=self.train_config.seed)
+            train_song_ids_dict[label_representation] = train
+            test_song_ids_dict[label_representation] = test
+
+        self.result_dict[self.dict_key.train] = train_song_ids_dict
+        self.result_dict[self.dict_key.test] = test_song_ids_dict
+        del self.result_dict[self.dict_key.major_label] # no need to save major label anymore
+
+    def _select_inference_songs(self):
+        non_major_label_df = self.df[~self.df[self.column_name.is_major_label]]
+        random_pick_song = non_major_label_df.sample(n=self.inference_config.size, random_state=self.train_config.seed)
+
+        song_ids = [self._get_song_id(row) for _, row in random_pick_song.iterrows()]
+        self.result_dict[self.dict_key.inference] = song_ids
+
     def _get_song_id(self, row):
         year = row[self.column_name.song.year]
         song = row[self.column_name.song.title]
@@ -86,8 +119,13 @@ class Categorizer:
         return get_song_id(year, song, artist)
 
     def _save_result(self):
-        # self.save_fn.parent.mkdir(parents=True, exist_ok=True)
-        # self.df.to_csv(self.save_fn, index=False)
+        for key, value in self.result_dict.items():
+            if isinstance(value, dict):
+                for k, v in value.items():
+                    value[k] = sorted(v)
+            elif isinstance(value, list):
+                self.result_dict[key] = sorted(value)
+
         self.song_usage_json_fn.parent.mkdir(parents=True, exist_ok=True)
         save_json(self.song_usage_json_fn, self.result_dict)
 

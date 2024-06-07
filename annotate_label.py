@@ -15,8 +15,6 @@ class LabelAnnotator:
 
         self.major_label_fn = Path(config.kpop_dataset.type.major_label_fn)
         self.column_name = config.column_name
-        self.test_size = config.test_size
-        self.random_seed = config.random_seed
 
         self.df = pd.read_csv(self.song_list_csv_fn)
 

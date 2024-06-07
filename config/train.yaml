@@ -1,3 +1,6 @@
-test_size: 0.1
-random_seed: 0
-song_used_json: ${kpop_dataset}/song_used.json
+train:
+  test_size: 0.1
+  seed: 0
+
+inference:
+  size: 3000
