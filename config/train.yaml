@@ -1,6 +1,7 @@
 train:
-  test_size: 0.1
-  seed: 0
+  val_ratio: 0.1
+  test_ratio: 0.1
 
-inference:
-  size: 3000
+  inference_size: 3000
+
+  seed: 0
