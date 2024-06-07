@@ -19,7 +19,7 @@ scripts=(
     # "musicbrainz_get_artist_of_label.py"
     # "musicbrainz_song.py"
 
-    # "musicbrainz_check_track_artist.py"
+    "musicbrainz_check_track_artist.py"
     "make_label_column.py"
 
     # Be careful when running this
