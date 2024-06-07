@@ -9,4 +9,5 @@ class SpecModel(nn.Module):
 
     def forward(self, x):
         mel_spec = self.mel_converter(x)
-        return self.db_converter(mel_spec)
+        db_converted = self.db_converter(mel_spec)
+        return db_converted
