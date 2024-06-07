@@ -1,7 +1,8 @@
 defaults:
-  - base
+  - file
   - audio_crawler_args
   - column_name
+  - dict_key
   - train
   - _self_
 

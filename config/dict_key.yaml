@@ -1,0 +1,7 @@
+dict_key:
+  train: train
+  valid: valid
+  test: test
+
+  case_study: case_study
+  major_label: major_label

@@ -1,0 +1,101 @@
+import pandas as pd
+from pathlib import Path
+from tqdm import tqdm
+import hydra
+from sklearn.model_selection import train_test_split
+from collections import defaultdict
+
+from utils import get_song_id, load_json, save_json
+
+class Categorizer:
+    def __init__(self, config):
+        self.song_list_csv_fn = Path(config.kpop_dataset.song_list_csv_fn)
+        self.song_usage_json_fn = Path(config.kpop_dataset.song_usage_json_fn)
+        self.audio_dir = Path(config.data.audio_dir)
+
+        self.column_name = config.column_name
+        self.dict_key = config.dict_key
+
+        # case study
+        self.case_study_fn = Path(config.kpop_dataset.type.case_study_fn)
+
+        # major label
+        self.major_label_json_fn = Path(config.kpop_dataset.type.major_label_fn)
+
+        # init
+        self.df = pd.read_csv(self.song_list_csv_fn)
+        self.result_dict = {}
+
+    def run(self):
+        self._drop_songs_without_audio()
+        self._check_case_study()
+        self._check_major_label()
+        # self._split_train_test_val_inference()
+        self._save_result()
+
+    def _drop_songs_without_audio(self):
+        idx_to_remove = []
+        for idx, row in tqdm(self.df.iterrows(), total=len(self.df)):
+            song_id = self._get_song_id(row)
+            audio_fn = self.audio_dir / f'{song_id}.mp3'
+            if not audio_fn.exists():
+                idx_to_remove.append(idx)
+        self.df = self.df.drop(idx_to_remove)
+
+    def _check_case_study(self):
+        case_study_type_dict = load_json(self.case_study_fn)
+        
+        song_ids_dict = defaultdict(list)
+        case_study_idx = []
+        for idx, row in tqdm(self.df.iterrows(), total=len(self.df)):
+            song_id = self._get_song_id(row)
+
+            row_str = ' '.join(map(str, row.dropna().values)).lower()
+            for case_study_type, case_study_list in case_study_type_dict.items():
+                for keyword in case_study_list:
+                    if f' {keyword} '.lower() in row_str.lower():
+                        case_study_idx.append(idx)
+                        song_ids_dict[case_study_type].append(song_id)
+                        break
+        
+        self.result_dict[self.dict_key.case_study] = song_ids_dict
+        self.df = self.df.drop(case_study_idx)
+
+    def _check_major_label(self):
+        label_dict = load_json(self.major_label_json_fn)
+        
+        song_ids_dict = defaultdict(list)
+        for _, row in tqdm(self.df.iterrows(), total=len(self.df)):
+            if not row[self.column_name.is_major_label]:
+                continue
+            
+            song_id = self._get_song_id(row)
+            
+            for label_representation, labels_included_list in label_dict.items():
+                for label_name in labels_included_list:
+                    if row[self.column_name.label] == label_name:
+                        song_ids_dict[label_representation].append(song_id)
+                        break
+
+        self.result_dict[self.dict_key.major_label] = song_ids_dict
+
+    def _get_song_id(self, row):
+        year = row[self.column_name.song.year]
+        song = row[self.column_name.song.title]
+        artist = row[self.column_name.song.artist]
+        return get_song_id(year, song, artist)
+
+    def _save_result(self):
+        # self.save_fn.parent.mkdir(parents=True, exist_ok=True)
+        # self.df.to_csv(self.save_fn, index=False)
+        self.song_usage_json_fn.parent.mkdir(parents=True, exist_ok=True)
+        save_json(self.song_usage_json_fn, self.result_dict)
+
+
+@hydra.main(config_path="config", config_name="packed")
+def main(config):
+    categorizer = Categorizer(config)
+    categorizer.run()
+
+if __name__ == "__main__":
+    main()

@@ -13,14 +13,14 @@ kpop_dataset:
     chosen: ${kpop_dataset.save_csv_name}_chosen.csv
     failed: ${kpop_dataset.save_csv_name}_failed.csv
     queries: ${kpop_dataset.save_csv_name}_queries.csv
+
+  song_usage_json_fn: ${kpop_dataset._dir}/song_usage.json
   
   type:
-    _dir: ${kpop_dataset._dir}/data_type
-    case_study:
-      _dir: ${kpop_dataset.type._dir}/case_study
-      artist_fn: ${kpop_dataset.type.case_study._dir}/artist.json
-      keyword_fn: ${kpop_dataset.type.case_study._dir}/keyword.json
+    _dir: ${kpop_dataset._dir}/data_usage
+    case_study_fn: ${kpop_dataset.type._dir}/case_study.json
     major_label_fn: ${kpop_dataset.type._dir}/major_label.json
+    song_used_fn: ${kpop_dataset.type._dir}/song_used.json
 
 data:
   _dir: . # TODO(minigb): change this to kpop-dataset
@@ -38,14 +38,3 @@ exclude_keywords:
   video_title_fn: ${exclude_keywords._dir}/video_title.json
   song_title_fn: ${exclude_keywords._dir}/song_title.json
   song_info_fn: ${exclude_keywords._dir}/song_info.json
-
-# TODO(minigb): This is moved to column_name.yaml. Remove this
-csv_column_names:
-  song:
-    year: year
-    title: title
-    artist: query_artist
-  video:
-    year: Year
-    title: Song
-    artist: Artist
