@@ -87,12 +87,12 @@ class LabelAnnotator:
                     break
 
     def _annotate_is_major_label(self):
-        self.df[self.column_name.is_major_label] = "_"
+        self.df[self.column_name.is_major_label] = False
         label_dict = load_json(self.small_json_fn)
-        for representative, label_list in label_dict.items():
+        for _, label_list in label_dict.items():
             for label_name in label_list:
                 idxs = self.df[self.df[self.column_name.label] == label_name].index
-                self.df.loc[idxs, self.column_name.is_major_label] = representative
+                self.df.loc[idxs, self.column_name.is_major_label] = True
 
     def _annotate_train_test_split(self):
         for column_name in [self.column_name.is_train, self.column_name.is_test]:
