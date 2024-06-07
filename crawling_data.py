@@ -9,7 +9,7 @@ import logging
 import json
 import hydra
 
-from utils import get_song_id
+from utils.song_id import get_song_id
 from dataset_cleanup import AudioDownloadCleaner
 
 # TODO(minigb): This is not ideal. Find a better way to handle this.

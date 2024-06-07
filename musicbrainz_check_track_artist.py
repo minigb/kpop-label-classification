@@ -3,7 +3,7 @@ from pathlib import Path
 from tqdm import tqdm
 import hydra
 from omegaconf import DictConfig
-from utils import load_json
+from utils.json import load_json
 
 class MusicBrainzResultCleaner:
     def __init__(self, config):

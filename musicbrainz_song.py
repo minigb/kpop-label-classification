@@ -7,7 +7,7 @@ from fuzzywuzzy import fuzz
 import hydra
 from datetime import datetime
 
-from utils import load_json
+from utils.json import load_json
 
 class MusicBrainzProcessor:
     BASE_URL = "https://musicbrainz.org/ws/2/"

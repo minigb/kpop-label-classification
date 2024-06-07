@@ -4,7 +4,7 @@ from tqdm import tqdm
 import hydra
 from sklearn.model_selection import train_test_split
 
-from utils import load_json
+from utils.json import load_json
 
 class LabelAnnotator:
     def __init__(self, config):
