@@ -102,22 +102,22 @@ class Categorizer:
             songs_used = random.sample(song_ids_list, min_size)
 
             train, test = train_test_split(songs_used, test_size=test_ratio, random_state=self.train_config.seed)
-            train, val = train_test_split(train, test_size=val_ratio/(1-test_ratio), random_state=self.train_config.seed)
+            train, valid = train_test_split(train, test_size=val_ratio/(1-test_ratio), random_state=self.train_config.seed)
             
             train_song_ids_dict[label_representation] = train
-            val_song_ids_dict[label_representation] = val
+            val_song_ids_dict[label_representation] = valid
             test_song_ids_dict[label_representation] = test
 
-            assert len(train) + len(val) + len(test) == len(songs_used)
+            assert len(train) + len(valid) + len(test) == len(songs_used)
 
         self.result_dict[self.dict_key.train] = train_song_ids_dict
-        self.result_dict[self.dict_key.val] = val_song_ids_dict
+        self.result_dict[self.dict_key.valid] = val_song_ids_dict
         self.result_dict[self.dict_key.test] = test_song_ids_dict
         del self.result_dict[self.dict_key.major_label] # no need to save major label anymore
 
     def _select_inference_songs(self):
-        non_major_label_df = self.df[~self.df[self.column_name.is_major_label]]
-        random_pick_song = non_major_label_df.sample(n=self.train_config.size, random_state=self.train_config.seed)
+        non_major_label_df = self.df[self.df[self.column_name.is_major_label] == False]
+        random_pick_song = non_major_label_df.sample(n=self.train_config.inference_size, random_state=self.train_config.seed)
 
         song_ids = [self._get_song_id(row) for _, row in random_pick_song.iterrows()]
         self.result_dict[self.dict_key.inference] = song_ids
