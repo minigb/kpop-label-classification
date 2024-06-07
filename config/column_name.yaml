@@ -1,0 +1,19 @@
+column_name:
+  song:
+    year: year
+    title: title
+    artist: query_artist
+  video:
+    year: Year
+    title: Song
+    artist: Artist
+  
+  artist: artists # TODO(minigb): Change this to singular form 'artist'
+  label: label
+  date: release_date
+  label_start: label_start_date
+  label_end: label_end_date
+  is_train: is_train
+  is_test: is_test
+  is_case_study: is_case_study
+  is_major_label: is_major_label

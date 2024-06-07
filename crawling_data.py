@@ -40,7 +40,7 @@ class MusicCrawler:
     self.out_csv_col_names = self.csv_column_names.video
 
     self._init_save_csv_files()
-    self.target_df = self._remove_existing_songs_from_the_input_df()
+    self.target_df = self._get_df_with_unique_songs()
     print(f"Number of songs to crawl: {len(self.target_df)}")
 
 
@@ -73,19 +73,34 @@ class MusicCrawler:
       assert set(chosen_df.columns) == set(CHOSEN_COLUMNS)
     else:
       chosen_df = pd.DataFrame(columns=CHOSEN_COLUMNS)
-    self.chosen_df = self._remove_rows_without_audio(chosen_df)
+    self.chosen_df = self._refine_chosen_df(chosen_df)
 
 
-  def _remove_rows_without_audio(self, df):
+  def _refine_chosen_df(self, chosen_df):
+    # remove rows that are not in input df, or do not have corresponding audio files
+    input_df = self._get_df_with_unique_songs()
+
     idx_to_remove = []
-    for idx, row in df.iterrows():
+    for idx, row in chosen_df.iterrows():
       date = row[self.out_csv_col_names.year]
       title = row[self.out_csv_col_names.title]
       artist = row[self.out_csv_col_names.artist]
       song_id = get_song_id(date, title, artist)
-      if not Path(f"{self.save_audio_dir}/{song_id}.mp3").exists():
+      mp3_fn = Path(f"{self.save_audio_dir}/{song_id}.mp3")
+
+      # remove rows that does not have audio file
+      if not mp3_fn.exists():
         idx_to_remove.append(idx)
-    return df.drop(index=idx_to_remove)
+      # remove rows that are not in input df
+      elif input_df[(input_df[self.in_csv_col_names.year] == date) & (input_df[self.in_csv_col_names.title] == title) & (input_df[self.in_csv_col_names.artist] == artist)].empty:
+        idx_to_remove.append(idx)
+        if mp3_fn.exists():
+          mp3_fn.rename(self.removed_audio_dir / Path(f'{song_id}.mp3'))
+
+    chosen_df = chosen_df.drop(index=idx_to_remove)
+    chosen_df.to_csv(self.save_csv_fns.chosen, index=False)
+    
+    return chosen_df
 
 
   def _get_df_with_unique_songs(self) -> pd.DataFrame:
@@ -277,23 +292,38 @@ class MusicCrawler:
     song_list = [(row[self.in_csv_col_names.title], row[self.in_csv_col_names.artist], row[self.in_csv_col_names.year], self.exclude_keywords, topk, self.include_keywords) \
                  for _, row in self.target_df.iterrows()]
 
-    self.run_parallel(song_list) # Results are saved while crawling
+    # self.run_parallel(song_list) # Results are saved while crawling
 
     # Check if all chosen songs have corresponding mp3 files
     self.check_downloaded_files()
 
   def check_downloaded_files(self):
-    chosen_fn = self.save_csv_fns.chosen
+    chosen_fn = Path(self.save_csv_fns.chosen)
     if not chosen_fn.exists():
         logging.info("No chosen file found.")
         return
-
+    
     chosen_df = pd.read_csv(chosen_fn)
-    total_chosen = len(chosen_df)
-    actual_files = sum(1 for _ in self.save_audio_dir.glob('*.mp3'))
+    mp3_files = list(self.save_audio_dir.glob('*.mp3'))
 
-    logging.info(f"Number of songs noted as succeeded: {total_chosen}")
-    logging.info(f"Number of actual MP3 files: {actual_files}")
+    for _, row in pd.read_csv(chosen_fn).iterrows():
+        date = row[self.out_csv_col_names.year]
+        title = row[self.out_csv_col_names.title]
+        artist = row[self.out_csv_col_names.artist]
+        song_id = get_song_id(date, title, artist)
+        mp3_fn = Path(f"{self.save_audio_dir}/{song_id}.mp3")
+
+        if mp3_fn.exists():
+          mp3_files.remove(mp3_fn)
+
+    for mp3_fn in mp3_files:
+      mp3_fn.rename(self.removed_audio_dir / mp3_fn.name)
+
+    total_chosen_len = len(chosen_df)
+    actual_files_len = len(list(self.save_audio_dir.glob('*.mp3')))
+
+    logging.info(f"Number of songs noted as succeeded: {total_chosen_len}")
+    logging.info(f"Number of actual MP3 files: {actual_files_len}")
 
   def _get_song_identifier(self, date, song, artist):
     # This is different from the song_id used for file name
@@ -307,15 +337,16 @@ class MusicCrawler:
 class AdditionalMusicCrawler(MusicCrawler):
   def __init__(self, config, exclude_keywords, include_keywords, query_suffix):
     super().__init__(config, exclude_keywords, include_keywords, query_suffix)
+    self.removed_audio_dir = Path(config.data.removed_audio_dir)
 
 
   def _custom_init(self):
     for fn in [self.save_csv_fns.chosen, self.save_csv_fns.queries, self.save_csv_fns.failed]: # TODO(minigb): Better way to handle this?
       assert Path(fn).exists(), f"{fn} does not exist"
 
-    # Remove noisy results
-    cleaner = AudioDownloadCleaner(self.config)
-    cleaner.run()
+    # # Remove noisy results
+    # cleaner = AudioDownloadCleaner(self.config)
+    # cleaner.run()
 
     self.in_csv_col_names = self.csv_column_names.song
     self.out_csv_col_names = self.csv_column_names.video

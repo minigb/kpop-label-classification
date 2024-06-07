@@ -6,12 +6,23 @@ kpop_dataset:
   _dir: kpop-dataset
 
   song_list_csv_fn: ${kpop_dataset._dir}/song_list.csv
+  artist_list_csv_fn: ${kpop_dataset._dir}/artist_list.csv
 
   save_csv_name: ${kpop_dataset._dir}/csv/kpop
   save_csv_fns:
     chosen: ${kpop_dataset.save_csv_name}_chosen.csv
     failed: ${kpop_dataset.save_csv_name}_failed.csv
     queries: ${kpop_dataset.save_csv_name}_queries.csv
+  
+  type:
+    _dir: ${kpop_dataset._dir}/data_type
+    case_study:
+      _dir: ${kpop_dataset.type._dir}/case_study
+      artist_fn: ${kpop_dataset.type.case_study._dir}/artist.json
+      keyword_fn: ${kpop_dataset.type.case_study._dir}/keyword.json
+    major_label_fn: ${kpop_dataset.type._dir}/major_label.json
+
+  song_list_for_model_fn: ${kpop_dataset._dir}/song_list_for_model.csv
 
 data:
   _dir: . # TODO(minigb): change this to kpop-dataset
@@ -30,6 +41,7 @@ exclude_keywords:
   song_title_fn: ${exclude_keywords._dir}/song_title.json
   song_info_fn: ${exclude_keywords._dir}/song_info.json
 
+# TODO(minigb): This is moved to column_name.yaml. Remove this
 csv_column_names:
   song:
     year: year
