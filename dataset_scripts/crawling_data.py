@@ -410,7 +410,7 @@ def update_config(config):
     config.data.audio_dir = config.save_audio_dir
 
 
-@hydra.main(config_path='config', config_name='packed')
+@hydra.main(config_path="../config", config_name='packed')
 def main(config):
   """
   Example line to run the code: 

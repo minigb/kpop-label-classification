@@ -71,7 +71,7 @@ class ArtistAndLabelMatcher:
         df.to_csv(self.save_fn, index=False)
 
 
-@hydra.main(config_path='config', config_name='packed')
+@hydra.main(config_path="../config", config_name='packed')
 def main(config):
     matcher = ArtistAndLabelMatcher(config)
     matcher.run()

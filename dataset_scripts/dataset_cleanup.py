@@ -160,7 +160,7 @@ class AudioDownloadCleaner:
         self.move_audio_files()
 
 
-@hydra.main(config_path='config', config_name='packed')
+@hydra.main(config_path="../config", config_name='packed')
 def main(config):
     processor = AudioDownloadCleaner(config)
     processor.run()

@@ -76,7 +76,7 @@ class LabelAnnotator:
         self.df.to_csv(self.song_list_csv_fn, index=False)
 
 
-@hydra.main(config_path="config", config_name="packed")
+@hydra.main(config_path="../config", config_name="packed")
 def main(config):
     annotator = LabelAnnotator(config)
     annotator.run()

@@ -169,7 +169,7 @@ class MusicBrainzResultCleaner:
             print("No data found to merge.")
 
 
-@hydra.main(config_path='config', config_name='packed')
+@hydra.main(config_path="../config", config_name='packed')
 def main(config: DictConfig):
     processor = MusicBrainzResultCleaner(config)
     processor.run()
