@@ -3,46 +3,42 @@ import torch
 import torch.nn as nn
 import torchaudio
 
-
-class SpecModel(nn.Module):
-    def __init__(self, sr:int, n_fft:int, hop_length:int, n_mels:int):
-        super().__init__()
-        self.mel_converter = torchaudio.transforms.MelSpectrogram(sample_rate=sr, n_fft=n_fft, hop_length=hop_length, n_mels=n_mels)
-        self.db_converter = torchaudio.transforms.AmplitudeToDB()
-
-    def forward(self, x):
-        mel_spec = self.mel_converter(x)
-        return self.db_converter(mel_spec)
-
+from module import SpecModel
 
 class AudioModel(nn.Module):
-  def __init__(self, sr, channel, n_fft, hop_length, n_mels, out_channels, n_class):
+  def __init__(self, sr, n_fft, hop_length, n_mels, n_in_channel, n_out_channel, n_label_class, n_year_class):
     super().__init__()
     self.sr = sr
-    self.channel = channel
-    self.n_channels = {'mono': 1, 'stereo': 2}[self.channel]
+    self.n_fft = n_fft
+    self.hop_length = hop_length
+    self.n_mels = n_mels
     self.spec_converter = self.SpecModel(sr, n_fft, hop_length, n_mels) # shape: (batch_size, channels, n_mels, time_frames)
+
+    self.n_in_channel = n_in_channel
+    self.n_label_class = n_label_class
+    self.n_year_class = n_year_class
+
     self.batchnorm1d = nn.BatchNorm1d(self.n_channels*n_mels)
 
     # model architecture
-    self.conv_layer = nn.Sequential( 
-        nn.Conv2d(self.n_channels, out_channels, kernel_size=3, padding=1),
-        nn.BatchNorm2d(out_channels),
+    self.conv_layer = nn.Sequential(
+        nn.Conv2d(self.n_in_channel, n_out_channel, kernel_size=3, padding=1),
+        nn.BatchNorm2d(n_out_channel),
         nn.ReLU(),
         nn.MaxPool2d(3),
 
-        nn.Conv2d(out_channels, out_channels, kernel_size=3, padding=1), 
-        nn.BatchNorm2d(out_channels),
+        nn.Conv2d(n_out_channel, n_out_channel, kernel_size=3, padding=1), 
+        nn.BatchNorm2d(n_out_channel),
         nn.ReLU(),
         nn.MaxPool2d(3), 
 
-        nn.Conv2d(out_channels, out_channels, kernel_size=3, padding=1), 
-        nn.BatchNorm2d(out_channels),
+        nn.Conv2d(n_out_channel, n_out_channel, kernel_size=3, padding=1), 
+        nn.BatchNorm2d(n_out_channel),
         nn.ReLU(),
         nn.MaxPool2d(3), 
       )
     
-    self.classification_head = ClassificationHead(out_channels, n_class, self.n_channels)
+    self.classification_head = ClassificationHead(n_out_channel, n_class, self.n_channels)
 
   def get_spec(self, x):
     return self.spec_converter(x)

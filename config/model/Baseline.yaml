@@ -1,0 +1,15 @@
+cls: Baseline
+
+cfg:
+  # spec model
+  sr: 48000
+  n_fft: 1024
+  hop_length: 512
+  n_mels: 80
+
+  # model
+  n_in_channel: 1
+  n_out_channel: 64
+  
+  n_label_class: 4
+  n_year_class: 31 # 1994~2024
