@@ -20,7 +20,7 @@ kpop_dataset:
       _dir: ${kpop_dataset.type._dir}/case_study
       artist_fn: ${kpop_dataset.type.case_study._dir}/artist.json
       keyword_fn: ${kpop_dataset.type.case_study._dir}/keyword.json
-    small_set_fn: ${kpop_dataset.type._dir}/small_set.json
+    major_label_fn: ${kpop_dataset.type._dir}/major_label.json
 
   song_list_for_model_fn: ${kpop_dataset._dir}/song_list_for_model.csv
 

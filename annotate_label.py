@@ -16,7 +16,7 @@ class LabelAnnotator:
 
         self.case_study_artist_json_fn = Path(config.kpop_dataset.type.case_study.artist_fn)
         self.case_study_keyword_json_fn = Path(config.kpop_dataset.type.case_study.keyword_fn)
-        self.small_json_fn = Path(config.kpop_dataset.type.small_set_fn)
+        self.small_json_fn = Path(config.kpop_dataset.type.major_label_fn)
 
         
         self.column_name = config.column_name
@@ -28,7 +28,7 @@ class LabelAnnotator:
     def run(self):
         self._match_label()
         self._annotate_case_study()
-        self._annotate_small_set()
+        self._annotate_is_major_label()
         # TODO(minigb): Do this later when audio crawling is done
         # self._annotate_train_test_split()
         # self._check_columns()
@@ -86,13 +86,13 @@ class LabelAnnotator:
                     self.df.loc[idx, self.column_name.is_case_study] = True
                     break
 
-    def _annotate_small_set(self):
-        self.df[self.column_name.small_set] = "_"
+    def _annotate_is_major_label(self):
+        self.df[self.column_name.is_major_label] = "_"
         label_dict = load_json(self.small_json_fn)
         for representative, label_list in label_dict.items():
             for label_name in label_list:
                 idxs = self.df[self.df[self.column_name.label] == label_name].index
-                self.df.loc[idxs, self.column_name.small_set] = representative
+                self.df.loc[idxs, self.column_name.is_major_label] = representative
 
     def _annotate_train_test_split(self):
         for column_name in [self.column_name.is_train, self.column_name.is_test]:
