@@ -10,6 +10,10 @@ cfg:
   # model
   n_in_channel: 1
   n_out_channel: 64
-  
-  n_label_class: 4
-  n_year_class: 31 # 1994~2024
+
+  label:
+    n_class: 4 # sm, yg, jyp, hybe
+    n_dim: 256
+  year:
+    n_class: 31 # 1994~2024
+    n_dim: 256
