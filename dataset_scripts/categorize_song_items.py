@@ -1,3 +1,7 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import pandas as pd
 from pathlib import Path
 from tqdm import tqdm
@@ -120,8 +124,9 @@ class Categorizer:
         non_major_label_df = self.df[self.df[self.column_name.is_major_label] == False]
         random_pick_song = non_major_label_df.sample(n=self.train_config.inference_size, random_state=self.train_config.seed)
 
-        song_ids = [self._get_song_id(row) for _, row in random_pick_song.iterrows()]
-        self.result_dict[self.dict_key.inference] = song_ids
+        song_ids_dict = {'_': # dummy key
+                         [self._get_song_id(row) for _, row in random_pick_song.iterrows()]}
+        self.result_dict[self.dict_key.inference] = song_ids_dict
 
     def _get_song_id(self, row):
         year = row[self.column_name.song.year]

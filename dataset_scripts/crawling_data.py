@@ -1,4 +1,7 @@
 # This code an updated vesion of "https://github.com/MALerLab/pop-era-classification/blob/main/crawling_data.py"
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import pandas as pd
 import yt_dlp

@@ -2,17 +2,8 @@
 
 set -e
 
-# Get the directory of the current shell script
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
 # Set the directory name where the Python scripts are located
 dir_name="dataset_scripts"
-
-# Get the parent directory of the script directory
-PARENT_DIR="$(dirname "$SCRIPT_DIR")"
-
-# Export PYTHONPATH to include the parent directory
-export PYTHONPATH="$PARENT_DIR:$PYTHONPATH"
 
 # List of Python scripts to run
 scripts=(
@@ -33,7 +24,7 @@ scripts=(
 for script in "${scripts[@]}"; 
 do
     echo "Running $script"
-    python "$SCRIPT_DIR/$dir_name/$script"
+    python "$dir_name/$script"
 done
 
 echo "All scripts have been executed successfully."
