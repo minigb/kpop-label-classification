@@ -12,12 +12,10 @@ class LabelAnnotator:
         self.artists_per_label_dir = Path(config.data.artists_dir)
         self.recordings_per_artist_dir = Path(config.data.recordings_dir)
         self.artist_list_csv_fn = Path(config.kpop_dataset.artist_list_csv_fn)
-        self.save_fn = Path(config.kpop_dataset.song_list_for_model_fn)
 
         self.case_study_artist_json_fn = Path(config.kpop_dataset.type.case_study.artist_fn)
         self.case_study_keyword_json_fn = Path(config.kpop_dataset.type.case_study.keyword_fn)
         self.small_json_fn = Path(config.kpop_dataset.type.major_label_fn)
-
         
         self.column_name = config.column_name
         self.test_size = config.test_size
@@ -27,7 +25,7 @@ class LabelAnnotator:
 
     def run(self):
         self._match_label()
-        self._annotate_case_study()
+        # self._annotate_case_study()
         self._annotate_is_major_label()
         # TODO(minigb): Do this later when audio crawling is done
         # self._annotate_train_test_split()
@@ -121,8 +119,7 @@ class LabelAnnotator:
             assert count_true == 1, f"Multiple True in {row[self.column_name.song.title]}"
 
     def _save_csv(self):
-        self.save_fn.parent.mkdir(parents=True, exist_ok=True)
-        self.df.to_csv(self.save_fn, index=False)
+        self.df.to_csv(self.song_list_csv_fn, index=False)
 
 
 @hydra.main(config_path="config", config_name="packed")

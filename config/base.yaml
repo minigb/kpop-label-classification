@@ -22,8 +22,6 @@ kpop_dataset:
       keyword_fn: ${kpop_dataset.type.case_study._dir}/keyword.json
     major_label_fn: ${kpop_dataset.type._dir}/major_label.json
 
-  song_list_for_model_fn: ${kpop_dataset._dir}/song_list_for_model.csv
-
 data:
   _dir: . # TODO(minigb): change this to kpop-dataset
   audio_dir: ${data._dir}/audio
