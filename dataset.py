@@ -10,7 +10,7 @@ import pandas as pd
 from utils.json import load_json
 from utils.song_id import decode_song_id
 
-class KpopDataset:
+class KpopDataset: # train, valid, test
     def __init__(self, config, mode):
         self.mode = mode
 
@@ -94,7 +94,7 @@ class KpopDataset:
         return pt_list
 
     def __len__(self):
-        pass
+        return len(self.data)
 
     def __getitem__(self, idx):
-        pass
+        return self.data[idx]
