@@ -1,3 +1,2 @@
 wandb:
   project_name: Kpop Label Classification
-  run_name_prefix: null
