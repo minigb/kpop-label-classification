@@ -34,7 +34,7 @@ def main(cfg: DictConfig):
     # wandb.watch(model, log="gradients", log_freq=1000)
 
     # Train the model and log with wandb
-    train_model(model, train_loader, val_loader, criterion, optimizer, cfg.train.num_epochs, device)
+    train_model(model, train_loader, val_loader, criterion, optimizer, cfg.train.num_epochs, valid_freq=cfg.train.valid_freq, smoothing=cfg.train.smoothing, device=device)
 
     # Save the model at the end of training
     # torch.save(model.state_dict(), 'final_model.pth')

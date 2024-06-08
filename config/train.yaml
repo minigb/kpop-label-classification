@@ -3,6 +3,8 @@ train:
   batch_size: 64
   learning_rate: 1e-4
   num_epochs: 500
+  valid_freq: 1
+  smoothing: 0.1
   
 
 data_setting:

@@ -51,7 +51,7 @@ def train_one_epoch(model, dataloader, criterion, optimizer, device, epoch, smoo
     average_loss = running_loss / len(dataloader)
     return average_loss
 
-def validate_one_epoch(model, dataloader, criterion, device, epoch, smoothing=0.1):
+def validate_per_frequency(model, dataloader, criterion, device, smoothing=0.1):
     model.eval()
     running_loss = 0.0
     with torch.no_grad():
@@ -71,22 +71,23 @@ def validate_one_epoch(model, dataloader, criterion, device, epoch, smoothing=0.
 
             loss_value = loss.item()
             running_loss += loss_value
-            wandb.log({"Validation Loss per Iteration": loss_value})
+            wandb.log({"Validation Loss per Period": loss_value})
 
     average_loss = running_loss / len(dataloader)
     return average_loss
 
-def train_model(model, train_loader, val_loader, criterion, optimizer, num_epochs, device, smoothing=0.1):
+def train_model(model, train_loader, val_loader, criterion, optimizer, num_epochs, device, smoothing=0.1, valid_freq=1):
     best_loss = float('inf')
     for epoch in tqdm(range(num_epochs), desc='Epochs'):
-        train_loss = train_one_epoch(model, train_loader, criterion, optimizer, device, epoch, smoothing)
-        val_loss = validate_one_epoch(model, val_loader, criterion, device, epoch, smoothing)
+        train_one_epoch(model, train_loader, criterion, optimizer, device, epoch, smoothing)
+        if epoch % valid_freq == 0: # currently valid_freq is set to 1
+            val_loss = validate_per_frequency(model, val_loader, criterion, device, smoothing)
 
-        if val_loss < best_loss:
-            best_loss = val_loss
-            # torch.save(model.state_dict(), 'best_model.pth')
-            wandb.save('best_model.pth')
-            wandb.run.summary["Best Validation Loss"] = best_loss
+            if val_loss < best_loss:
+                best_loss = val_loss
+                # torch.save(model.state_dict(), 'best_model.pth')
+                wandb.save('best_model.pth')
+                wandb.run.summary["Best Validation Loss"] = best_loss
 
         # # Save the model at the end of every epoch
         # torch.save(model.state_dict(), f'model_epoch_{epoch+1}.pth')
