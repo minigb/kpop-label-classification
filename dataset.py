@@ -48,7 +48,7 @@ class KpopDataset: # train, valid, test
                 year, _, _ = decode_song_id(song_id)
 
                 song_ids.append(song_id)
-                class_labels.append((company_label, year))
+                class_labels.append((company_label, int(year)))
 
         load_result = []
         assert len(song_ids) == len(class_labels)
@@ -64,9 +64,13 @@ class KpopDataset: # train, valid, test
 
         pt_path_list = [self.pt_dir / Path(f'{self.mode}/{self.n_in_channel}_{self.sr}/{song_id}/{segment_num}.pt') \
                         for segment_num in range(n_segments)]
-        if all([pt_path.exists() for pt_path in pt_path_list]):
-            pt_list = [torch.load(pt_path) for pt_path in pt_path_list]
-            return pt_list
+        # if all([pt_path.exists() for pt_path in pt_path_list]):
+        #     pt_list = [torch.load(pt_path) for pt_path in pt_path_list]
+        #     return pt_list
+
+        assert all([pt_path.exists() for pt_path in pt_path_list])
+        pt_list = [torch.load(pt_path) for pt_path in pt_path_list]
+        return pt_list
 
         audio_fn = Path(f'{self.audio_dir}/{song_id}.mp3')
         assert audio_fn.exists(), f'{audio_fn} does not exist'

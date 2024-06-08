@@ -23,7 +23,7 @@ def main(cfg: DictConfig):
     val_loader = DataLoader(val_dataset, batch_size=cfg.train.batch_size, shuffle=False)
 
     model_class = getattr(model_zoo, cfg.model.name)
-    model = model_class(cfg.model).to(device)
+    model = model_class(cfg.model.cfg).to(device)
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=cfg.train.learning_rate)
 
