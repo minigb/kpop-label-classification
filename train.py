@@ -3,8 +3,9 @@ import torch.optim as optim
 import torch.nn as nn
 from torch.utils.data import DataLoader
 import hydra
-from omegaconf import DictConfig
+from omegaconf import DictConfig, OmegaConf
 import wandb
+import datetime
 
 import model_zoo
 from dataset import KpopDataset
@@ -12,7 +13,9 @@ from trainer import train_model
 
 @hydra.main(config_path='config', config_name='packed')
 def main(cfg: DictConfig):
-    wandb.init(project=cfg.wandb.project_name, config=cfg)
+    wandb.init(project=cfg.wandb.project_name,
+               config=OmegaConf.to_container(cfg, resolve=True),
+               name=datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
 
     device = cfg.model.cfg.device
 

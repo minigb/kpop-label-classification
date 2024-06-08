@@ -6,5 +6,6 @@ __pycache__
 .hydra
 
 audio*
+wandb
 
 tmp_*
