@@ -45,8 +45,9 @@ def train_one_epoch(model, dataloader, criterion, optimizer, device, epoch, smoo
         optimizer.step()
 
         running_loss += loss.item()
-        wandb.log({"Train Loss per Iteration": running_loss, "Epoch": epoch})
+        wandb.log({"Train Loss per Iteration": running_loss})
 
+    wandb.log({"Epoch": epoch})
     average_loss = running_loss / len(dataloader)
     return average_loss
 
@@ -69,8 +70,9 @@ def validate_one_epoch(model, dataloader, criterion, device, epoch, smoothing=0.
             loss = label_loss + year_loss
 
             running_loss += loss.item()
-            wandb.log({"Validation Loss per Iteration": running_loss, "Epoch": epoch})
+            wandb.log({"Validation Loss per Iteration": running_loss})
 
+    wandb.log({"Epoch": epoch})
     average_loss = running_loss / len(dataloader)
     return average_loss
 
