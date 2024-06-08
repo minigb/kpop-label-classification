@@ -71,7 +71,7 @@ class AudioModel(nn.Module):
 
 #     batch_size = 1
 #     n_in_channel = 1
-#     x = torch.randn(batch_size, n_in_channel, cfg.model.cfg.sr * 30) # (batch_size, channels, time_frames)
+#     x = torch.randn(batch_size, n_in_channel, cfg.model.cfg.sr * 10) # (batch_size, channels, time_frames)
 #     out = model(x)
 #     print(out.shape)
 
