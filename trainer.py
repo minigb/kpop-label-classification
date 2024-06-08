@@ -1,7 +1,5 @@
 import torch
-import torch.optim as optim
-import torch.nn as nn
-from torch.utils.data import DataLoader
+from tqdm.auto import tqdm
 import wandb
 
 def smooth_labels(labels, num_classes, smoothing=0.1):
@@ -78,7 +76,7 @@ def validate_one_epoch(model, dataloader, criterion, device, epoch, smoothing=0.
 
 def train_model(model, train_loader, val_loader, criterion, optimizer, num_epochs, device, smoothing=0.1):
     best_loss = float('inf')
-    for epoch in range(num_epochs):
+    for epoch in tqdm(range(num_epochs), desc='Epochs'):
         train_loss = train_one_epoch(model, train_loader, criterion, optimizer, device, epoch, smoothing)
         val_loss = validate_one_epoch(model, val_loader, criterion, device, epoch, smoothing)
 
@@ -86,7 +84,7 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, num_epoch
 
         if val_loss < best_loss:
             best_loss = val_loss
-            torch.save(model.state_dict(), 'best_model.pth')
+            # torch.save(model.state_dict(), 'best_model.pth')
             wandb.save('best_model.pth')
             wandb.run.summary["Best Validation Loss"] = best_loss
 

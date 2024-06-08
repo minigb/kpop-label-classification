@@ -64,13 +64,9 @@ class KpopDataset: # train, valid, test
 
         pt_path_list = [self.pt_dir / Path(f'{self.mode}/{self.n_in_channel}_{self.sr}/{song_id}/{segment_num}.pt') \
                         for segment_num in range(n_segments)]
-        # if all([pt_path.exists() for pt_path in pt_path_list]):
-        #     pt_list = [torch.load(pt_path) for pt_path in pt_path_list]
-        #     return pt_list
-
-        assert all([pt_path.exists() for pt_path in pt_path_list])
-        pt_list = [torch.load(pt_path) for pt_path in pt_path_list]
-        return pt_list
+        if all([pt_path.exists() for pt_path in pt_path_list]):
+            pt_list = [torch.load(pt_path) for pt_path in pt_path_list]
+            return pt_list
 
         audio_fn = Path(f'{self.audio_dir}/{song_id}.mp3')
         assert audio_fn.exists(), f'{audio_fn} does not exist'
@@ -86,17 +82,20 @@ class KpopDataset: # train, valid, test
             new_n_segments = audio_len // (self.sr * self.clip_len)
             n_segments = new_n_segments
         
+        # clipping
         sample_clip_len = self.sr * self.clip_len
         ended = 0
         pt_list = []
         for i, pt_path in enumerate(pt_path_list):
-            max_start = ended + (audio_len - sample_clip_len * (n_segments - i))
-            start = random.randint(ended, max_start-1)
+            min_start = ended
+            max_start = audio_len - sample_clip_len * (n_segments - i)
+            start = random.randint(min_start, max_start-1)
             ended = start + sample_clip_len
+            assert ended <= audio_len
 
             audio_segment = audio[:, start:ended]
             audio_segment = audio_segment.to(dtype=torch.float16)
-            assert audio_segment.shape[0] == self.n_in_channel
+            assert audio_segment.shape == (self.n_in_channel, sample_clip_len)
 
             pt_path.parent.mkdir(parents=True, exist_ok=True)
             torch.save(audio_segment, pt_path)

@@ -37,7 +37,7 @@ def main(cfg: DictConfig):
     train_model(model, train_loader, val_loader, criterion, optimizer, cfg.train.num_epochs, device)
 
     # Save the model at the end of training
-    torch.save(model.state_dict(), 'final_model.pth')
+    # torch.save(model.state_dict(), 'final_model.pth')
     wandb.save('final_model.pth')
 
     # Finish the wandb run
