@@ -2,8 +2,10 @@ import torch
 import torch.optim as optim
 import torch.nn as nn
 from torch.utils.data import DataLoader
+from tqdm.auto import tqdm
+import wandb
 
-def train_one_epoch(model, dataloader, criterion, optimizer, device):
+def train_one_epoch(model, dataloader, criterion, optimizer, device, epoch):
     model.train()
     running_loss = 0.0
     for batch in dataloader:
@@ -22,9 +24,11 @@ def train_one_epoch(model, dataloader, criterion, optimizer, device):
 
         running_loss += loss.item()
 
-    return running_loss / len(dataloader)
+    average_loss = running_loss / len(dataloader)
+    wandb.log({"Train Loss": average_loss, "Epoch": epoch})
+    return average_loss
 
-def validate_one_epoch(model, dataloader, criterion, device):
+def validate_one_epoch(model, dataloader, criterion, device, epoch):
     model.eval()
     running_loss = 0.0
     with torch.no_grad():
@@ -40,18 +44,22 @@ def validate_one_epoch(model, dataloader, criterion, device):
 
             running_loss += loss.item()
 
-    return running_loss / len(dataloader)
+    average_loss = running_loss / len(dataloader)
+    wandb.log({"Validation Loss": average_loss, "Epoch": epoch})
+    return average_loss
 
 def train_model(model, train_loader, val_loader, criterion, optimizer, num_epochs, device):
     best_loss = float('inf')
-    for epoch in range(num_epochs):
-        train_loss = train_one_epoch(model, train_loader, criterion, optimizer, device)
-        val_loss = validate_one_epoch(model, val_loader, criterion, device)
+    for epoch in tqdm(range(num_epochs), desc='Running Epochs'):
+        train_loss = train_one_epoch(model, train_loader, criterion, optimizer, device, epoch)
+        val_loss = validate_one_epoch(model, val_loader, criterion, device, epoch)
 
         print(f'Epoch {epoch+1}/{num_epochs}, Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f}')
 
         if val_loss < best_loss:
             best_loss = val_loss
             torch.save(model.state_dict(), 'best_model.pth')
+            wandb.run.summary["Best Validation Loss"] = best_loss
 
     print('Training complete. Best validation loss:', best_loss)
+    wandb.run.summary["Final Best Validation Loss"] = best_loss

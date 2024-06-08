@@ -4,6 +4,7 @@ import torch.nn as nn
 from torch.utils.data import DataLoader
 import hydra
 from omegaconf import DictConfig
+import wandb
 
 import model_zoo
 from dataset import KpopDataset
@@ -11,16 +12,13 @@ from trainer import train_model
 
 @hydra.main(config_path='config', config_name='packed')
 def main(cfg: DictConfig):
+    wandb.init(project=cfg.wandb.project_name, config=cfg)
+
     device = cfg.model.cfg.device
 
-    num_samples = 1000
-    inputs = torch.randn(num_samples, cfg.model.n_in_channel, cfg.model.sr * 30)  # Example input tensor
-    labels = torch.randint(0, cfg.model.n_label_class, (num_samples,))  # Example label tensor
-    years = torch.randint(0, cfg.model.n_year_class, (num_samples,))  # Example year tensor
-
+    # Use KpopDataset for train and validation datasets
     train_dataset = KpopDataset(cfg, cfg.dict_key.train)
     val_dataset = KpopDataset(cfg, cfg.dict_key.valid)
-    # test_dataset = KpopDataset(cfg, cfg.dict_key.test)
 
     train_loader = DataLoader(train_dataset, batch_size=cfg.train.batch_size, shuffle=True)
     val_loader = DataLoader(val_dataset, batch_size=cfg.train.batch_size, shuffle=False)
@@ -30,7 +28,11 @@ def main(cfg: DictConfig):
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=cfg.train.learning_rate)
 
-    train_model(model, train_loader, val_loader, criterion, optimizer, cfg.num_epochs, device)
+    # Train the model and log with wandb
+    train_model(model, train_loader, val_loader, criterion, optimizer, cfg.train.num_epochs, device)
+
+    # Finish the wandb run
+    wandb.finish()
 
 if __name__ == '__main__':
     main()
