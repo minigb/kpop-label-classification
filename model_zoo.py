@@ -5,7 +5,7 @@ import hydra
 from module import SpecModel
 
 
-class AudioModel(nn.Module):
+class Basic(nn.Module):
     def __init__(self, cfg):
         super().__init__()
         self.n_in_channel = cfg.n_in_channel
