@@ -13,11 +13,7 @@ from trainer import train_model
 
 @hydra.main(config_path='config', config_name='packed')
 def main(cfg: DictConfig):
-    wandb.init(project=cfg.wandb.project_name,
-               config=OmegaConf.to_container(cfg, resolve=True),
-               name=datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
-
-    device = cfg.model.cfg.device
+    device = cfg.train.device
 
     # Use KpopDataset for train and validation datasets
     train_dataset = KpopDataset(cfg, cfg.dict_key.train)
@@ -31,6 +27,9 @@ def main(cfg: DictConfig):
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=cfg.train.learning_rate)
 
+    wandb.init(project=cfg.wandb.project_name,
+               config=OmegaConf.to_container(cfg, resolve=True),
+               name=datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
     # # Watch the model for gradient updates, logging every 1000 batches
     # wandb.watch(model, log="gradients", log_freq=1000)
 
