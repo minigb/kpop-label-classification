@@ -25,7 +25,6 @@ def smooth_labels(labels, num_classes, smoothing=0.1):
     
     return smoothed_labels
 
-
 def train_one_epoch(model, dataloader, criterion, optimizer, device, epoch, smoothing=0.1):
     model.train()
     running_loss = 0.0
@@ -88,7 +87,12 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, num_epoch
         if val_loss < best_loss:
             best_loss = val_loss
             torch.save(model.state_dict(), 'best_model.pth')
+            wandb.save('best_model.pth')
             wandb.run.summary["Best Validation Loss"] = best_loss
+
+        # # Save the model at the end of every epoch
+        # torch.save(model.state_dict(), f'model_epoch_{epoch+1}.pth')
+        # wandb.save(f'model_epoch_{epoch+1}.pth')
 
     print('Training complete. Best validation loss:', best_loss)
     wandb.run.summary["Final Best Validation Loss"] = best_loss

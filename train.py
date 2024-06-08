@@ -31,8 +31,15 @@ def main(cfg: DictConfig):
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=cfg.train.learning_rate)
 
+    # # Watch the model for gradient updates, logging every 1000 batches
+    # wandb.watch(model, log="gradients", log_freq=1000)
+
     # Train the model and log with wandb
     train_model(model, train_loader, val_loader, criterion, optimizer, cfg.train.num_epochs, device)
+
+    # Save the model at the end of training
+    torch.save(model.state_dict(), 'final_model.pth')
+    wandb.save('final_model.pth')
 
     # Finish the wandb run
     wandb.finish()
