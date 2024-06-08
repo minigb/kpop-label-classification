@@ -7,6 +7,7 @@ import random
 
 from utils.json import load_json
 from utils.song_id import decode_song_id
+from utils.run_info import create_run_info
 
 class KpopDataset: # train, valid, test
     def __init__(self, config, mode):
@@ -26,6 +27,7 @@ class KpopDataset: # train, valid, test
         self.n_year_class = config.model.cfg.n_year_class
 
         self.dict_key = config.dict_key
+        _, self.run_info = create_run_info(config)
 
         self.seed = config.data_setting.seed
         random.seed(self.seed)
@@ -62,7 +64,7 @@ class KpopDataset: # train, valid, test
     def _load_and_save_audio_segment_pt_files(self, song_id):
         n_segments = self.n_clip_segment
 
-        pt_path_list = [self.pt_dir / Path(f'{self.mode}/{self.n_in_channel}_{self.sr}/{song_id}/{segment_num}.pt') \
+        pt_path_list = [self.pt_dir / Path(f'{self.mode}/{self.run_info}/{song_id}/{segment_num}.pt') \
                         for segment_num in range(n_segments)]
         if all([pt_path.exists() for pt_path in pt_path_list]):
             pt_list = [torch.load(pt_path) for pt_path in pt_path_list]

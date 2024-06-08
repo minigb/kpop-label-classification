@@ -10,6 +10,7 @@ import datetime
 import model_zoo
 from dataset import KpopDataset
 from trainer import train_model
+from utils.run_info import create_run_info
 
 @hydra.main(config_path='config', config_name='packed')
 def main(cfg: DictConfig):
@@ -27,9 +28,10 @@ def main(cfg: DictConfig):
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=cfg.train.learning_rate)
 
+    run_name, _ = create_run_info(cfg)
     wandb.init(project=cfg.wandb.project_name,
                config=OmegaConf.to_container(cfg, resolve=True),
-               name=datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
+               name=run_name)
     # # Watch the model for gradient updates, logging every 1000 batches
     # wandb.watch(model, log="gradients", log_freq=1000)
 
