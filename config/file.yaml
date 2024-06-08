@@ -33,6 +33,8 @@ data:
   removed_recordings_dir: ${data.recordings_dir}_${data._removed_suffix}
   removed_artists_dir: ${data.artists_dir}_${data._removed_suffix}
 
+pt_dir: pt
+
 exclude_keywords:
   _dir: excluding_keywords
   video_title_fn: ${exclude_keywords._dir}/video_title.json

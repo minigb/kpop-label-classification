@@ -4,6 +4,8 @@ defaults:
   - column_name
   - dict_key
   - train
+  - model: Basic
+  - wandb_setting
   - _self_
 
 hydra:
