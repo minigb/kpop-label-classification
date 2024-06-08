@@ -63,17 +63,3 @@ class Basic(nn.Module):
         year_output = self.fc_year(out[:, out.size(1) // 2:])
 
         return label_output, year_output
-    
-
-# @hydra.main(config_path='config', config_name='packed')
-# def rum_dummy(cfg):
-#     model = AudioModel(cfg.model.cfg)
-
-#     batch_size = 1
-#     n_in_channel = 1
-#     x = torch.randn(batch_size, n_in_channel, cfg.model.cfg.sr * 10) # (batch_size, channels, time_frames)
-#     out = model(x)
-#     print(out.shape)
-
-# if __name__ == '__main__':
-#     rum_dummy()
