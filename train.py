@@ -27,7 +27,7 @@ def main(cfg: DictConfig):
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=cfg.train.learning_rate)
 
-    run_name = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + cfg.wandb.run_name
+    run_name = f'{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}_{cfg.wandb.run_name}'
     wandb.init(project=cfg.wandb.project_name,
                config=OmegaConf.to_container(cfg, resolve=True),
                name=run_name)
