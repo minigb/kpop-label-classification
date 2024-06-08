@@ -48,7 +48,6 @@ def train_one_epoch(model, dataloader, criterion, optimizer, device, epoch, smoo
         running_loss += loss_value
         wandb.log({"Train Loss per Iteration": loss_value})
 
-    wandb.log({"Epoch": epoch})
     average_loss = running_loss / len(dataloader)
     return average_loss
 
@@ -74,7 +73,6 @@ def validate_one_epoch(model, dataloader, criterion, device, epoch, smoothing=0.
             running_loss += loss_value
             wandb.log({"Validation Loss per Iteration": loss_value})
 
-    wandb.log({"Epoch": epoch})
     average_loss = running_loss / len(dataloader)
     return average_loss
 
