@@ -62,7 +62,7 @@ class KpopDataset: # train, valid, test
     def _load_and_save_audio_segment_pt_files(self, song_id):
         n_segments = self.n_clip_segment
 
-        pt_path_list = [self.pt_dir / Path(f'{self.mode}/{self.n_in_channel}_{self.sr}/{song_id}/{segment_num}.pt') \
+        pt_path_list = [self.pt_dir / Path(f'{self.mode}/{self.n_in_channel}_{self.sr}/{self.clip_len}s_{self.n_clip_segment}segs/{song_id}/{segment_num}.pt') \
                         for segment_num in range(n_segments)]
         if all([pt_path.exists() for pt_path in pt_path_list]):
             pt_list = [torch.load(pt_path) for pt_path in pt_path_list]

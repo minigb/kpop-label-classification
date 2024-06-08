@@ -27,9 +27,10 @@ def main(cfg: DictConfig):
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=cfg.train.learning_rate)
 
+    run_name = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + cfg.wandb.run_name
     wandb.init(project=cfg.wandb.project_name,
                config=OmegaConf.to_container(cfg, resolve=True),
-               name=datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
+               name=run_name)
     # # Watch the model for gradient updates, logging every 1000 batches
     # wandb.watch(model, log="gradients", log_freq=1000)
 
