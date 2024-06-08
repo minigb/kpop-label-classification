@@ -32,6 +32,12 @@ class KpopDataset: # train, valid, test
         self.seed = config.data_setting.seed
         random.seed(self.seed)
 
+        # Create mappings for labels and years
+        self.company_label_to_index = {'SM': 0, 'YG': 1, 'JYP': 2, 'HYBE': 3} # TODO(minigb): Remove hardcoding
+        self.index_to_company_label = {v: k for k, v in self.company_label_to_index.items()}
+        self.year_to_index = {year: i for i, year in enumerate(range(1994, 2025))} # TODO(minigb): Remove hardcoding
+        self.index_to_year = {v: k for k, v in self.year_to_index.items()}
+
         self.load_data()
 
     def load_data(self):
@@ -63,7 +69,8 @@ class KpopDataset: # train, valid, test
             pt_list = [torch.load(pt_path) for pt_path in pt_path_list]
             return pt_list
 
-        audio_fn = Path(f'{song_id}.mp3')
+        audio_fn = Path(f'{self.audio_dir}/{song_id}.mp3')
+        assert audio_fn.exists(), f'{audio_fn} does not exist'
         audio, org_sr = torchaudio.load(audio_fn)
         audio_len = audio.shape[-1]
         assert audio_len >= self.sr * self.clip_len * n_segments, f'audio_len: {audio_len}, n_segments: {n_segments}'
@@ -97,4 +104,13 @@ class KpopDataset: # train, valid, test
         return len(self.data)
 
     def __getitem__(self, idx):
-        return self.data[idx]
+        audio_segment, (company_label, year) = self.data[idx]
+        company_label_index = self.company_label_to_index[company_label]
+        year_index = self.year_to_index[year]
+        return audio_segment, company_label_index, year_index
+
+    def decode_company_label(self, index):
+        return self.index_to_company_label[index]
+
+    def decode_year(self, index):
+        return self.index_to_year[index]
