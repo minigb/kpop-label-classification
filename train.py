@@ -5,9 +5,8 @@ from torch.utils.data import DataLoader, TensorDataset
 import hydra
 from omegaconf import DictConfig
 
-from module import SpecModel
-from model_zoo import AudioModel  # Adjust this import based on your file structure
-from trainer import train_model
+from model_zoo import AudioModel
+from trainer import Trainer
 
 @hydra.main(config_path='config', config_name='packed')
 def main(cfg: DictConfig):
@@ -30,7 +29,8 @@ def main(cfg: DictConfig):
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=cfg.lr)
 
-    train_model(model, train_loader, val_loader, criterion, optimizer, cfg.num_epochs, device)
+    trainer = Trainer(model, train_loader, val_loader, criterion, optimizer, cfg.num_epochs, device)
+    trainer.train()
 
 if __name__ == '__main__':
     main()
