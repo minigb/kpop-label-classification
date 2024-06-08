@@ -10,7 +10,7 @@ from trainer import Trainer
 
 @hydra.main(config_path='config', config_name='packed')
 def main(cfg: DictConfig):
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    device = cfg.train.device
 
     # Dummy dataset for demonstration purposes
     num_samples = 1000

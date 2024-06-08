@@ -1,0 +1,4 @@
+train_set:
+  dir: ${file.pt_dir}
+  audio_dir: ${file.data.audio_dir}
+  
