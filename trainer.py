@@ -45,9 +45,9 @@ def train_one_epoch(model, dataloader, criterion, optimizer, device, epoch, smoo
         optimizer.step()
 
         running_loss += loss.item()
+        wandb.log({"Train Loss per Iteration": running_loss, "Epoch": epoch})
 
     average_loss = running_loss / len(dataloader)
-    wandb.log({"Train Loss": average_loss, "Epoch": epoch})
     return average_loss
 
 def validate_one_epoch(model, dataloader, criterion, device, epoch, smoothing=0.1):
@@ -69,9 +69,9 @@ def validate_one_epoch(model, dataloader, criterion, device, epoch, smoothing=0.
             loss = label_loss + year_loss
 
             running_loss += loss.item()
+            wandb.log({"Validation Loss per Iteration": running_loss, "Epoch": epoch})
 
     average_loss = running_loss / len(dataloader)
-    wandb.log({"Validation Loss": average_loss, "Epoch": epoch})
     return average_loss
 
 def train_model(model, train_loader, val_loader, criterion, optimizer, num_epochs, device, smoothing=0.1):
@@ -79,8 +79,6 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, num_epoch
     for epoch in tqdm(range(num_epochs), desc='Epochs'):
         train_loss = train_one_epoch(model, train_loader, criterion, optimizer, device, epoch, smoothing)
         val_loss = validate_one_epoch(model, val_loader, criterion, device, epoch, smoothing)
-
-        print(f'Epoch {epoch+1}/{num_epochs}, Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f}')
 
         if val_loss < best_loss:
             best_loss = val_loss
