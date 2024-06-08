@@ -23,7 +23,7 @@ def smooth_labels(labels, num_classes, smoothing=0.1):
     
     return smoothed_labels
 
-def train_one_epoch(model, dataloader, criterion, optimizer, device, epoch, smoothing=0.1):
+def train_one_epoch(model, dataloader, criterion, optimizer, device, smoothing=0.1):
     model.train()
     running_loss = 0.0
     for batch in dataloader:
@@ -51,7 +51,7 @@ def train_one_epoch(model, dataloader, criterion, optimizer, device, epoch, smoo
     average_loss = running_loss / len(dataloader)
     return average_loss
 
-def validate_per_frequency(model, dataloader, criterion, device, smoothing=0.1):
+def validate(model, dataloader, criterion, device, smoothing=0.1):
     model.eval()
     running_loss = 0.0
     with torch.no_grad():
@@ -79,9 +79,9 @@ def validate_per_frequency(model, dataloader, criterion, device, smoothing=0.1):
 def train_model(model, train_loader, val_loader, criterion, optimizer, num_epochs, device, smoothing=0.1, valid_freq=1):
     best_loss = float('inf')
     for epoch in tqdm(range(num_epochs), desc='Epochs'):
-        train_one_epoch(model, train_loader, criterion, optimizer, device, epoch, smoothing)
+        train_one_epoch(model, train_loader, criterion, optimizer, device, smoothing)
         if epoch % valid_freq == 0: # currently valid_freq is set to 1
-            val_loss = validate_per_frequency(model, val_loader, criterion, device, smoothing)
+            val_loss = validate(model, val_loader, criterion, device, smoothing)
 
             if val_loss < best_loss:
                 best_loss = val_loss
