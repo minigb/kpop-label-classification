@@ -60,27 +60,31 @@ class KpopDataset: # train, valid, test
         self.data = load_result
 
     def _load_and_save_audio_segment_pt_files(self, song_id):
-        n_segments = self.n_clip_segment
+        cur_pt_paths_dir = self.pt_dir / Path(f'{self.mode}/{self.n_in_channel}_{self.sr}/{self.clip_len}s_{self.n_clip_segment}segs/{song_id}')
+        if cur_pt_paths_dir.exists(): # TODO(minigb): Is this safe to check only the dir?
+            pt_path_list = [pt_path for pt_path in cur_pt_paths_dir.glob("*.pt")]
+            return [torch.load(pt_path) for pt_path in pt_path_list]
 
-        pt_path_list = [self.pt_dir / Path(f'{self.mode}/{self.n_in_channel}_{self.sr}/{self.clip_len}s_{self.n_clip_segment}segs/{song_id}/{segment_num}.pt') \
-                        for segment_num in range(n_segments)]
-        if all([pt_path.exists() for pt_path in pt_path_list]):
-            pt_list = [torch.load(pt_path) for pt_path in pt_path_list]
-            return pt_list
-
+        # load audio
         audio_fn = Path(f'{self.audio_dir}/{song_id}.mp3')
         assert audio_fn.exists(), f'{audio_fn} does not exist'
         audio, org_sr = torchaudio.load(audio_fn)
         audio_len = audio.shape[-1]
-        assert audio_len >= self.sr * self.clip_len * n_segments, f'audio_len: {audio_len}, n_segments: {n_segments}'
-
         if org_sr != self.sr:
             audio = torchaudio.functional.resample(audio, orig_freq=org_sr, new_freq=self.sr)
         if self.n_in_channel == 1:
             audio = audio.mean(dim=0).unsqueeze(0)
-        if self.mode == self.dict_key.test:
-            new_n_segments = audio_len // (self.sr * self.clip_len)
-            n_segments = new_n_segments
+        
+        # adjust n_segments
+        n_segments = self.n_clip_segment
+        if self.mode == self.dict_key.valid:
+            n_segments = 1
+        elif self.mode == self.dict_key.test:
+            n_segments = audio_len // (self.sr * self.clip_len)
+        assert audio_len >= self.sr * self.clip_len * n_segments, f'audio_len: {audio_len}, n_segments: {n_segments}'
+
+        pt_path_list = [self.pt_dir / Path(f'{self.mode}/{self.n_in_channel}_{self.sr}/{self.clip_len}s_{self.n_clip_segment}segs/{song_id}/{segment_num}.pt') \
+                        for segment_num in range(n_segments)]
         
         # clipping
         sample_clip_len = self.sr * self.clip_len
