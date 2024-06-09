@@ -8,5 +8,6 @@ __pycache__
 audio*
 wandb
 pt
+*.pth
 
 tmp_*

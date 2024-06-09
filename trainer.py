@@ -48,9 +48,8 @@ def train_one_epoch(model, dataloader, criterion, optimizer, device, smoothing):
         loss.backward()
         optimizer.step()
 
-        loss_value = loss.item()
-        running_loss += loss_value
-        wandb.log({"Train Loss per Iteration": loss_value})
+        running_loss += loss.item()
+        wandb.log({"[Train] Loss per Iteration": loss.item()})
 
     average_loss = running_loss / len(dataloader)
     return average_loss
@@ -66,9 +65,8 @@ def validate(model, dataloader, criterion, device, smoothing):
             label_output, year_output = model(inputs)
 
             loss = get_loss('Valid', criterion, label_output, year_output, labels, years, smoothing)
-            loss_value = loss.item()
-            running_loss += loss_value
-            wandb.log({"Validation Loss per Period": loss_value})
+            running_loss += loss.item()
+            wandb.log({"[Valid] Loss per Period": loss.item()})
 
     average_loss = running_loss / len(dataloader)
     return average_loss
@@ -77,11 +75,12 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, num_epoch
     best_loss = float('inf')
     for epoch in tqdm(range(num_epochs), desc='Epochs'):
         train_one_epoch(model, train_loader, criterion, optimizer, device, smoothing)
-        if epoch % valid_freq == 0: # currently valid_freq is set to 1
+        if epoch % valid_freq == 0:
             val_loss = validate(model, val_loader, criterion, device, smoothing)
 
             if val_loss < best_loss:
                 best_loss = val_loss
+                torch.save(model.state_dict(), 'best_model.pth')
                 wandb.save('best_model.pth')
                 wandb.run.summary["Best Validation Loss"] = best_loss
 
