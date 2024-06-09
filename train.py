@@ -15,7 +15,6 @@ from trainer import train_model
 def main(cfg: DictConfig):
     device = cfg.train.device
 
-    # Use KpopDataset for train and validation datasets
     train_dataset = KpopDataset(cfg, cfg.dict_key.train)
     val_dataset = KpopDataset(cfg, cfg.dict_key.valid)
 
@@ -27,20 +26,13 @@ def main(cfg: DictConfig):
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=cfg.train.learning_rate)
 
-    wandb.init(project=cfg.wandb.project_name,
-               config=OmegaConf.to_container(cfg, resolve=True),
-               name=datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
-    # # Watch the model for gradient updates, logging every 1000 batches
-    # wandb.watch(model, log="gradients", log_freq=1000)
+    run_name = f'{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}_{cfg.wandb.run_name}'
+    wandb.init(project=cfg.wandb.project_name, config=OmegaConf.to_container(cfg, resolve=True), name=run_name)
 
-    # Train the model and log with wandb
     train_model(model, train_loader, val_loader, criterion, optimizer, cfg.train.num_epochs, valid_freq=cfg.train.valid_freq, smoothing=cfg.train.smoothing, device=device)
 
-    # Save the model at the end of training
-    # torch.save(model.state_dict(), 'final_model.pth')
+    torch.save(model.state_dict(), 'final_model.pth')
     wandb.save('final_model.pth')
-
-    # Finish the wandb run
     wandb.finish()
 
 if __name__ == '__main__':

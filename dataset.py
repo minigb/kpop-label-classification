@@ -54,34 +54,34 @@ class KpopDataset: # train, valid, test
         assert len(song_ids) == len(class_labels)
         for song_id, class_label in tqdm(zip(song_ids, class_labels), total=len(song_ids), desc=f'Loading {self.mode} data'):
             audio_segments_pt = self._load_and_save_audio_segment_pt_files(song_id)
-            assert len(audio_segments_pt) >= self.n_clip_segment # greater than or equal to
+            assert len(audio_segments_pt) >= 1 # greater than or equal to
             load_result.extend([(audio_segment, class_label) for audio_segment in audio_segments_pt])
 
         self.data = load_result
 
     def _load_and_save_audio_segment_pt_files(self, song_id):
-        n_segments = self.n_clip_segment
-
-        pt_path_list = [self.pt_dir / Path(f'{self.mode}/{self.n_in_channel}_{self.sr}/{song_id}/{segment_num}.pt') \
+        def _get_n_segments():
+            if self.mode == self.dict_key.train:
+                return self.n_clip_segment
+            elif self.mode == self.dict_key.valid:
+                return 1
+            elif self.mode == self.dict_key.test:
+                _, audio_len = self._load_audio(song_id)
+                return audio_len // (self.sr * self.clip_len)
+            else:
+                raise ValueError(f'Invalid mode: {self.mode}')
+        
+        # return pt files if already exists
+        n_segments = _get_n_segments()
+        pt_path_list = [self.pt_dir / Path(f'{self.mode}/{self.n_in_channel}_{self.sr}/{self.clip_len}s_{self.n_clip_segment}segs/{song_id}/{segment_num}.pt') \
                         for segment_num in range(n_segments)]
         if all([pt_path.exists() for pt_path in pt_path_list]):
-            pt_list = [torch.load(pt_path) for pt_path in pt_path_list]
-            return pt_list
-
-        audio_fn = Path(f'{self.audio_dir}/{song_id}.mp3')
-        assert audio_fn.exists(), f'{audio_fn} does not exist'
-        audio, org_sr = torchaudio.load(audio_fn)
-        audio_len = audio.shape[-1]
+            return [torch.load(pt_path).to(torch.float16) for pt_path in pt_path_list]
+        
+        # load audio
+        audio, audio_len = self._load_audio(song_id)
         assert audio_len >= self.sr * self.clip_len * n_segments, f'audio_len: {audio_len}, n_segments: {n_segments}'
 
-        if org_sr != self.sr:
-            audio = torchaudio.functional.resample(audio, orig_freq=org_sr, new_freq=self.sr)
-        if self.n_in_channel == 1:
-            audio = audio.mean(dim=0).unsqueeze(0)
-        if self.mode == self.dict_key.test:
-            new_n_segments = audio_len // (self.sr * self.clip_len)
-            n_segments = new_n_segments
-        
         # clipping
         sample_clip_len = self.sr * self.clip_len
         ended = 0
@@ -103,6 +103,17 @@ class KpopDataset: # train, valid, test
 
         return pt_list
 
+    def _load_audio(self, song_id):
+        audio_fn = Path(f'{self.audio_dir}/{song_id}.mp3')
+        assert audio_fn.exists(), f'{audio_fn} does not exist'
+        audio, org_sr = torchaudio.load(audio_fn)
+        audio_len = audio.shape[-1]
+        if org_sr != self.sr:
+            audio = torchaudio.functional.resample(audio, orig_freq=org_sr, new_freq=self.sr)
+        if self.n_in_channel == 1:
+            audio = audio.mean(dim=0).unsqueeze(0)
+        return audio, audio_len
+    
     def __len__(self):
         return len(self.data)
 

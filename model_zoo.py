@@ -10,6 +10,7 @@ class Basic(nn.Module):
         super().__init__()
         self.n_in_channel = cfg.n_in_channel
         self.n_out_channel = cfg.n_out_channel
+        self.n_conv_layer = cfg.n_conv_layer
 
         self.n_label_class = cfg.n_label_class
         self.n_year_class = cfg.n_year_class
@@ -17,34 +18,33 @@ class Basic(nn.Module):
         self.spec_converter = SpecModel(cfg.sr, cfg.n_fft, cfg.hop_length, cfg.n_mels)  # shape: (batch_size, channels, n_mels, time_frames)
         self.batchnorm1d = nn.BatchNorm1d(self.n_in_channel * cfg.n_mels)
 
-        # input: (batch_size, n_in_channel, n_mels, time_frames)
-        self.conv_layer = nn.Sequential(
-            nn.Conv2d(self.n_in_channel, self.n_out_channel, kernel_size=cfg.kernel_size, padding=1),
-            nn.BatchNorm2d(self.n_out_channel),
-            nn.ReLU(),
-            nn.MaxPool2d(cfg.max_pool_size), # result: (batch_size, n_out_channel, n_mels // 3, time_frames // 3)
+        self._init_conv_layers(cfg)
+        self._init_fc_layers(cfg)
 
-            nn.Conv2d(self.n_out_channel, self.n_out_channel, kernel_size=cfg.kernel_size, padding=1), 
-            nn.BatchNorm2d(self.n_out_channel),
-            nn.ReLU(),
-            nn.MaxPool2d(cfg.max_pool_size), # result: (batch_size, n_out_channel, n_mels // 9, time_frames // 9)
+    def _init_conv_layers(self, cfg):
+        layers = []
+        in_channel = self.n_in_channel
+        out_channel = self.n_out_channel
+        for _ in range(self.n_conv_layer):
+            layers.append(nn.Conv2d(in_channel, out_channel, kernel_size=cfg.kernel_size, padding=1))
+            layers.append(nn.BatchNorm2d(out_channel))
+            layers.append(nn.ReLU())
+            layers.append(nn.MaxPool2d(cfg.max_pool_size))
+            in_channel = out_channel  # Update in_channel for the next layer
 
-            nn.Conv2d(self.n_out_channel, self.n_out_channel, kernel_size=cfg.kernel_size, padding=1), 
-            nn.BatchNorm2d(self.n_out_channel),
-            nn.ReLU(),
-            nn.MaxPool2d(cfg.max_pool_size), # result: (batch_size, n_out_channel, n_mels // 27, time_frames // 27)
-        )
+        self.conv_layer = nn.Sequential(*layers)
+    
+    def _init_fc_layers(self, cfg):
+        def _get_final_dim(n_mels, max_pool_size, n_conv_layer):
+            final_dim = n_mels
+            for _ in range(n_conv_layer):
+                final_dim = final_dim // max_pool_size
+            return self.n_out_channel * final_dim
 
-        # Initialize the fully connected layers
-        final_dim = self.n_out_channel * (cfg.n_mels // cfg.max_pool_size ** 3)
-        self.fc_label = nn.Sequential(
-            nn.Linear(final_dim // 2, self.n_label_class),
-            nn.Softmax(),
-        )
-        self.fc_year = nn.Sequential(
-            nn.Linear(final_dim - final_dim // 2, self.n_year_class),
-            nn.Softmax(),
-        )
+        final_dim = _get_final_dim(cfg.n_mels, cfg.max_pool_size, self.n_conv_layer)
+        fc_label_dim = final_dim // 2
+        self.fc_label = nn.Linear(fc_label_dim, self.n_label_class)
+        self.fc_year = nn.Linear(final_dim - fc_label_dim, self.n_year_class)
 
     def forward(self, x):
         spec = self.spec_converter(x) # (batch_size, channels, n_mels, time_frames)
