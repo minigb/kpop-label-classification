@@ -13,6 +13,7 @@ cfg:
   n_in_channel: 1
   n_out_channel: 64
 
+  n_conv_layer: 1
   kernel_size: 3
   max_pool_size: 3
 
