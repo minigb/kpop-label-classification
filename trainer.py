@@ -23,6 +23,16 @@ def smooth_labels(labels, num_classes, smoothing=0.1):
     
     return smoothed_labels
 
+def get_loss(criterion, label_output, year_output, labels, years, smoothing=0.1):
+    label_loss = criterion(label_output, labels)
+    
+    # Apply label smoothing for year classification
+    smoothed_years = smooth_labels(years, year_output.size(1), smoothing)
+    year_loss = torch.mean(torch.sum(-smoothed_years * torch.log_softmax(year_output, dim=1), dim=1))
+    
+    loss = (label_loss + year_loss) / 2
+    return loss
+
 def train_one_epoch(model, dataloader, criterion, optimizer, device, smoothing=0.1):
     model.train()
     running_loss = 0.0
@@ -33,14 +43,7 @@ def train_one_epoch(model, dataloader, criterion, optimizer, device, smoothing=0
         optimizer.zero_grad()
         label_output, year_output = model(inputs)
 
-        label_loss = criterion(label_output, labels)
-        
-        # Apply label smoothing for year classification
-        smoothed_years = smooth_labels(years, model.n_year_class, smoothing)
-        year_loss = torch.mean(torch.sum(-smoothed_years * torch.log_softmax(year_output, dim=1), dim=1))
-        
-        loss = label_loss + year_loss
-
+        loss = get_loss(criterion, label_output, year_output, labels, years, smoothing)
         loss.backward()
         optimizer.step()
 
@@ -61,14 +64,7 @@ def validate(model, dataloader, criterion, device, smoothing=0.1):
 
             label_output, year_output = model(inputs)
 
-            label_loss = criterion(label_output, labels)
-
-            # Apply label smoothing for year classification
-            smoothed_years = smooth_labels(years, model.n_year_class, smoothing)
-            year_loss = torch.mean(torch.sum(-smoothed_years * torch.log_softmax(year_output, dim=1), dim=1))
-
-            loss = label_loss + year_loss
-
+            loss = get_loss(criterion, label_output, year_output, labels, years, smoothing)
             loss_value = loss.item()
             running_loss += loss_value
             wandb.log({"Validation Loss per Period": loss_value})
