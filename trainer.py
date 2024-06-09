@@ -28,8 +28,8 @@ def get_loss(run_type, criterion, label_output, year_output, labels, years, smoo
     # Apply label smoothing for year classification
     smoothed_years = smooth_labels(years, year_output.size(1), smoothing)
     year_loss = torch.mean(torch.sum(-smoothed_years * torch.log_softmax(year_output, dim=1), dim=1))
-    wandb.log({f"{[run_type]} Label Loss": label_loss.item(),
-               f"{[run_type]} Year Loss": year_loss.item()})
+    wandb.log({f'[{run_type}] Label Loss': label_loss.item(),
+               f'[{run_type}] Year Loss': year_loss.item()})
     
     loss = (label_loss + year_loss) / 2
     return loss

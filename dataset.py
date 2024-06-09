@@ -54,7 +54,7 @@ class KpopDataset: # train, valid, test
         assert len(song_ids) == len(class_labels)
         for song_id, class_label in tqdm(zip(song_ids, class_labels), total=len(song_ids), desc=f'Loading {self.mode} data'):
             audio_segments_pt = self._load_and_save_audio_segment_pt_files(song_id)
-            assert len(audio_segments_pt) >= self.n_clip_segment # greater than or equal to
+            assert len(audio_segments_pt) >= 1 # greater than or equal to
             load_result.extend([(audio_segment, class_label) for audio_segment in audio_segments_pt])
 
         self.data = load_result
