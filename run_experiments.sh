@@ -3,10 +3,10 @@
 # Array of model names to test
 models=(
         # "Basic" # This is already done
-        "BasicWith3Convs"
-        "BasicWith15s1seg"
-        "BasicWith15s2seg"
-        "BasicWith30s2seg"
+        "Basic3Convs15s1seg"
+        "Basic3Convs15s2seg"
+        "Basic3Convs30s1seg"
+        "Basic3Convs30s2seg"
         )
 
 # Loop through each model and run the training script
