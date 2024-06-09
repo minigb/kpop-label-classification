@@ -42,12 +42,9 @@ class Basic(nn.Module):
             return self.n_out_channel * final_dim
 
         final_dim = _get_final_dim(cfg.n_mels, cfg.max_pool_size, self.n_conv_layer)
-        self.fc_label = nn.Sequential(
-            nn.Linear(final_dim // 2, self.n_label_class),
-        )
-        self.fc_year = nn.Sequential(
-            nn.Linear(final_dim - final_dim // 2, self.n_year_class),
-        )
+        fc_label_dim = final_dim // 2
+        self.fc_label = nn.Linear(fc_label_dim, self.n_label_class)
+        self.fc_year = nn.Linear(final_dim - fc_label_dim, self.n_year_class)
 
     def forward(self, x):
         spec = self.spec_converter(x) # (batch_size, channels, n_mels, time_frames)
