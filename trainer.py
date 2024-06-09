@@ -31,6 +31,10 @@ def get_loss(run_type, criterion, label_output, year_output, labels, years, smoo
     wandb.log({f'[{run_type}] Label Loss': label_loss.item(),
                f'[{run_type}] Year Loss': year_loss.item()})
     
+    # # TODO(minigb): normalize
+    # normalized_label_loss = label_loss / 4 # TODO(minigb): Remove the hardcoded value
+    # normalized_year_loss = year_loss / 31
+    
     loss = (label_loss + year_loss) / 2
     return loss
 
