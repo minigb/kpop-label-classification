@@ -3,7 +3,7 @@ name: Basic
 cfg:
   # spec model
   sr: 48000
-  clip_len: 30
+  clip_len: 15
   n_clip_segment: 2
   n_fft: 1024
   hop_length: 512
