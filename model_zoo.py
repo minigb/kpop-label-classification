@@ -44,11 +44,9 @@ class Basic(nn.Module):
         final_dim = _get_final_dim(cfg.n_mels, cfg.max_pool_size, self.n_conv_layer)
         self.fc_label = nn.Sequential(
             nn.Linear(final_dim // 2, self.n_label_class),
-            nn.Softmax(),
         )
         self.fc_year = nn.Sequential(
             nn.Linear(final_dim - final_dim // 2, self.n_year_class),
-            nn.Softmax(),
         )
 
     def forward(self, x):
