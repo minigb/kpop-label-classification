@@ -76,7 +76,7 @@ class KpopDataset: # train, valid, test
         pt_path_list = [self.pt_dir / Path(f'{self.mode}/{self.n_in_channel}_{self.sr}/{self.clip_len}s_{self.n_clip_segment}segs/{song_id}/{segment_num}.pt') \
                         for segment_num in range(n_segments)]
         if all([pt_path.exists() for pt_path in pt_path_list]):
-            return [torch.load(pt_path) for pt_path in pt_path_list]
+            return [torch.load(pt_path).to(torch.float16) for pt_path in pt_path_list]
         
         # load audio
         audio, audio_len = self._load_audio(song_id)
