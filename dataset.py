@@ -33,8 +33,15 @@ class KpopDataset: # train, valid, test
         # Create mappings for labels and years
         self.company_label_to_index = {'SM': 0, 'YG': 1, 'JYP': 2, 'HYBE': 3} # TODO(minigb): Remove hardcoding
         self.index_to_company_label = {v: k for k, v in self.company_label_to_index.items()}
-        self.year_to_index = {year: i for i, year in enumerate(range(1994, 2025))} # TODO(minigb): Remove hardcoding
-        self.index_to_year = {v: k for k, v in self.year_to_index.items()}
+
+        _start_year = 1994 # TODO(minigb): Remove hardcoding
+        start_year = _start_year + 1 # 1995
+        end_year = 2024 # TODO(minigb): Remove hardcoding
+        years_per_class = (end_year - start_year) // self.n_year_class
+        self.year_to_index = {1994 : 0} # TODO(minigb): Remove hardcoding
+        for year in range(start_year, end_year + 1):
+            self.year_to_index[year] = (year - start_year) // years_per_class
+        self.index_to_start_year = {v: start_year + v * years_per_class for v in range(self.n_year_class)}
 
         self.load_data()
 
