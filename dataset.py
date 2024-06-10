@@ -116,11 +116,11 @@ class KpopDataset: # train, valid, test
         audio_fn = Path(f'{self.audio_dir}/{song_id}.mp3')
         assert audio_fn.exists(), f'{audio_fn} does not exist'
         audio, org_sr = torchaudio.load(audio_fn)
-        audio_len = audio.shape[-1]
         if org_sr != self.sr:
             audio = torchaudio.functional.resample(audio, orig_freq=org_sr, new_freq=self.sr)
         if self.n_in_channel == 1:
             audio = audio.mean(dim=0).unsqueeze(0)
+        audio_len = audio.shape[-1]
         return audio, audio_len
     
     def __len__(self):
