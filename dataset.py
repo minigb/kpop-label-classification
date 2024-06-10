@@ -73,7 +73,7 @@ class KpopDataset: # train, valid, test
         
         # return pt files if already exists
         n_segments = _get_n_segments()
-        pt_path_list = [self.pt_dir / Path(f'{self.mode}/{self.n_in_channel}_{self.sr}/{self.clip_len}s_{self.n_clip_segment}segs/{song_id}/{segment_num}.pt') \
+        pt_path_list = [self.pt_dir / Path(f'{self.mode}/{self.n_in_channel}_{self.sr}/{self.clip_len}s_{n_segments}segs/{song_id}/{segment_num}.pt') \
                         for segment_num in range(n_segments)]
         if all([pt_path.exists() for pt_path in pt_path_list]):
             return [torch.load(pt_path).to(torch.float16) for pt_path in pt_path_list]
