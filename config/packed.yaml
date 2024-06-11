@@ -4,7 +4,7 @@ defaults:
   - column_name
   - dict_key
   - train
-  - model: Basic3Conv30s1seg_5year
+  - model: Basic2Conv30s1seg_5year_16kHz
   - wandb_setting
   - _self_
 
