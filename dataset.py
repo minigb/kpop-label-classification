@@ -72,12 +72,14 @@ class KpopDataset: # train, valid, test
         def _get_n_segments():
             if self.mode == self.dict_key.train:
                 return self.n_clip_segment
+                # _, audio_len = self._load_audio(song_id)
+                # return audio_len // (self.sr * self.clip_len)
             elif self.mode == self.dict_key.valid:
                 return 1
             elif self.mode == self.dict_key.test:
-                # _, audio_len = self._load_audio(song_id)
-                # return audio_len // (self.sr * self.clip_len)
-                return 1
+                _, audio_len = self._load_audio(song_id)
+                return audio_len // (self.sr * self.clip_len)
+                # return 1
             else:
                 raise ValueError(f'Invalid mode: {self.mode}')
         
@@ -99,7 +101,7 @@ class KpopDataset: # train, valid, test
         for i, pt_path in enumerate(pt_path_list):
             min_start = ended
             max_start = audio_len - sample_clip_len * (n_segments - i)
-            start = random.randint(min_start, max_start-1)
+            start = random.randint(min_start, max_start)
             ended = start + sample_clip_len
             assert ended <= audio_len
 

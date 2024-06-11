@@ -1,13 +1,14 @@
 train:
   device: cuda
-  batch_size: 32
+  batch_size: 64
   learning_rate: 1e-4
   num_epochs: 500
   valid_freq: 1
   smoothing: 0.1
 
 test:
-  best_model_files_path: 'wandb/run-20240610_235751-bf1l1m5i/files'
+  best_model_pt_path: 'wandb/run-20240611_010356-qtms784k/files/best_model.pth'
+  best_model_config_path: 'config/model/Basic2Conv15s1seg_5year.yaml'
 
 data_setting:
   val_ratio: 0.1
