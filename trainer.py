@@ -29,8 +29,8 @@ def get_loss(run_type, criterion, label_output, year_output, labels, years, smoo
     # Apply label smoothing for year classification
     smoothed_years = smooth_labels(years, year_output.size(1), smoothing)
     year_loss = torch.mean(torch.sum(-smoothed_years * torch.log_softmax(year_output, dim=1), dim=1))
-    # wandb.log({f'[{run_type}] Label Loss': label_loss.item(),
-    #            f'[{run_type}] Year Loss': year_loss.item()})
+    wandb.log({f'[{run_type}] Label Loss': label_loss.item(),
+               f'[{run_type}] Year Loss': year_loss.item()})
     
     loss = (label_loss + year_loss) / 2
     return loss
@@ -50,7 +50,7 @@ def train_one_epoch(model, dataloader, criterion, optimizer, device, smoothing):
         optimizer.step()
 
         running_loss += loss.item()
-        # wandb.log({"[Train] Loss per Iteration": loss.item()})
+        wandb.log({"[Train] Loss per Iteration": loss.item()})
 
     average_loss = running_loss / len(dataloader)
     return average_loss
@@ -67,7 +67,7 @@ def validate(model, dataloader, criterion, device, smoothing):
 
             loss = get_loss('Valid', criterion, label_output, year_output, labels, years, smoothing)
             running_loss += loss.item()
-            # wandb.log({"[Valid] Loss per Period": loss.item()})
+            wandb.log({"[Valid] Loss per Period": loss.item()})
 
     average_loss = running_loss / len(dataloader)
     return average_loss
@@ -82,11 +82,11 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, num_epoch
             if val_loss < best_loss:
                 best_loss = val_loss
                 torch.save(model.state_dict(), 'best_model.pth')
-                # wandb.save('best_model.pth')
-                # wandb.run.summary["Best Validation Loss"] = best_loss
+                wandb.save('best_model.pth')
+                wandb.run.summary["Best Validation Loss"] = best_loss
 
     print('Training complete. Best validation loss:', best_loss)
-    # wandb.run.summary["Final Best Validation Loss"] = best_loss
+    wandb.run.summary["Final Best Validation Loss"] = best_loss
 
 def validate_with_accuracy(model, dataloader, criterion, device, smoothing, normalize=True):
     model.eval()
