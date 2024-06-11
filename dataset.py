@@ -1,7 +1,7 @@
 import numpy as np
 import torch
 import torchaudio
-from tqdm.auto import tqdm
+from tqdm import tqdm
 from pathlib import Path
 import random
 
@@ -138,3 +138,18 @@ class KpopDataset: # train, valid, test
 
     def decode_year(self, index):
         return self.index_to_year[index]
+
+
+class InferenceDataset(KpopDataset):
+    def __init__(self, config, mode):
+        super().__init__(config, mode)
+
+    def __getitem__(self, idx):
+        audio_segment, _ = self.data[idx]
+        return audio_segment, idx
+
+    def decode_company_label(self, index):
+        return index
+
+    def decode_year(self, index):
+        return index

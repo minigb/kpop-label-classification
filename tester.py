@@ -9,10 +9,10 @@ import model_zoo
 from dataset import KpopDataset
 from trainer import validate_with_accuracy  # Assuming validate_with_accuracy function is in trainer.py
 
-def test_model():
-    initialize(config_path='config')
-    cfg = compose(config_name='packed')
+initialize(config_path='config')
+cfg = compose(config_name='packed')
 
+def load_model():
     device = cfg.train.device
 
     best_model_config_path = Path(cfg.test.best_model_config_path)
@@ -24,6 +24,13 @@ def test_model():
     # Load the best model
     best_model_pt_path = Path(cfg.test.best_model_pt_path)
     model.load_state_dict(torch.load(best_model_pt_path))
+    model.eval()
+
+    return model, criterion, device
+
+
+def test_model():
+    model, criterion, device = load_model()
     model.eval()
 
     dataset_mode_list = ['train', 'valid', 'test']
@@ -41,6 +48,8 @@ def test_model():
         print(f'Test Label Accuracy: {label_accuracy:.4f}')
         print(f'Test Year Accuracy: {year_accuracy:.4f}')
         print(f'Total Examples: {total_examples}')
+
+    casestudy_list = ['artist']
 
 
 if __name__ == '__main__':

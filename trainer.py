@@ -1,6 +1,6 @@
 import torch
 from sklearn.metrics import accuracy_score
-from tqdm.auto import tqdm
+from tqdm import tqdm
 import wandb
 
 def smooth_labels(labels, num_classes, smoothing):
