@@ -5,7 +5,6 @@ train:
   num_epochs: 500
   valid_freq: 1
   smoothing: 0.1
-  
 
 data_setting:
   val_ratio: 0.1

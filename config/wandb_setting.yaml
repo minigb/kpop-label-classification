@@ -1,3 +1,3 @@
 wandb:
   project_name: Kpop Label Classification
-  run_name: ${model.cfg.n_in_channel}_${model.cfg.sr}_${model.cfg.clip_len}s_${model.cfg.n_clip_segment}segs
+  run_name: ${model.cfg.n_in_channel}_${model.cfg.sr}_${model.cfg.clip_len}s_${model.cfg.n_clip_segment}segs_${model.cfg.n_conv_layer}conv

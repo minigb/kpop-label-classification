@@ -33,8 +33,17 @@ class KpopDataset: # train, valid, test
         # Create mappings for labels and years
         self.company_label_to_index = {'SM': 0, 'YG': 1, 'JYP': 2, 'HYBE': 3} # TODO(minigb): Remove hardcoding
         self.index_to_company_label = {v: k for k, v in self.company_label_to_index.items()}
-        self.year_to_index = {year: i for i, year in enumerate(range(1994, 2025))} # TODO(minigb): Remove hardcoding
-        self.index_to_year = {v: k for k, v in self.year_to_index.items()}
+
+        # TODO(minigb): Remove hardcodings ㅠㅠ
+        start_year = 1994 # TODO(minigb): Remove hardcoding
+        end_year = 2024 # TODO(minigb): Remove hardcoding
+        if self.n_year_class != 31:
+            start_year += 1
+        years_per_class = (end_year + 1 - start_year) // self.n_year_class
+        self.year_to_index = {1994 : 0} # TODO(minigb): Remove hardcoding
+        for year in range(start_year, end_year + 1):
+            self.year_to_index[year] = (year - start_year) // years_per_class
+        self.index_to_year = {v: start_year + v * years_per_class for v in range(self.n_year_class)}
 
         self.load_data()
 
@@ -73,7 +82,7 @@ class KpopDataset: # train, valid, test
         
         # return pt files if already exists
         n_segments = _get_n_segments()
-        pt_path_list = [self.pt_dir / Path(f'{self.mode}/{self.n_in_channel}_{self.sr}/{self.clip_len}s_{self.n_clip_segment}segs/{song_id}/{segment_num}.pt') \
+        pt_path_list = [self.pt_dir / Path(f'{self.mode}/{self.n_in_channel}_{self.sr}/{self.clip_len}s_{n_segments}segs/{song_id}/{segment_num}.pt') \
                         for segment_num in range(n_segments)]
         if all([pt_path.exists() for pt_path in pt_path_list]):
             return [torch.load(pt_path).to(torch.float16) for pt_path in pt_path_list]
@@ -107,11 +116,11 @@ class KpopDataset: # train, valid, test
         audio_fn = Path(f'{self.audio_dir}/{song_id}.mp3')
         assert audio_fn.exists(), f'{audio_fn} does not exist'
         audio, org_sr = torchaudio.load(audio_fn)
-        audio_len = audio.shape[-1]
         if org_sr != self.sr:
             audio = torchaudio.functional.resample(audio, orig_freq=org_sr, new_freq=self.sr)
         if self.n_in_channel == 1:
             audio = audio.mean(dim=0).unsqueeze(0)
+        audio_len = audio.shape[-1]
         return audio, audio_len
     
     def __len__(self):

@@ -1,0 +1,21 @@
+name: Basic
+
+cfg:
+  # spec model
+  sr: 48000
+  clip_len: 30
+  n_clip_segment: 1
+  n_fft: 1024
+  hop_length: 512
+  n_mels: 80
+
+  # model
+  n_in_channel: 1
+  n_out_channel: 64
+
+  n_conv_layer: 2
+  kernel_size: 3
+  max_pool_size: 3
+
+  n_label_class: 4 # sm, yg, jyp, hybe
+  n_year_class: 31 # 1994~2024
