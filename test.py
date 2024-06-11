@@ -25,10 +25,12 @@ def main(cfg):
     model = model_class(model_config.cfg).to(device)
     criterion = nn.CrossEntropyLoss()
 
+    # Print the model to verify
+    print("Model Architecture:")
     print(model)
 
     # Load the best model
-    model.load_state_dict(torch.load(best_model_path))
+    model.load_state_dict(torch.load(best_model_path), strict=False)  # Load with strict=False
     model.eval()
 
     # Perform validation on the test set
