@@ -17,13 +17,15 @@ def main(cfg):
 
     best_model_files_path = Path(cfg.test.best_model_files_path)
     best_model_config_path = best_model_files_path / 'config.yaml'
-    best_model_config = hydra.utils.instantiate(hydra.utils.load_config(best_model_config_path))
-    cfg.model.cfg.update(best_model_config)
+    best_model_config = hydra.utils.instantiate(cfg, config_path=best_model_config_path)
     best_model_path = best_model_files_path / 'best_model.pth'
 
-    model_class = getattr(model_zoo, cfg.model.name)
-    model = model_class(cfg.model.cfg).to(device)
+    model_config = best_model_config.model
+    model_class = getattr(model_zoo, model_config.name)
+    model = model_class(model_config.cfg).to(device)
     criterion = nn.CrossEntropyLoss()
+
+    print(model)
 
     # Load the best model
     model.load_state_dict(torch.load(best_model_path))

@@ -75,8 +75,9 @@ class KpopDataset: # train, valid, test
             elif self.mode == self.dict_key.valid:
                 return 1
             elif self.mode == self.dict_key.test:
-                _, audio_len = self._load_audio(song_id)
-                return audio_len // (self.sr * self.clip_len)
+                # _, audio_len = self._load_audio(song_id)
+                # return audio_len // (self.sr * self.clip_len)
+                return 1
             else:
                 raise ValueError(f'Invalid mode: {self.mode}')
         

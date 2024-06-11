@@ -1,4 +1,5 @@
 import torch
+from sklearn.metrics import accuracy_score
 from tqdm.auto import tqdm
 import wandb
 
@@ -86,3 +87,36 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, num_epoch
 
     print('Training complete. Best validation loss:', best_loss)
     wandb.run.summary["Final Best Validation Loss"] = best_loss
+
+def validate_with_accuracy(model, dataloader, criterion, device, smoothing, normalize=True):
+    model.eval()
+    running_loss = 0.0
+    correct_label_preds = 0
+    correct_year_preds = 0
+    total_examples = 0
+
+    with torch.no_grad():
+        for batch in dataloader:
+            inputs, labels, years = batch
+            inputs, labels, years = inputs.to(device), labels.to(device), years.to(device)
+
+            label_output, year_output = model(inputs)
+            loss = get_loss('Test', criterion, label_output, year_output, labels, years, smoothing, normalize)
+
+            running_loss += loss.item()
+
+            # Collect predictions and true labels for accuracy computation
+            label_preds = torch.argmax(label_output, dim=1)
+            year_preds = torch.argmax(year_output, dim=1)
+            
+            correct_label_preds += (label_preds == labels).sum().item()
+            correct_year_preds += (year_preds == years).sum().item()
+            total_examples += labels.size(0)
+
+    average_loss = running_loss / len(dataloader)
+    
+    # Compute accuracy
+    label_accuracy = correct_label_preds / total_examples
+    year_accuracy = correct_year_preds / total_examples
+
+    return average_loss, label_accuracy, year_accuracy

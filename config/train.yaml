@@ -6,6 +6,9 @@ train:
   valid_freq: 1
   smoothing: 0.1
 
+test:
+  best_model_files_path: 'wandb/run-20240611_010356-qtms784k/files/'
+
 data_setting:
   val_ratio: 0.1
   test_ratio: 0.1
