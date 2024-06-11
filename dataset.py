@@ -72,8 +72,6 @@ class KpopDataset: # train, valid, test
         def _get_n_segments():
             if self.mode == self.dict_key.train:
                 return self.n_clip_segment
-                # _, audio_len = self._load_audio(song_id)
-                # return audio_len // (self.sr * self.clip_len)
             elif self.mode == self.dict_key.valid:
                 return 1
             elif self.mode == self.dict_key.test:

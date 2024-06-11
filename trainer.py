@@ -100,7 +100,7 @@ def validate_with_accuracy(model, dataloader, criterion, device, smoothing, norm
     total_examples = 0
 
     with torch.no_grad():
-        for batch in dataloader:
+        for batch in tqdm(dataloader):
             inputs, labels, years = batch
             inputs, labels, years = inputs.to(device), labels.to(device), years.to(device)
 

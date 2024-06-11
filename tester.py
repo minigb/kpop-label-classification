@@ -2,20 +2,21 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
 from pathlib import Path
-import hydra
+from hydra import initialize, compose
 from omegaconf import OmegaConf
 
 import model_zoo
 from dataset import KpopDataset
 from trainer import validate_with_accuracy  # Assuming validate_with_accuracy function is in trainer.py
 
-@hydra.main(config_path='config', config_name='packed')
-def main(cfg):
+def test_model():
+    initialize(config_path='config')
+    cfg = compose(config_name='packed')
+
     device = cfg.train.device
 
     best_model_config_path = Path(cfg.test.best_model_config_path)
     best_model_config = OmegaConf.load(best_model_config_path)
-    # model_config.n_in_channel = 2 # TODO(minigb): Don't know why but there's an error
     model_class = getattr(model_zoo, best_model_config.name)
     model = model_class(best_model_config.cfg).to(device)
     criterion = nn.CrossEntropyLoss()
@@ -43,4 +44,4 @@ def main(cfg):
 
 
 if __name__ == '__main__':
-    main()
+    test_model()
