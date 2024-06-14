@@ -130,7 +130,6 @@ class KpopDataset:
             audio_segment = audio[:, start:ended]
             audio_segments.append(audio_segment)
 
-        audio_segments = torch.stack(audio_segments)
         return audio_segments
     
     def __len__(self):
@@ -166,6 +165,7 @@ class KpopTrainDataset(KpopDataset):
     def __getitem__(self, idx):
         audio_whole, company_label_index, year_index = super().__getitem__(idx)
         audio_segment = self._clip_audio(audio_whole, 1)
+        audio_segment = audio_segment[0]
         
         return audio_segment, company_label_index, year_index
 
