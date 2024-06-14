@@ -1,14 +1,14 @@
 import numpy as np
 import torch
 import torchaudio
-from tqdm.auto import tqdm
+from tqdm import tqdm
 from pathlib import Path
 import random
 
 from utils.json import load_json
 from utils.song_id import decode_song_id
 
-class KpopDataset: # train, valid, test
+class KpopDataset:
     def __init__(self, config, mode):
         self.mode = mode
 
@@ -19,7 +19,6 @@ class KpopDataset: # train, valid, test
         
         self.sr = config.model.cfg.sr
         self.clip_len = config.model.cfg.clip_len
-        self.n_clip_segment = config.model.cfg.n_clip_segment
 
         self.n_in_channel = config.model.cfg.n_in_channel
         self.n_label_class = config.model.cfg.n_label_class
@@ -65,14 +64,17 @@ class KpopDataset: # train, valid, test
             audio_segments_pt = self._load_and_save_audio_segment_pt_files(song_id)
             assert len(audio_segments_pt) >= 1 # greater than or equal to
             load_result.extend([(audio_segment, class_label) for audio_segment in audio_segments_pt])
-
         self.data = load_result
+
+        # # Testing with random data
+        # audios = [audio for audio, _ in load_result]
+        # labels = [label for _, label in load_result]
+        # random.shuffle(labels)
+        # self.data = list(zip(audios, labels))
 
     def _load_and_save_audio_segment_pt_files(self, song_id):
         def _get_n_segments():
-            if self.mode == self.dict_key.train:
-                return self.n_clip_segment
-            elif self.mode == self.dict_key.valid:
+            if self.mode == self.dict_key.valid:
                 return 1
             elif self.mode == self.dict_key.test:
                 _, audio_len = self._load_audio(song_id)
@@ -92,23 +94,10 @@ class KpopDataset: # train, valid, test
         assert audio_len >= self.sr * self.clip_len * n_segments, f'audio_len: {audio_len}, n_segments: {n_segments}'
 
         # clipping
-        sample_clip_len = self.sr * self.clip_len
-        ended = 0
-        pt_list = []
+        pt_list = self._clip_audio(audio, n_segments)
         for i, pt_path in enumerate(pt_path_list):
-            min_start = ended
-            max_start = audio_len - sample_clip_len * (n_segments - i)
-            start = random.randint(min_start, max_start-1)
-            ended = start + sample_clip_len
-            assert ended <= audio_len
-
-            audio_segment = audio[:, start:ended]
-            audio_segment = audio_segment.to(dtype=torch.float16)
-            assert audio_segment.shape == (self.n_in_channel, sample_clip_len)
-
             pt_path.parent.mkdir(parents=True, exist_ok=True)
-            torch.save(audio_segment, pt_path)
-            pt_list.append(audio_segment)
+            torch.save(pt_list[i], pt_path)
 
         return pt_list
 
@@ -121,7 +110,27 @@ class KpopDataset: # train, valid, test
         if self.n_in_channel == 1:
             audio = audio.mean(dim=0).unsqueeze(0)
         audio_len = audio.shape[-1]
+        audio = audio.to(torch.float16)
         return audio, audio_len
+    
+    def _clip_audio(self, audio, n_segments):
+        audio_len = audio.shape[-1]
+        sample_clip_len = self.sr * self.clip_len
+        ended = 0
+        
+        audio_segments = []
+        for i in range(n_segments):
+            min_start = ended
+            max_start = audio_len - sample_clip_len * (n_segments - i)
+            start = random.randint(min_start, max_start)
+            ended = start + sample_clip_len
+            assert ended <= audio_len
+
+            audio = audio.unsqueeze(0) if len(audio.shape) == 1 else audio
+            audio_segment = audio[:, start:ended]
+            audio_segments.append(audio_segment)
+
+        return audio_segments
     
     def __len__(self):
         return len(self.data)
@@ -137,3 +146,40 @@ class KpopDataset: # train, valid, test
 
     def decode_year(self, index):
         return self.index_to_year[index]
+
+
+class KpopTrainDataset(KpopDataset):
+    def __init__(self, config, mode):
+        super().__init__(config, mode)
+
+    def _load_and_save_audio_segment_pt_files(self, song_id):
+        pt_path = self.pt_dir / Path(f'{self.mode}/{self.n_in_channel}_{self.sr}/{song_id}.pt')
+        if pt_path.exists():
+            return torch.load(pt_path).to(torch.float16)
+        
+        audio, _ = self._load_audio(song_id)
+        pt_path.parent.mkdir(parents=True, exist_ok=True)
+        torch.save(audio, pt_path)
+        return audio
+
+    def __getitem__(self, idx):
+        audio_whole, company_label_index, year_index = super().__getitem__(idx)
+        audio_segment = self._clip_audio(audio_whole, 1)
+        audio_segment = audio_segment[0]
+        
+        return audio_segment, company_label_index, year_index
+
+
+class InferenceDataset(KpopDataset):
+    def __init__(self, config, mode):
+        super().__init__(config, mode)
+
+    def __getitem__(self, idx):
+        audio_segment, _ = self.data[idx]
+        return audio_segment, idx
+
+    def decode_company_label(self, index):
+        return index
+
+    def decode_year(self, index):
+        return index

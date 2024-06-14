@@ -8,14 +8,14 @@ import wandb
 import datetime
 
 import model_zoo
-from dataset import KpopDataset
+from dataset import *
 from trainer import train_model
 
 @hydra.main(config_path='config', config_name='packed')
 def main(cfg: DictConfig):
     device = cfg.train.device
 
-    train_dataset = KpopDataset(cfg, cfg.dict_key.train)
+    train_dataset = KpopTrainDataset(cfg, cfg.dict_key.train)
     val_dataset = KpopDataset(cfg, cfg.dict_key.valid)
 
     train_loader = DataLoader(train_dataset, batch_size=cfg.train.batch_size, shuffle=True)
@@ -32,8 +32,9 @@ def main(cfg: DictConfig):
     train_model(model, train_loader, val_loader, criterion, optimizer, cfg.train.num_epochs, valid_freq=cfg.train.valid_freq, smoothing=cfg.train.smoothing, device=device)
 
     torch.save(model.state_dict(), 'final_model.pth')
-    wandb.save('final_model.pth')
-    wandb.finish()
+    if wandb.run:
+        wandb.save('final_model.pth')
+        wandb.finish()
 
 if __name__ == '__main__':
     main()
