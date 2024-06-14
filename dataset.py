@@ -96,6 +96,7 @@ class KpopDataset:
         # clipping
         pt_list = self._clip_audio(audio, n_segments)
         for i, pt_path in enumerate(pt_path_list):
+            pt_path.parent.mkdir(parents=True, exist_ok=True)
             torch.save(pt_list[i], pt_path)
 
         return pt_list
@@ -157,6 +158,7 @@ class KpopTrainDataset(KpopDataset):
             return torch.load(pt_path).to(torch.float16)
         
         audio, _ = self._load_audio(song_id)
+        pt_path.parent.mkdir(parents=True, exist_ok=True)
         torch.save(audio, pt_path)
         return audio
 
