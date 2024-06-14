@@ -52,7 +52,7 @@ class KpopDataset:
         song_ids = []
         class_labels = [] # (company_label, year)
         for company_label, song_list in song_usage_dict[self.mode].items():
-            for song_id in song_list[:10]:
+            for song_id in song_list:
                 year, _, _ = decode_song_id(song_id)
 
                 song_ids.append(song_id)
@@ -126,9 +126,11 @@ class KpopDataset:
             ended = start + sample_clip_len
             assert ended <= audio_len
 
+            audio = audio.unsqueeze(0) if len(audio.shape) == 1 else audio
             audio_segment = audio[:, start:ended]
             audio_segments.append(audio_segment)
 
+        audio_segments = torch.stack(audio_segments)
         return audio_segments
     
     def __len__(self):
