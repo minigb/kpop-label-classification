@@ -27,14 +27,14 @@ def main(cfg: DictConfig):
     optimizer = optim.Adam(model.parameters(), lr=cfg.train.learning_rate)
 
     run_name = f'{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}_{cfg.wandb.run_name}'
-    # wandb.init(project=cfg.wandb.project_name, config=OmegaConf.to_container(cfg, resolve=True), name=run_name)
+    wandb.init(project=cfg.wandb.project_name, config=OmegaConf.to_container(cfg, resolve=True), name=run_name)
 
-    # train_model(model, train_loader, val_loader, criterion, optimizer, cfg.train.num_epochs, valid_freq=cfg.train.valid_freq, smoothing=cfg.train.smoothing, device=device)
+    train_model(model, train_loader, val_loader, criterion, optimizer, cfg.train.num_epochs, valid_freq=cfg.train.valid_freq, smoothing=cfg.train.smoothing, device=device)
 
-    # torch.save(model.state_dict(), 'final_model.pth')
-    # if wandb.run:
-    #     wandb.save('final_model.pth')
-    #     wandb.finish()
+    torch.save(model.state_dict(), 'final_model.pth')
+    if wandb.run:
+        wandb.save('final_model.pth')
+        wandb.finish()
 
 if __name__ == '__main__':
     main()

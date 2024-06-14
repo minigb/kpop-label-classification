@@ -52,7 +52,7 @@ class KpopDataset:
         song_ids = []
         class_labels = [] # (company_label, year)
         for company_label, song_list in song_usage_dict[self.mode].items():
-            for song_id in song_list:
+            for song_id in song_list[:10]:
                 year, _, _ = decode_song_id(song_id)
 
                 song_ids.append(song_id)

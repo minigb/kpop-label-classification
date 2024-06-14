@@ -26,13 +26,14 @@ def smooth_labels(labels, num_classes, smoothing):
 def get_loss(run_type, criterion, label_output, year_output, labels, years, smoothing):
     def _get_label_loss(label_output, labels):
         if label_output is None:
-            return -1
+            return None
         if wandb.run and run_type == 'Train':
             wandb.log({f'[{run_type}] Label Loss': label_loss.item()})
         return criterion(label_output, labels)
     
     def _get_year_loss(year_output, years):
-    
+        if year_output is None:
+            return None
         # Apply label smoothing for year classification
         smoothed_years = smooth_labels(years, year_output.size(1), smoothing)
         year_loss = torch.mean(torch.sum(-smoothed_years * torch.log_softmax(year_output, dim=1), dim=1))
@@ -44,9 +45,14 @@ def get_loss(run_type, criterion, label_output, year_output, labels, years, smoo
     label_loss = _get_label_loss(label_output, labels)
     year_loss = _get_year_loss(year_output, years)
 
-    if label_loss == -1:
+    if label_loss is not None and year_loss is not None:
+        return (label_loss + year_loss) / 2
+    elif label_loss is not None:
+        return label_loss
+    elif year_loss is not None:
         return year_loss
-    return (label_loss + year_loss) / 2
+    else:
+        raise ValueError('Both label_output and year_output are None')
 
 def train_one_epoch(model, dataloader, criterion, optimizer, device, smoothing):
     model.train()

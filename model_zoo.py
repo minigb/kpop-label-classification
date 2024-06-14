@@ -42,9 +42,13 @@ class Basic(nn.Module):
             return self.n_out_channel * final_dim
 
         final_dim = _get_final_dim(cfg.n_mels, cfg.max_pool_size, self.n_conv_layer)
-        fc_label_dim = final_dim * self.label_dim_proportion
-        self.fc_label = nn.Linear(fc_label_dim, self.n_label_class)
-        self.fc_year = nn.Linear(final_dim - fc_label_dim, self.n_year_class)
+        fc_label_dim = int(final_dim * self.label_dim_proportion)
+        fc_year_dim = final_dim - fc_label_dim
+
+        if fc_label_dim and self.n_label_class:
+            self.fc_label = nn.Linear(fc_label_dim, self.n_label_class)
+        if fc_year_dim and self.n_year_class:
+            self.fc_year = nn.Linear(final_dim - fc_label_dim, self.n_year_class)
 
     def forward(self, x):
         spec = self.spec_converter(x)  # (batch_size, channels, n_mels, time_frames)
@@ -53,9 +57,9 @@ class Basic(nn.Module):
         out = out.flatten(1, 2)  # (batch_size, n_out_channel * n_mels // 27, time_frames // 27)
         out = out.mean(dim=-1)  # (batch_size, n_out_channel * n_mels // 27)
 
-        label_dim = out.size(1) * self.label_dim_proportion
-        label_output = self.fc_label(out[:, :label_dim])
-        year_output = self.fc_year(out[:, label_dim:])
+        label_dim = int(out.size(1) * self.label_dim_proportion)
+        label_output = self.fc_label(out[:, :label_dim]) if hasattr(self, 'fc_label') else None
+        year_output = self.fc_year(out[:, label_dim:]) if hasattr(self, 'fc_year') else None
 
         return label_output, year_output
 
