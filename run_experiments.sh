@@ -2,7 +2,7 @@
 
 # Array of model names to test
 models=(
-        Basic_yearonly
+        Basic_GTZAN
         )
 
 # Loop through each model and run the training script

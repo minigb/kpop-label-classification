@@ -8,6 +8,7 @@ import wandb
 import datetime
 
 import model_zoo
+import dataset
 from dataset import *
 from trainer import train_model
 
@@ -15,8 +16,14 @@ from trainer import train_model
 def main(cfg: DictConfig):
     device = cfg.train.device
 
-    train_dataset = KpopTrainDataset(cfg, cfg.dict_key.train)
-    val_dataset = KpopDataset(cfg, cfg.dict_key.valid)
+    if hasattr(cfg.model.dataset_name):
+        dataset_class = getattr(dataset, cfg.model.dataset_name)
+        train_dataset = dataset_class(cfg, cfg.dict_key.train)
+        val_dataset = dataset_class(cfg, cfg.dict_key.valid)
+
+    else:
+        train_dataset = KpopTrainDataset(cfg, cfg.dict_key.train)
+        val_dataset = KpopDataset(cfg, cfg.dict_key.valid)
 
     train_loader = DataLoader(train_dataset, batch_size=cfg.train.batch_size, shuffle=True)
     val_loader = DataLoader(val_dataset, batch_size=cfg.train.batch_size, shuffle=False)

@@ -188,9 +188,10 @@ class InferenceDataset(KpopDataset):
 
 class GTZANDataset:
   # https://github.com/jdasam/ant5015/blob/main/notebooks/4th_week_genre_classification.ipynb
-  def __init__(self, data_dir, target_sr=16000, is_test=False):
-    self.data_dir = Path(data_dir)
-    self.is_test = is_test
+  def __init__(self, config, mode, audio_type = 'mp3'):
+    self.data_dir = Path(Path(config.data.audio_dir))
+    self.pt_dir = Path(config.pt_dir)
+    self.is_test = (not (mode == config.dict_keys.train))
 
     self.wav_fns = list(self.data_dir.rglob('*.wav'))
     self.wav_fns.sort() # sort before shuffling
@@ -200,12 +201,12 @@ class GTZANDataset:
     assert len(self.wav_fns) > 100
 
     self.orig_freq = 22050
-    self.target_sr = target_sr
+    self.target_sr = config.model.cfg.sr
     self.resampler = torchaudio.transforms.Resample(orig_freq=self.orig_freq, new_freq=target_sr)
 
     self.audio_label_pairs = self.load_audio()
     self.class_names = self.make_class_vocab()
-    self.slice_dur = 2
+    self.slice_dur = config.model.cfg.clip_len
     self.slice_samples = self.slice_dur * self.target_sr
 
     # self.labels = self.load_label()
@@ -214,9 +215,13 @@ class GTZANDataset:
     audios = []
     selected_fns = self.wav_fns[800:] if self.is_test else self.wav_fns[:800]
     for wav_fn in tqdm(selected_fns):
-      y, sr = torchaudio.load(wav_fn)
-      assert sr == self.orig_freq, f'SR has to besame with expected frequency {self.orig_freq}'
-      y = self.resampler(y)
+      pt_path = self.pt_dir / Path(f'{wav_fn.stem}.pt')
+      if pt_path.exists():
+        y = torch.load(pt_path)
+      else:
+          y, sr = torchaudio.load(wav_fn)
+          assert sr == self.orig_freq, f'SR has to besame with expected frequency {self.orig_freq}'
+          y = self.resampler(y)
       audios.append([y, wav_fn.parent.name])
     return audios
 
