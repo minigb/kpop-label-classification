@@ -151,8 +151,6 @@ class KpopTrainDataset(KpopDataset):
     def __init__(self, config, mode):
         super().__init__(config, mode)
 
-        self.n_clip_segment = config.data_setting.n_clip_segment
-
     def _load_and_save_audio_segment_pt_files(self, song_id):
         pt_path = self.pt_dir / Path(f'{self.mode}/{self.n_in_channel}_{self.sr}/{song_id}.pt')
         if pt_path.exists():
