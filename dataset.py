@@ -110,6 +110,7 @@ class KpopDataset:
         if self.n_in_channel == 1:
             audio = audio.mean(dim=0).unsqueeze(0)
         audio_len = audio.shape[-1]
+        audio = audio.to(torch.float16)
         return audio, audio_len
     
     def _clip_audio(self, audio, n_segments):
