@@ -65,8 +65,14 @@ class KpopDataset: # train, valid, test
             audio_segments_pt = self._load_and_save_audio_segment_pt_files(song_id)
             assert len(audio_segments_pt) >= 1 # greater than or equal to
             load_result.extend([(audio_segment, class_label) for audio_segment in audio_segments_pt])
-
         self.data = load_result
+
+        # # Testing with random data
+        # audios = [audio for audio, _ in load_result]
+        # labels = [label for _, label in load_result]
+        # random.shuffle(labels)
+        # self.data = list(zip(audios, labels))
+
 
     def _load_and_save_audio_segment_pt_files(self, song_id):
         def _get_n_segments():

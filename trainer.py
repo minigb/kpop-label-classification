@@ -29,7 +29,7 @@ def get_loss(run_type, criterion, label_output, year_output, labels, years, smoo
     # Apply label smoothing for year classification
     smoothed_years = smooth_labels(years, year_output.size(1), smoothing)
     year_loss = torch.mean(torch.sum(-smoothed_years * torch.log_softmax(year_output, dim=1), dim=1))
-    if wandb.run:
+    if wandb.run and run_type == 'Train':
         wandb.log({f'[{run_type}] Label Loss': label_loss.item(),
                 f'[{run_type}] Year Loss': year_loss.item()})
     
@@ -69,10 +69,10 @@ def validate(model, dataloader, criterion, device, smoothing):
 
             loss = get_loss('Valid', criterion, label_output, year_output, labels, years, smoothing)
             running_loss += loss.item()
-            if wandb.run:
-                wandb.log({"[Valid] Loss per Period": loss.item()})
 
     average_loss = running_loss / len(dataloader)
+    if wandb.run:
+        wandb.log({"[Valid] Loss per Period": average_loss})
     return average_loss
 
 def train_model(model, train_loader, val_loader, criterion, optimizer, num_epochs, device, smoothing, valid_freq):
