@@ -2,7 +2,7 @@
 
 # Array of model names to test
 models=(
-        Basic2Conv15s1seg_5year_yearonly
+        Basic_yearonly
         )
 
 # Loop through each model and run the training script
