@@ -8,14 +8,14 @@ import wandb
 import datetime
 
 import model_zoo
-from dataset import KpopDataset
+from dataset import *
 from trainer import train_model
 
 @hydra.main(config_path='config', config_name='packed')
 def main(cfg: DictConfig):
     device = cfg.train.device
 
-    train_dataset = KpopDataset(cfg, cfg.dict_key.train)
+    train_dataset = KpopTrainDataset(cfg, cfg.dict_key.train)
     val_dataset = KpopDataset(cfg, cfg.dict_key.valid)
 
     train_loader = DataLoader(train_dataset, batch_size=cfg.train.batch_size, shuffle=True)
