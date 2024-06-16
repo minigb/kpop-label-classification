@@ -16,7 +16,7 @@ from trainer import train_model
 def main(cfg: DictConfig):
     device = cfg.train.device
 
-    if hasattr(cfg.model.dataset_name):
+    if hasattr(cfg.model, 'dataset_name'):
         dataset_class = getattr(dataset, cfg.model.dataset_name)
         train_dataset = dataset_class(cfg, cfg.dict_key.train)
         val_dataset = dataset_class(cfg, cfg.dict_key.valid)

@@ -188,10 +188,10 @@ class InferenceDataset(KpopDataset):
 
 class GTZANDataset:
   # https://github.com/jdasam/ant5015/blob/main/notebooks/4th_week_genre_classification.ipynb
-  def __init__(self, config, mode, audio_type = 'mp3'):
-    self.data_dir = Path(Path(config.data.audio_dir))
-    self.pt_dir = Path(config.pt_dir)
-    self.is_test = (not (mode == config.dict_keys.train))
+  def __init__(self, config, mode):
+    self.data_dir = Path('genres') # TODO(minigb): Remove hardcoding
+    self.pt_dir = Path('pt_gtzan') # TODO(minigb): Remove hardcoding
+    self.is_test = (not mode == 'train')
 
     self.wav_fns = list(self.data_dir.rglob('*.wav'))
     self.wav_fns.sort() # sort before shuffling
@@ -202,7 +202,7 @@ class GTZANDataset:
 
     self.orig_freq = 22050
     self.target_sr = config.model.cfg.sr
-    self.resampler = torchaudio.transforms.Resample(orig_freq=self.orig_freq, new_freq=target_sr)
+    self.resampler = torchaudio.transforms.Resample(orig_freq=self.orig_freq, new_freq=self.target_sr)
 
     self.audio_label_pairs = self.load_audio()
     self.class_names = self.make_class_vocab()
@@ -222,6 +222,9 @@ class GTZANDataset:
           y, sr = torchaudio.load(wav_fn)
           assert sr == self.orig_freq, f'SR has to besame with expected frequency {self.orig_freq}'
           y = self.resampler(y)
+          y = y.to(torch.float16)
+          pt_path.parent.mkdir(parents=True, exist_ok=True)
+          torch.save(y, pt_path)
       audios.append([y, wav_fn.parent.name])
     return audios
 
@@ -241,9 +244,9 @@ class GTZANDataset:
     audio, label = self.audio_label_pairs[idx]
 
     # string이 아닌 텐서로 반환해줄 수 있도록 변환
-    num_samples = audio.shape[1]
+    num_samples = audio.shape[-1]
     slice_end = num_samples - self.slice_samples
     slice_start = random.randint(0, slice_end-1) #randint는 끝점 포함
 
 
-    return audio[0, slice_start:slice_start+self.slice_samples], self.class_names.index(label)
+    return audio[:, slice_start:slice_start+self.slice_samples], 0, self.class_names.index(label) # returning dummy 0
