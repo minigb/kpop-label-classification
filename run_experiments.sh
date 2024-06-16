@@ -2,8 +2,8 @@
 
 # Array of model names to test
 models=(
-        Basic15s_5year
         Basic_labelonly
+        Basic15s_5year
         )
 
 # Loop through each model and run the training script
