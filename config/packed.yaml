@@ -4,7 +4,7 @@ defaults:
   - column_name
   - dict_key
   - train
-  - model: Basic_GTZAN
+  - model: Basic15s_5year
   - wandb_setting
   - _self_
 
