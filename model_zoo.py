@@ -15,6 +15,7 @@ class Basic(nn.Module):
         self.n_label_class = cfg.n_label_class
         self.n_year_class = cfg.n_year_class
 
+        assert cfg.sr == 16000 # TODO(minigb): Remove this later
         self.spec_converter = SpecModel(cfg.sr, cfg.n_fft, cfg.hop_length, cfg.n_mels)  # shape: (batch_size, channels, n_mels, time_frames)
 
         self.label_dim_proportion = cfg.label_dim_proportion if hasattr(cfg, 'label_dim_proportion') else 0.5
