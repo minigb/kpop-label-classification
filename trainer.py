@@ -26,6 +26,7 @@ def get_loss(run_type, criterion, label_output, year_output, labels, years, smoo
     def _get_label_loss(label_output, labels):
         if label_output is None:
             return None
+        label_loss = criterion(label_output, labels)
         if wandb.run and run_type == 'Train':
             wandb.log({f'[{run_type}] Label Loss': label_loss.item()})
         return criterion(label_output, labels)

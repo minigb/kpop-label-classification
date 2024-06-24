@@ -6,8 +6,10 @@ __pycache__
 .hydra
 
 audio*
+genres*
 wandb
 pt
+pt_gtzan
 *.pth
 
 tmp_*

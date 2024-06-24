@@ -4,8 +4,8 @@ dataset_type: KpopDatasetWith5Years
 
 cfg:
   # spec model
-  sr: 48000
-  clip_len: 30
+  sr: 16000
+  clip_len: 15
   n_clip_segment: 1
   n_fft: 1024
   hop_length: 512
@@ -15,9 +15,11 @@ cfg:
   n_in_channel: 1
   n_out_channel: 64
 
-  n_conv_layer: 2
+  n_conv_layer: 3
   kernel_size: 3
   max_pool_size: 3
 
   n_label_class: 4 # sm, yg, jyp, hybe
   n_year_class: 6 # 1994~2024, 5 years per class
+
+  label_dim_proportion: 1 # [0, 1]
